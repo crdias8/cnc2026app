@@ -623,7 +623,7 @@ function card(e, opts = {}){
   const dim = ['I','T','V'].includes(e.type);
   const room = ROOMS[e.room];
   const fav = FAV.has(e.id);
-  const people = e.people.map(p => `<span>${esc(p)}</span>`).join('');
+  const people = e.people.map(p => `<span>${e.type === 'O' ? esc(p).replace(/ - apresentador/g,' - <em>apresentador</em>') : esc(p)}</span>`).join('');
   const flags = [...e.flags].filter(f => FLAGS[f]).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${FLAGS[f].i}</svg>${FLAGS[f].t}</span>`).join('');
   const sinab = '';
   const kws = e.kws.filter(k => k !== 'Pôsteres').map(k => `<button class="kw${F.kws.has(k)?' on':''}" data-kw="${esc(k)}">${esc(k)}</button>`).join('');
