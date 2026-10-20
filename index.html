@@ -434,7 +434,7 @@ const EVENTS = [
 [30,'16:40','17:05','ARE','EF.O.8','O','A relevância da assistência técnica pericial no processo criminal e a discussão sobre o dolo eventual na elucidação de sinistros de trânsito (caso real)','Christian Tombini (OAB/RS) - apresentador, Rodrigo Kleinubing (IGP/RS)','',''],
 [30,'17:10','17:35','ARE','EF.O.10','O','Revisão de casos de desabamento por ruptura de consolo em concreto pré-moldado: achados periciais, retroanálises e recomendações','Jorge Augusto Wissmann (PCIPR; UNIOESTE) - apresentador, Marcelo Mazzuco (PCIPR), Joel Heron Freitas (PCISC), Guilherme de Lima Dutra (UNIOESTE)','',''],
 [30,'17:40','18:05','ARE','', 'T','Palestra a confirmar','','',''],
-[30,'16:10','16:35','JSL','OE.O.2','O','18 mil itens por ano: como a Informática Forense de Santa Catarina enfrentou o passivo','','',''],
+[30,'16:10','16:35','JSL','OE.O.2','O','18 mil itens por ano: como a Informática Forense de Santa Catarina enfrentou o passivo','Wilson Leite da Silva Filho (PCISC) - apresentador','',''],
 [30,'16:40','17:05','JSL','CP.O.5','O','Exame forense em câmeras espiãs de baixo custo: da extração de memória flash à vinculação ao suspeito','Mateus Bizzotto Nunes (PCI SC) - apresentador','',''],
 [30,'17:10','17:35','JSL','CP.O.7','O','Violence as a Service (VaaS) e Crime as a Service (CaaS): aspectos essenciais da perícia computacional para atuação de combate no ecossistema cibercriminoso transnacional','João Benedito dos Santos Junior (PUC Minas) - apresentador','',''],
 [30,'17:40','18:05','JSL','CP.O.8','O','Análise forense do mecanismo de bloqueio de aplicativos (app lock) em dispositivos Xiaomi: identificação de artefatos e inferência de credenciais','Michael André Hempkemeyer (PCI) - apresentador','',''],
@@ -480,6 +480,7 @@ const AREAS = {
   SN:{n:'SINAB · Sistema Nacional de Análise Balística',c:'#FFFFFF',t:'#E8541C'}
 };
 const SINAB_TAG = '<span class="tag sinab" aria-label="SINAB">S<svg viewBox="0 0 10 32" aria-hidden="true"><path d="M5 0C7.4 4 8.2 8 8.2 12V27H1.8V12C1.8 8 2.6 4 5 0Z" fill="#E8541C"/><rect x="1" y="27.6" width="8" height="1.6" rx=".4" fill="#E8541C"/><rect x="1.6" y="29.8" width="6.8" height="2.2" rx=".4" fill="#E8541C"/></svg>NAB</span>';
+const EXTRA_AREAS = { 'OE.O.2':['GI','CP'] }; // áreas adicionais exibidas ao lado do código
 const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo'};
 const TYPE_FILTER = ['P','R','O','M','C','X','S','V','I'];
 const DAYS = [{d:27,w:'Terça',sub:'Minicursos e abertura'},{d:28,w:'Quarta',sub:''},{d:29,w:'Quinta',sub:''},{d:30,w:'Sexta',sub:'Encerramento às 18:30'}];
@@ -528,6 +529,7 @@ EVENTS.forEach((r, i) => {
   const pre = code ? code.split('.')[0] : '';
   const areas = [];
   if (AREAS[pre]) areas.push(pre);
+  (EXTRA_AREAS[code]||[]).forEach(a => { if (!areas.includes(a)) areas.push(a); });
   if (type === 'S') areas.push('BA');
   if (type === 'S' || flags.includes('s')) areas.push('SN');
   let id = code ? code : `${d}-${room||'x'}-${s}`;
@@ -614,7 +616,7 @@ function measureHeader(){ document.documentElement.style.setProperty('--hdr', $(
 /* ---------- cartão ---------- */
 function tagHTML(e){
   const sn = e.areas.includes('SN') ? SINAB_TAG : '';
-  if (e.code){ const a = AREAS[e.areas[0]] || AREAS.OE; return `<span class="tag" style="--c:${a.c};--t:${a.t}">${esc(e.code)}</span>${sn}`; }
+  if (e.code){ const a = AREAS[e.areas[0]] || AREAS.OE; const extra = (EXTRA_AREAS[e.code]||[]).map(k => `<span class="tag" style="--c:${AREAS[k].c};--t:${AREAS[k].t}">${k}</span>`).join(''); return `<span class="tag" style="--c:${a.c};--t:${a.t}">${esc(e.code)}</span>${extra}${sn}`; }
   if (e.type === 'S') return `<span class="tag" style="--c:${AREAS.BA.c};--t:${AREAS.BA.t}">BA</span>${sn}`;
   return '';
 }
