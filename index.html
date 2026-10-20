@@ -96,6 +96,7 @@ section.view{padding-top:16px}
 .legend button{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;cursor:pointer;text-align:left;font-size:14.5px}
 .legend button:hover{border-color:var(--accent)}
 .flags-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.fl-lbl{font-weight:600;font-size:14px;align-self:center;margin-right:2px}
 .orgs{display:grid;gap:8px;grid-template-columns:1fr}
 @media (min-width:560px){.orgs{grid-template-columns:1fr 1fr}}
 .org{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:15px}
@@ -669,7 +670,7 @@ function renderInicio(){
       <h2>Áreas temáticas</h2>
       <p class="note" style="margin:0 0 10px">O código de cada atividade indica a área (primeiras letras) e o tipo: P para palestra, R para mesa-redonda, O para apresentação oral, M e N para minicursos, C para reunião setorial de coordenadores. Toque numa área para filtrar.</p>
       <div class="legend">${areaList.map(([k,a]) => `<button data-area="${k}"><span class="tag" style="--c:${a.c};--t:${a.t}">${k}</span><span>${a.n}</span></button>`).join('')}</div>
-      <div class="flags-legend">${Object.values(FLAGS).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${f.i}</svg>${f.t}</span>`).join('')}</div>
+      <div class="flags-legend"><span class="fl-lbl">Legendas:</span>${Object.values(FLAGS).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${f.i}</svg>${f.t}</span>`).join('')}</div>
     </div>
     <div class="block">
       <h2>Comissão Organizadora</h2>
