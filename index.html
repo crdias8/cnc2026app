@@ -112,6 +112,8 @@ section.view{padding-top:16px}
 
 /* Etiquetas */
 .tag{display:inline-block;background:var(--c);color:var(--t);font-family:var(--f-display);font-weight:500;font-size:14px;letter-spacing:.04em;padding:1px 7px;border-radius:5px;line-height:1.45;box-shadow:inset 0 0 0 1px rgba(127,127,127,.25);white-space:nowrap}
+.tag.sinab{--c:#FFFFFF;--t:#E8541C;display:inline-flex;align-items:center;font-weight:500;letter-spacing:.06em;box-shadow:inset 0 0 0 1px #F2B9A2}
+.tag.sinab svg{width:.42em;height:1.15em;margin:0 .05em;flex:0 0 auto}
 .flag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;border-radius:5px;padding:2px 7px;background:var(--surface-2);color:var(--fg);white-space:nowrap}
 .flag svg{width:13px;height:13px}
 
@@ -475,9 +477,10 @@ const AREAS = {
   QB:{n:'Perícias químicas e biológicas',c:'#4A86E6',t:'#FFFFFF'},
   OE:{n:'Plenárias multidisciplinares',c:'#FFFFFF',t:'#C10000'},
   EX:{n:'Apresentações de expositores',c:'#FFFFFF',t:'#6B6B6B'},
-  SN:{n:'SINAB',c:'#1F5E63',t:'#FFFFFF'}
+  SN:{n:'SINAB · Sistema Nacional de Análise Balística',c:'#FFFFFF',t:'#E8541C'}
 };
-const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo'};
+const SINAB_TAG = '<span class="tag sinab" aria-label="SINAB">S<svg viewBox="0 0 10 32" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7C21A"/><stop offset="1" stop-color="#E8541C"/></linearGradient></defs><path d="M5 0C7.4 4 8.2 8 8.2 12V27H1.8V12C1.8 8 2.6 4 5 0Z" fill="url(#sg)"/><rect x="1" y="27.6" width="8" height="1.6" rx=".4" fill="#E8541C"/><rect x="1.6" y="29.8" width="6.8" height="2.2" rx=".4" fill="#E8541C"/></svg>NAB</span>';
+const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo'};
 const TYPE_FILTER = ['P','R','O','M','C','X','S','V','I'];
 const DAYS = [{d:27,w:'Terça',sub:'Minicursos e abertura'},{d:28,w:'Quarta',sub:''},{d:29,w:'Quinta',sub:''},{d:30,w:'Sexta',sub:'Encerramento às 18:30'}];
 const FLAGS = {
@@ -525,6 +528,7 @@ EVENTS.forEach((r, i) => {
   const pre = code ? code.split('.')[0] : '';
   const areas = [];
   if (AREAS[pre]) areas.push(pre);
+  if (type === 'S') areas.push('BA');
   if (type === 'S' || flags.includes('s')) areas.push('SN');
   let id = code ? code : `${d}-${room||'x'}-${s}`;
   if (code && EVENTS.filter(x => x[4] === code).length > 1) id = `${code}@${d}-${s}`;
@@ -609,8 +613,9 @@ function measureHeader(){ document.documentElement.style.setProperty('--hdr', $(
 
 /* ---------- cartão ---------- */
 function tagHTML(e){
-  if (e.code){ const a = AREAS[e.areas[0]] || AREAS.OE; return `<span class="tag" style="--c:${a.c};--t:${a.t}">${esc(e.code)}</span>`; }
-  if (e.type === 'S') return `<span class="tag" style="--c:${AREAS.SN.c};--t:#fff">SINAB</span>`;
+  const sn = e.areas.includes('SN') ? SINAB_TAG : '';
+  if (e.code){ const a = AREAS[e.areas[0]] || AREAS.OE; return `<span class="tag" style="--c:${a.c};--t:${a.t}">${esc(e.code)}</span>${sn}`; }
+  if (e.type === 'S') return `<span class="tag" style="--c:${AREAS.BA.c};--t:${AREAS.BA.t}">BA</span>${sn}`;
   return '';
 }
 function card(e, opts = {}){
@@ -620,7 +625,7 @@ function card(e, opts = {}){
   const fav = FAV.has(e.id);
   const people = e.people.map(p => `<span>${esc(p)}</span>`).join('');
   const flags = [...e.flags].filter(f => FLAGS[f]).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${FLAGS[f].i}</svg>${FLAGS[f].t}</span>`).join('');
-  const sinab = e.flags.includes('s') ? `<span class="flag">SINAB</span>` : '';
+  const sinab = '';
   const kws = e.kws.filter(k => k !== 'Pôsteres').map(k => `<button class="kw${F.kws.has(k)?' on':''}" data-kw="${esc(k)}">${esc(k)}</button>`).join('');
   const minicurso = e.type === 'M' && e.sm === mins('13:00') ? ' · intervalo 15:00–15:15' : '';
   return `<article class="ev${dim?' dim':''}${isNow?' is-now':''}" data-id="${esc(e.id)}">
@@ -706,7 +711,7 @@ function renderFiltros(){
   const total = counts.reduce((a,[,n]) => a+n, 0);
   const cnt = (fn) => EV.filter(e => e.type !== 'B' && fn(e)).length;
   const typeChecks = TYPE_FILTER.map(t => `<label class="chk"><input type="checkbox" data-f="types" value="${t}" ${F.types.has(t)?'checked':''}><span class="lab">${TYPES[t]}</span><span class="c">${cnt(e=>e.type===t)}</span></label>`).join('');
-  const areaChecks = Object.entries(AREAS).map(([k,a]) => `<label class="chk"><input type="checkbox" data-f="areas" value="${k}" ${F.areas.has(k)?'checked':''}><span class="tag" style="--c:${a.c};--t:${a.t}">${k==='SN'?'SINAB':k}</span><span class="lab">${a.n}</span><span class="c">${cnt(e=>e.areas.includes(k))}</span></label>`).join('');
+  const areaChecks = Object.entries(AREAS).map(([k,a]) => `<label class="chk"><input type="checkbox" data-f="areas" value="${k}" ${F.areas.has(k)?'checked':''}>${k==='SN'?SINAB_TAG:`<span class="tag" style="--c:${a.c};--t:${a.t}">${k}</span>`}<span class="lab">${a.n}</span><span class="c">${cnt(e=>e.areas.includes(k))}</span></label>`).join('');
   const roomChecks = ROOM_ORDER.filter(r => r!=='GER').map(r => `<label class="chk"><input type="checkbox" data-f="rooms" value="${r}" ${F.rooms.has(r)?'checked':''}><span class="lab">${ROOMS[r].n}${ROOMS[r].x?` <span class="c">(${ROOMS[r].x})</span>`:''}</span></label>`).join('');
   const periodPills = Object.entries(PERIODS).map(([k,[l]]) => `<label class="pill"><input type="checkbox" data-f="periods" value="${k}" ${F.periods.has(k)?'checked':''}>${l}</label>`).join('');
   const slotPills = SLOTS.map(s => `<label class="pill"><input type="checkbox" data-f="slots" value="${s}" ${F.slots.has(s)?'checked':''}>${s}</label>`).join('');
