@@ -138,6 +138,9 @@ section.view{padding-top:16px}
 .ev-top .time{font-variant-numeric:tabular-nums}
 .ev-top .nowpill{color:var(--now);background:var(--now-soft);font-weight:700;border-radius:999px;padding:0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .ev h3{font-size:16.5px;line-height:1.35;font-weight:600;margin:6px 0 4px;text-wrap:pretty;overflow-wrap:anywhere}
+.ev h3.books{line-height:1.4;display:grid;gap:8px}
+.ev h3.books .book{display:block;padding-left:12px;border-left:3px solid var(--line)}
+.ev h3.books em{font-style:italic}
 .ev .ppl{font-size:14.5px;color:var(--fg);margin:0 0 4px;overflow-wrap:anywhere}
 .ev .ppl span{display:block}
 .ev .room{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);margin-top:2px}
@@ -232,6 +235,8 @@ const EVENTS = [
 [27,'18:30','20:30','EVE','', 'I','Cerimônia de abertura','','',''],
 
 /* ===== 28/10 ===== */
+[28,'09:00','10:00','EXP','', 'A','*Reconstrução de Colisões Veiculares*;;*Fundamentos de Estatística Aplicados na Reconstrução de Acidentes de Trânsito* (2ª edição)','Autores: Wilson Toresan Jr. (responsável pela sessão) e Nortthon Didyk','Livros|Acidente de trânsito',''],
+[28,'15:30','16:30','EXP','', 'A','*Entomologia Forense: quando os insetos são vestígios* (4ª edição);;*Entomologia Forense Médico-Legal: da cronotanatognose à entomogenética*;;*Entomologia Forense no Brasil: insetos peritos*','Vários autores;;Responsável pela sessão: Janyra Oliveira-Costa','Livros|Entomologia forense',''],
 [28,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [28,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
 [28,'10:00','10:55','TEA','GI.P.3','P','Ensino, Pesquisa e Inovação na Polícia Científica do Paraná','Alexandre Lara - PCI/PR','Inovação',''],
@@ -301,6 +306,8 @@ const EVENTS = [
 [28,'17:10','18:05','AMA','EF.C.1','C','Reunião de coordenadores em Engenharia Forense','','',''],
 
 /* ===== 29/10 ===== */
+[29,'09:00','10:00','EXP','', 'A','*Reprodução Simulada dos Fatos: Fundamentos da Reconstrução Criminal*','Autor: Andrei Röehrs Portinho (responsável pela sessão)','Livros',''],
+[29,'15:30','16:30','EXP','', 'A','*Criminalística: procedimentos e metodologias* (6ª edição)','Vários autores;;Responsáveis pela sessão: Gabrielle Virgínia Ferreira Cardoso e Celso Felipe Bandeira de Sá','Livros',''],
 [29,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [29,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
 [29,'10:00','10:55','TEA','BA.P.9','P','Subclass and Individual Characteristics in the 3D Era: Lessons from Virtual Comparison Microscopy Research','Zachary Carr - Cadre Forensics/Chicago/EUA','Microcomparação|SINAB','ls'],
@@ -376,6 +383,8 @@ const EVENTS = [
 [29,'16:10','18:05','AMA','PA.C.1','C','Reunião de coordenadores em perícias Ambientais','','',''],
 
 /* ===== 30/10 ===== */
+[30,'09:00','10:00','EXP','', 'A','*Vestígios*, volumes 1, 2 e 3','Autor: Anderson Fraga Morales (responsável pela sessão)','Livros',''],
+[30,'15:30','16:30','EXP','', 'A','*Uma Introdução à Criminalística: Guia Prático para Perícia Criminal e Concursos*;;*A Lei Antifacção: Quando a Comunidade é o Corpo de Delito*;;*Impressões Humanas na Cena do Crime: Papiloscopia e outros vestígios corporais de contato*','Autor: Paulo Ricardo Ost Frank (responsável pela sessão)','Livros',''],
 [30,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [30,'09:00','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
 [30,'09:00','10:25','IBE','', 'S','IBIS – Melhores Práticas: Maximizando os Dados de Entrada e os Resultados','Petar Zancovich - Leads Online/Canadá','SINAB',''],
@@ -462,7 +471,7 @@ const ROOMS = {
   AUD:{n:'Auditório Augusto Meyer'}, TEA:{n:'Teatro Lupicínio Rodrigues'}, ARE:{n:'Arena Elis Regina'},
   JSL:{n:'Sala João Simões Lopes Neto',x:'Sala A'}, IBE:{n:'Sala Iberê Camargo',x:'Sala B'}, MQU:{n:'Sala Mário Quintana',x:'Sala C'},
   MSC:{n:'Sala Moacyr Scliar'}, EVE:{n:'Sala Érico Veríssimo'}, DMA:{n:'Sala Dyonélio Machado'}, JGU:{n:'Sala Josué Guimarães'},
-  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores'}, GER:{n:'Andar superior'}
+  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores (térreo)'}, GER:{n:'Andar superior'}
 };
 const ROOM_ORDER = Object.keys(ROOMS);
 const AREAS = {
@@ -481,8 +490,8 @@ const AREAS = {
 };
 const SINAB_TAG = '<span class="tag sinab" aria-label="SINAB">S<svg viewBox="0 0 10 32" aria-hidden="true"><path d="M5 0C7.4 4 8.2 8 8.2 12V27H1.8V12C1.8 8 2.6 4 5 0Z" fill="#E8541C"/><rect x="1" y="27.6" width="8" height="1.6" rx=".4" fill="#E8541C"/><rect x="1.6" y="29.8" width="6.8" height="2.2" rx=".4" fill="#E8541C"/></svg>NAB</span>';
 const EXTRA_AREAS = { 'OE.O.2':['GI','CP'] }; // áreas adicionais exibidas ao lado do código
-const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo'};
-const TYPE_FILTER = ['P','R','O','M','C','X','S','V','I'];
+const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo',A:'Sessão de autógrafos e de lançamento'};
+const TYPE_FILTER = ['P','R','O','M','C','X','S','A','V','I'];
 const DAYS = [{d:27,w:'Terça',sub:'Minicursos e abertura'},{d:28,w:'Quarta',sub:''},{d:29,w:'Quinta',sub:''},{d:30,w:'Sexta',sub:'Premiação e encerramento às 18:30'}];
 const FLAGS = {
   l:{t:'Tradução por legendas',i:'<path d="M3 5h18v12H8l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 10h6M7 13h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
@@ -536,11 +545,11 @@ EVENTS.forEach((r, i) => {
   if (code && EVENTS.filter(x => x[4] === code).length > 1) id = `${code}@${d}-${s}`;
   const kws = kw ? kw.split('|') : [];
   const ev = { i, id, d, s, e, sm:mins(s), em:mins(e), room, code, type, title, people: people ? people.split(';;') : [], kws, flags, areas };
-  ev.hay = norm([code, title, people, kw, ROOMS[room]?.n||'', ROOMS[room]?.x||'', TYPES[type], areas.map(a=>AREAS[a].n).join(' ')].join(' '));
+  ev.hay = norm([code, title.replace(/\*/g,''), people, kw, ROOMS[room]?.n||'', ROOMS[room]?.x||'', TYPES[type], areas.map(a=>AREAS[a].n).join(' ')].join(' '));
   EV.push(ev);
 });
 const ALL_KW = (() => { const m = new Map(); EV.forEach(e => e.kws.forEach(k => m.set(k, (m.get(k)||0)+1))); return [...m].sort((a,b) => a[0].localeCompare(b[0],'pt')); })();
-const SLOTS = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','16:10','16:40','17:10','17:40','18:30'];
+const SLOTS = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','15:30','16:10','16:40','17:10','17:40','18:30'];
 const PERIODS = {manha:['Manhã',0,mins('12:30')], tarde:['Tarde',mins('12:30'),mins('18:25')], noite:['Noite',mins('18:25'),24*60]};
 
 /* ---------- estado ---------- */
@@ -633,7 +642,7 @@ function card(e, opts = {}){
   return `<article class="ev${dim?' dim':''}${isNow?' is-now':''}" data-id="${esc(e.id)}">
     <div class="ev-main">
       <div class="ev-top">${tagHTML(e)}<span class="type">${TYPES[e.type]}</span><span class="time">${opts.showDay?`${e.d}/10 · `:''}${e.s}–${e.e}${minicurso}</span>${isNow?'<span class="nowpill">Agora</span>':''}</div>
-      <h3>${esc(e.title)}</h3>
+      <h3${e.type==='A'?' class="books"':''}>${e.type==='A' ? e.title.split(';;').map(b => `<span class="book">${esc(b).replace(/\*([^*]+)\*/g,'<em>$1</em>')}</span>`).join('') : esc(e.title)}</h3>
       ${people?`<p class="ppl">${people}</p>`:''}
       ${room?`<div class="room">${ICON_PIN}<span>${esc(room.n)}${room.x?` (${room.x})`:''}</span></div>`:''}
       ${flags||sinab?`<div class="flags">${sinab}${flags}</div>`:''}
@@ -786,7 +795,7 @@ function renderFavoritos(){
     const l = favs.filter(e => e.d === x.d); if (!l.length) return;
     html += `<div class="slot"><div class="slot-h">${x.d}/10 · ${x.w}</div><div class="list">${l.map(e => {
       const c = l.find(o => o !== e && o.sm < e.em && e.sm < o.em);
-      return card(e,{now, conflict: c ? (c.code || c.title.slice(0,40)) + ` (${c.s}–${c.e})` : ''});
+      return card(e,{now, conflict: c ? (c.code || c.title.replace(/\*/g,'').split(';;')[0].slice(0,40)) + ` (${c.s}–${c.e})` : ''});
     }).join('')}</div></div>`;
   });
   if (favs.length) html += `<footer>Os favoritos ficam guardados no navegador deste aparelho. Se trocar de celular ou limpar os dados do navegador, será preciso marcar de novo.</footer>`;
