@@ -221,6 +221,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 const EVENTS = [
 /* ===== 27/10 — Minicursos ===== */
 [27,'08:00','12:10','AUD','', 'I','Reunião CONDPCi','','',''],
+[27,'08:00','15:00','TAU','', 'S','Visita técnica à fábrica da Taurus','','SINAB',''],
 [27,'08:00','12:10','AMA','PA.N.1','M','Curso de Geotecnologias aplicadas à Perícia Criminalística (módulo remoto)','Christhian Cunha - Empresa/Ambgeo','Geoprocessamento','rn'],
 [27,'12:10','13:00','', '', 'B','Intervalo de almoço','','',''],
 [27,'13:00','17:15','AUD','', 'I','Reunião CONDPCi','','',''],
@@ -252,9 +253,9 @@ const EVENTS = [
 [28,'11:00','11:55','MSC','CP.P.9','P','Recuperação de dados em dispositivos de armazenamento danificados','Wellington Rodrigues - Empresa/Legacy','Computação forense',''],
 [28,'10:00','10:55','EVE','OE.P.6','P','Atuação e avanços da SENASP','João Alberto Nogueira Junior - SENASP e Beatriz Figueiredo - SENASP','',''],
 [28,'11:00','11:50','EVE','OE.P.7','P','O papel da Polícia Científica no fortalecimento de Políticas Públicas sobre Drogas','João Carlos Laboissière Ambrósio - SENAD','Drogas',''],
-[28,'10:00','10:55','DMA','BA.P.5','P','Balística Forense e SINAB: estado da arte, visão de futuro e integração internacional','Lehi Sudy dos Santos - Polícia Federal','Balística forense|SINAB','s'],
-[28,'11:00','11:25','DMA','', 'S','Implicações da análise de padrões para a seleção e inserção de projéteis de chumbo nu no BNPB','Vanduir Soares - João Pessoa/PB','SINAB',''],
-[28,'11:30','11:55','DMA','', 'S','Análise das armas de fogo apreendidas em megaoperação policial no Rio de Janeiro: desafios de identificação e integração ao Banco Nacional de Perfis Balísticos','Priscila Madela e Laura Biondo - Rio de Janeiro/RJ','SINAB',''],
+[28,'09:45','10:55','DMA','BA.P.5','P','Balística Forense e SINAB: estado da arte, visão de futuro e integração internacional','Lehi Sudy dos Santos - Polícia Federal','Balística forense|SINAB','s'],
+[28,'11:00','11:30','DMA','', 'S','Implicações da análise de padrões para a seleção e inserção de projéteis de chumbo nu no BNPB','Vanduir Soares - João Pessoa/PB','SINAB',''],
+[28,'11:30','12:00','DMA','', 'S','Análise das armas de fogo apreendidas em megaoperação policial no Rio de Janeiro: desafios de identificação e integração ao Banco Nacional de Perfis Balísticos','Priscila Madela e Laura Biondo - Rio de Janeiro/RJ','SINAB',''],
 [28,'10:00','10:55','JGU','ML.P.8','P','Entomologia Médico-legal: como o tempo de colonização dos insetos nos corpos reflete o intervalo pós-morte mínimo','Janyra Oliveira Costa - PC/RJ','Entomologia forense',''],
 [28,'11:00','11:55','JGU','ML.C.1','C','Reunião de coordenadores em Medicina Legal','','',''],
 [28,'10:00','10:55','AMA','EX.10','X','A cena que nunca se apaga: preservando a cadeia de custódia da cena do crime em 3D','Karin Kawakami De Vicente - Santiago e Cintra','',''],
@@ -311,7 +312,7 @@ const EVENTS = [
 [29,'15:30','16:30','EXP','', 'A','*Criminalística: procedimentos e metodologias* (6ª edição)','Vários autores;;Responsáveis pela sessão: Gabrielle Virgínia Ferreira Cardoso e Celso Felipe Bandeira de Sá','Livros',''],
 [29,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [29,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
-[29,'10:00','10:55','TEA','BA.P.9','P','Subclass and Individual Characteristics in the 3D Era: Lessons from Virtual Comparison Microscopy Research','Zachary Carr - Cadre Forensics/Chicago/EUA','Microcomparação|SINAB','ls'],
+[29,'09:45','10:55','TEA','BA.P.9','P','Subclass and Individual Characteristics in the 3D Era: Lessons from Virtual Comparison Microscopy Research','Zachary Carr - Cadre Forensics/Chicago/EUA','Microcomparação|SINAB','ls'],
 [29,'11:00','11:55','TEA','GI.P.2','P','Introduction to 3D Forensics','Eugene Liscio - ai2-3D / Universidade de Toronto','Inovação|Crimes contra a pessoa|Crimes contra o patrimônio','l'],
 [29,'10:00','10:55','ARE','EX.2','X','A Utilização de Deposição de Metal a Vácuo (VMD) na revelação de Vestígios Papiloscópicos: Aplicações e Perspectivas na Papiloscopia Forense','Equipatec','',''],
 [29,'11:00','11:25','ARE','LC.O.2','O','Atendimento pericial em local de suspeita de envenenamento com múltiplas vítimas: relato técnico do caso do “bolo envenenado” no litoral norte do Rio Grande do Sul','Andrei Röehrs Portinho (IGP-RS) - apresentador','',''],
@@ -320,8 +321,8 @@ const EVENTS = [
 [29,'11:00','11:55','JSL','EX.5','X','Veículos Eletrificados: Os Desafios da Perícia na Nova Era Automotiva — como identificar riscos, avaliar danos em baterias de alta tensão e entender as particularidades de um sinistro envolvendo veículos híbridos e elétricos','Rodrigo Galski - Regula','',''],
 [29,'10:00','10:25','IBE','EF.O.9','O','Inteligência artificial especializada aplicada à investigação pericial de incêndios: apoio metodológico e padronização do raciocínio causal','Leandro Goulart Dias (SPTC) - apresentador','',''],
 [29,'10:30','10:55','IBE','CP.O.6','O','A contribuição da computação forense na investigação de eventos críticos em ambiente hospitalar: correlação temporal e análise multissistêmica de uma ocorrência no Distrito Federal','Gabriel Velasco Braga (PCDF) - apresentador, Eduardo Mallmann (PCDF), Leandro Oliveira (PCDF)','',''],
-[29,'11:00','11:25','IBE','', 'S','Atendendo confrontos requisitados no SINAB para pedidos com múltiplos inquéritos','Francisco Martins - Maringá/PR','SINAB',''],
-[29,'11:30','11:55','IBE','', 'S','Uma proposta de indicadores de desempenho para o Sistema Nacional de Análise Balística','Rodrigo Londe Moura - Goiânia/GO','SINAB',''],
+[29,'11:00','11:30','IBE','', 'S','Atendendo confrontos requisitados no SINAB para pedidos com múltiplos inquéritos','Francisco Martins - Maringá/PR','SINAB',''],
+[29,'11:30','12:00','IBE','', 'S','Uma proposta de indicadores de desempenho para o Sistema Nacional de Análise Balística','Rodrigo Londe Moura - Goiânia/GO','SINAB',''],
 [29,'10:00','10:55','MQU','OE.P.1','P','A Autonomia da Perícia Científica e seus Reflexos na Atuação da Advocacia','Diogo Ramos - Presidente da Comissão Nacional de Perícias do Conselho Federal da OAB','Autonomia da perícia|Devido processo legal',''],
 [29,'11:00','11:55','MQU','OE.P.2','P','Prova Pericial no Processo Judicial: Limites, Garantias e a Intervenção Estratégica do Advogado','Mônica Silva - Presidente da Comissão de Perícias da OAB São Paulo','Autonomia da perícia|Devido processo legal',''],
 [29,'10:00','10:25','MSC','ML.O.5','O','O fenómeno “canine rescue” – relato de uma morte altruísta - a importância do exame do local no esclarecimento da morte violenta','Carlos Henrique da Silva Durão (INMLCF) - apresentador, Dina Durão (INSA)','',''],
@@ -387,8 +388,8 @@ const EVENTS = [
 [30,'15:30','16:30','EXP','', 'A','*Uma Introdução à Criminalística: Guia Prático para Perícia Criminal e Concursos*;;*A Lei Antifacção: Quando a Comunidade é o Corpo de Delito*;;*Impressões Humanas na Cena do Crime: Papiloscopia e outros vestígios corporais de contato*','Autor: Paulo Ricardo Ost Frank (responsável pela sessão)','Livros',''],
 [30,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [30,'09:00','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
-[30,'09:00','10:25','IBE','', 'S','IBIS – Melhores Práticas: Maximizando os Dados de Entrada e os Resultados','Petar Zancovich - Leads Online/Canadá','SINAB',''],
-[30,'10:30','11:55','IBE','', 'S','SINAB – Evento exclusivo: Reunião com os Administradores Locais e Usuários do SINAB','Thiago Sampaio e Rafael Davet - Comitê Gestor/MJSP','SINAB',''],
+[30,'09:15','10:25','IBE','', 'S','IBIS – Melhores Práticas: Maximizando os Dados de Entrada e os Resultados','Petar Zancovich - Leads Online/Canadá','SINAB',''],
+[30,'10:30','12:00','IBE','', 'S','Evento exclusivo: Reunião com os Administradores Locais e Usuários do SINAB','Thiago Sampaio e Rafael Davet - Comitê Gestor/MJSP','SINAB',''],
 [30,'10:00','11:55','TEA','LC.P.7','P','iPhone LiDAR For Crime Scene Documentation','Eugene Liscio - ai2-3D / Universidade de Toronto','Crimes contra o patrimônio|Crimes contra a pessoa','l'],
 [30,'10:00','10:25','ARE','GI.O.2','O','Padronização e escalabilidade na extração de dados forenses: arquitetura operacional de um laboratório especializado','Michael André Hempkemeyer (PCIPR) - apresentador','',''],
 [30,'10:30','10:55','ARE','GI.O.3','O','CHARLIE: assistente de IA em criminalística','Leandro Dias Carneiro (PCDF) - apresentador','',''],
@@ -471,7 +472,7 @@ const ROOMS = {
   AUD:{n:'Auditório Augusto Meyer'}, TEA:{n:'Teatro Lupicínio Rodrigues'}, ARE:{n:'Arena Elis Regina'},
   JSL:{n:'Sala João Simões Lopes Neto',x:'Sala A'}, IBE:{n:'Sala Iberê Camargo',x:'Sala B'}, MQU:{n:'Sala Mário Quintana',x:'Sala C'},
   MSC:{n:'Sala Moacyr Scliar'}, EVE:{n:'Sala Érico Veríssimo'}, DMA:{n:'Sala Dyonélio Machado'}, JGU:{n:'Sala Josué Guimarães'},
-  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores (térreo)'}, GER:{n:'Andar superior'}
+  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores (térreo)'}, TAU:{n:'Fábrica da Taurus (visita externa)'}, GER:{n:'Andar superior'}
 };
 const ROOM_ORDER = Object.keys(ROOMS);
 const AREAS = {
@@ -549,7 +550,7 @@ EVENTS.forEach((r, i) => {
   EV.push(ev);
 });
 const ALL_KW = (() => { const m = new Map(); EV.forEach(e => e.kws.forEach(k => m.set(k, (m.get(k)||0)+1))); return [...m].sort((a,b) => a[0].localeCompare(b[0],'pt')); })();
-const SLOTS = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','15:30','16:10','16:40','17:10','17:40','18:30'];
+const SLOTS = ['08:00','08:30','09:00','09:15','09:30','09:45','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','15:30','16:10','16:40','17:10','17:40','18:30'];
 const PERIODS = {manha:['Manhã',0,mins('12:30')], tarde:['Tarde',mins('12:30'),mins('18:25')], noite:['Noite',mins('18:25'),24*60]};
 
 /* ---------- estado ---------- */
