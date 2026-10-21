@@ -731,9 +731,6 @@ function renderFiltros(){
     <div class="search">${ICON_SEARCH}<input id="q" type="search" placeholder="Buscar tema, palestrante, instituição ou código" value="${esc(F.q)}" autocomplete="off" enterkeyhint="search" aria-label="Buscar na programação"><button class="clr" data-clrq aria-label="Limpar busca" ${F.q?'':'hidden'}>×</button></div>
     <div class="results" id="results">${resultsHTML(counts,total)}</div>
     <fieldset><legend>Áreas temáticas ${F.areas.size?'<button class="linkbtn" data-clrset="areas">limpar</button>':''}</legend><div class="checks two">${areaChecks}</div></fieldset>
-    <fieldset><legend>Tópicos relacionados ${F.kws.size?'<button class="linkbtn" data-clrset="kws">limpar</button>':''}</legend>
-      <input class="subsearch" id="kwq" type="search" placeholder="Procurar tópico" value="${esc(kwQuery)}" aria-label="Procurar tópico">
-      <div class="checks two kwbox" id="kwbox">${kwChecks()}</div></fieldset>
     <fieldset><legend>Tipo de atividade ${F.types.size?'<button class="linkbtn" data-clrset="types">limpar</button>':''}</legend><div class="checks two">${typeChecks}</div></fieldset>
     <fieldset><legend>Horário ${F.periods.size||F.slots.size?'<button class="linkbtn" data-clrset="periods,slots">limpar</button>':''}</legend>
       <div class="pills">${periodPills}</div>
