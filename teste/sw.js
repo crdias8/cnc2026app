@@ -2,7 +2,7 @@
    Estratégia: a página sempre busca primeiro a versão mais nova na internet;
    só usa a cópia salva quando não há conexão (ou a rede demora demais).
    VERSION é trocada a cada publicação (preenchida pelo build). */
-const VERSION = '8710e20d9e';
+const VERSION = '267040f89d';
 const KILL = false; // true = remove o modo offline dos aparelhos na próxima abertura com internet
 const CACHE = 'cnc2026-' + VERSION;
 const CORE = ['./', './index.html', './manifest.webmanifest',
@@ -11,7 +11,7 @@ const CORE = ['./', './index.html', './manifest.webmanifest',
 self.addEventListener('install', e => {
   self.skipWaiting();
   if (KILL) return;
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE.map(u => new Request(u, { cache: 'reload' })))).catch(() => {}));
+  e.waitUntil(caches.open(CACHE).then(async c => { await c.addAll(CORE.map(u => new Request(u, { cache: 'reload' }))); await c.put('./__saved_at', new Response(String(Date.now()))); }).catch(() => {}));
 });
 
 self.addEventListener('activate', e => {
@@ -39,6 +39,7 @@ self.addEventListener('fetch', e => {
         if (fresh && fresh.ok) {
           const c = await caches.open(CACHE);
           c.put('./index.html', fresh.clone());
+          c.put('./__saved_at', new Response(String(Date.now()), { headers: { 'Content-Type': 'text/plain' } }));
           return fresh;
         }
         throw new Error('bad response');
