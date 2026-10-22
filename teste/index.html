@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8B0000">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CNC 2026">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Programação CNC 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Programação oficial do XXVIII Congresso Nacional de Criminalística — 27 a 30 de outubro de 2026, Gramado/RS">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;600&family=Sora:wght@400;600;700&display=swap">
+<style>
+/* Layout: cabeçalho fixo vermelho/preto como o site oficial; conteúdo em coluna única (máx. 760px), cartões por horário */
+:root{
+  --brand:#8B0000; --brand-2:#C10000; --brand-deep:#5A0000; --salmon:#EC7969; --gold:#F2C230;
+  --nav:#141414; --nav-fg:#F2F2F2; --nav-muted:#A9A9A9;
+  --bg:#F6F2F1; --surface:#FFFFFF; --surface-2:#F1EAE9; --fg:#1C1516; --muted:#6B5F60; --line:#E4D8D7;
+  --accent:#A30F12; --accent-soft:#FBE7E4; --now:#0E7A43; --now-soft:#E2F4EA; --warn:#9A5B00; --warn-soft:#FFF1D6;
+  --shadow:0 1px 2px rgba(60,10,10,.06),0 4px 14px rgba(60,10,10,.05);
+  --f-display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --f-body:"Sora",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#120E0E; --surface:#1C1617; --surface-2:#251E1F; --fg:#F2EBEB; --muted:#AD9FA0; --line:#352B2C;
+  --accent:#F0857A; --accent-soft:#3A1A1A; --now:#5FD39A; --now-soft:#15301F; --warn:#F1B65A; --warn-soft:#33260F;
+  --shadow:none; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#120E0E; --surface:#1C1617; --surface-2:#251E1F; --fg:#F2EBEB; --muted:#AD9FA0; --line:#352B2C;
+  --accent:#F0857A; --accent-soft:#3A1A1A; --now:#5FD39A; --now-soft:#15301F; --warn:#F1B65A; --warn-soft:#33260F;
+  --shadow:none; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--brand)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Cabeçalho */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.brandbar{background:var(--brand);color:#fff}
+.brandbar .wrap{display:flex;align-items:center;gap:12px;padding-block:8px}
+.logo{height:40px;width:auto;display:block;flex:0 0 auto}
+.brandbar .ttl{margin-left:auto;text-align:right}
+.mark{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:.02em;line-height:1;display:flex;align-items:flex-end;gap:4px}
+.mark small{font-size:13px;font-weight:500;color:var(--gold);letter-spacing:.08em;padding-bottom:2px}
+.brandbar .ttl{font-size:13px;line-height:1.25;opacity:.92;min-width:0}
+.brandbar .ttl b{display:block;font-weight:600}
+.tabs{background:var(--nav)}
+.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs .wrap::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;background:none;border:0;color:var(--nav-muted);font-family:var(--f-display);font-weight:500;font-size:16px;letter-spacing:.06em;text-transform:uppercase;padding:12px 10px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--nav-fg);border-bottom-color:var(--salmon)}
+.tab .n{font-family:var(--f-body);font-size:12px;font-weight:600;background:var(--salmon);color:#2a0606;border-radius:999px;padding:1px 6px;margin-left:5px;letter-spacing:0;vertical-align:2px}
+
+/* Barra de filtros ativos */
+.active-filters{background:var(--accent-soft);border-bottom:1px solid var(--line)}
+.active-filters .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-block:8px;font-size:14px}
+.active-filters .lbl{font-weight:600;color:var(--accent);margin-right:2px}
+.af-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 4px 2px 10px;font-size:13.5px;cursor:pointer}
+.af-chip span.x{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--surface-2);font-size:14px;line-height:1}
+.linkbtn{background:none;border:0;color:var(--accent);font-weight:600;text-decoration:underline;cursor:pointer;padding:2px 4px;font-size:14px}
+
+main{padding-bottom:48px}
+section.view{padding-top:16px}
+
+/* Início */
+.hero{background:radial-gradient(120% 90% at 85% 10%,var(--brand-2) 0%,var(--brand) 45%,var(--brand-deep) 100%);color:#fff;position:relative;overflow:hidden}
+.hero-logo{width:min(420px,88%);height:auto;display:block;margin:10px 0 22px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
+.hero .wrap{position:relative;padding-block:28px 26px}
+.eyebrow{font-family:var(--f-display);font-weight:300;letter-spacing:.12em;text-transform:uppercase;font-size:14px;color:#FFD7CF}
+.hero h1{font-family:var(--f-display);font-weight:600;font-size:clamp(30px,8vw,46px);line-height:1.02;margin:8px 0 10px;text-wrap:balance;letter-spacing:.01em;text-transform:uppercase}
+.hero p{margin:0;max-width:52ch;font-size:15.5px;opacity:.95}
+.daygrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+.daybtn{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:var(--r);padding:10px 6px;cursor:pointer;text-align:center}
+.daybtn b{display:block;font-family:var(--f-display);font-size:24px;font-weight:500;line-height:1}
+.daybtn span{font-size:12px;opacity:.85;text-transform:uppercase;letter-spacing:.06em}
+.daybtn.today{background:#fff;color:var(--brand)}
+.nowbar{margin-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14.5px}
+.nowbar button{background:var(--gold);color:#2a1a00;border:0;border-radius:999px;padding:8px 14px;font-weight:600;cursor:pointer}
+
+.block{margin-top:28px}
+.block h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:20px;margin:0 0 10px;color:var(--accent)}
+.prose p{margin:0 0 10px;max-width:65ch}
+.info{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.info li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;display:grid;gap:2px}
+.info li b{font-family:var(--f-display);font-weight:500;font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.legend{display:grid;grid-template-columns:1fr;gap:6px}
+@media (min-width:560px){.legend{grid-template-columns:1fr 1fr}}
+.legend button{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;cursor:pointer;text-align:left;font-size:14.5px}
+.legend button:hover{border-color:var(--accent)}
+.flags-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.fl-lbl{font-weight:600;font-size:14px;align-self:center;margin-right:2px}
+.orgs{display:grid;gap:8px;grid-template-columns:1fr}
+@media (min-width:560px){.orgs{grid-template-columns:1fr 1fr}}
+.org{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:15px}
+.org .role{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
+.org .inst{color:var(--muted)}
+.subh{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:17px;margin:22px 0 10px}
+.committee{display:grid;gap:14px}
+.committee .grp h3{font-size:14px;font-weight:600;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.committee ul{margin:0;padding:0;list-style:none;font-size:14.5px;color:var(--muted)}
+.committee li strong{color:var(--fg);font-weight:600}
+.dot{width:12px;height:12px;border-radius:3px;flex:0 0 auto;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.note{font-size:13.5px;color:var(--muted)}
+
+/* Etiquetas */
+.tag{display:inline-block;background:var(--c);color:var(--t);font-family:var(--f-display);font-weight:500;font-size:14px;letter-spacing:.04em;padding:1px 7px;border-radius:5px;line-height:1.45;box-shadow:inset 0 0 0 1px rgba(127,127,127,.25);white-space:nowrap}
+.tag.sinab{--c:#FFFFFF;--t:#E8541C;display:inline-flex;align-items:center;font-weight:500;letter-spacing:.06em;box-shadow:inset 0 0 0 1px #F2B9A2}
+.tag.sinab svg{width:.42em;height:1.15em;margin:0 .05em;flex:0 0 auto}
+.tag.pnum{--c:var(--surface-2);--t:var(--fg);font-variant-numeric:tabular-nums}
+.ev h3.ptitle{font-size:14.5px;letter-spacing:.01em}
+.ptoggle{margin-top:10px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);font-weight:600;font-size:14px;border-radius:999px;padding:7px 14px;cursor:pointer}
+.ptoggle[aria-expanded="true"]{background:var(--accent-soft)}
+.flag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;border-radius:5px;padding:2px 7px;background:var(--surface-2);color:var(--fg);white-space:nowrap}
+.flag svg{width:13px;height:13px}
+
+/* Dia */
+.dayhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.dayhead h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:24px;margin:0}
+.dayhead .meta{font-size:14px;color:var(--muted)}
+.slot{margin-top:18px}
+.slot-h{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hdr,96px));z-index:5;background:var(--bg);display:flex;align-items:center;gap:10px;padding:6px 0;font-family:var(--f-display);font-weight:500;font-size:22px;font-variant-numeric:tabular-nums}
+.slot-h::after{content:"";flex:1;height:1px;background:var(--line)}
+.slot-h .live{font-family:var(--f-body);font-size:12px;font-weight:700;color:var(--now);background:var(--now-soft);border-radius:999px;padding:2px 8px;text-transform:uppercase;letter-spacing:.06em}
+.brk{margin-top:18px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px}
+.brk::before,.brk::after{content:"";flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 10px)}
+.brk b{font-variant-numeric:tabular-nums;font-weight:600}
+.list{display:grid;gap:10px}
+.ev{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 12px 12px 14px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:2px 8px;min-width:0}
+.ev.dim{background:var(--surface-2);box-shadow:none}
+.ev.is-now{border-color:var(--now);box-shadow:0 0 0 1px var(--now) inset}
+.ev-main{min-width:0}
+.ev-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:13.5px;color:var(--muted)}
+.ev-top .type{font-weight:600;color:var(--fg)}
+.ev-top .time{font-variant-numeric:tabular-nums}
+.ev-top .nowpill{color:var(--now);background:var(--now-soft);font-weight:700;border-radius:999px;padding:0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.ev h3{font-size:16.5px;line-height:1.35;font-weight:600;margin:6px 0 4px;text-wrap:pretty;overflow-wrap:anywhere}
+.ev h3.books{line-height:1.4;display:grid;gap:8px}
+.ev h3.books .book{display:block;padding-left:12px;border-left:3px solid var(--line)}
+.ev h3.books em{font-style:italic}
+.ev .ppl{font-size:14.5px;color:var(--fg);margin:0 0 4px;overflow-wrap:anywhere}
+.ev .ppl span{display:block}
+.ev .room{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);margin-top:2px}
+.ev .room svg{width:14px;height:14px;flex:0 0 auto}
+.ev .flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ev .kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.kw{border:1px solid var(--line);background:transparent;border-radius:999px;font-size:13px;padding:2px 9px;cursor:pointer;color:var(--muted)}
+.kw:hover,.kw.on{border-color:var(--accent);color:var(--accent)}
+.kw.on{background:var(--accent-soft)}
+.fav{grid-row:1/span 2;grid-column:2;align-self:start;background:none;border:0;padding:6px;margin:-6px -6px 0 0;cursor:pointer;color:var(--muted);border-radius:8px;width:40px;height:40px;display:grid;place-items:center}
+.fav svg{width:24px;height:24px}
+.fav[aria-pressed="true"]{color:#E2A400}
+.fav[aria-pressed="true"] svg path{fill:currentColor}
+.conflict{margin-top:8px;font-size:13px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:3px 8px;display:inline-block}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:22px 16px;text-align:center;color:var(--muted);margin-top:16px}
+.empty b{display:block;color:var(--fg);font-size:16px;margin-bottom:4px}
+
+/* Filtros */
+.search{position:relative}
+.search input{width:100%;font:inherit;font-size:17px;padding:12px 40px 12px 42px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.search input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:20px}
+.results{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hdr,96px));z-index:4;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:6px}
+.results .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.results .count{font-weight:600}
+.results .days{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.results .days button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums}
+.results .days button b{color:var(--accent)}
+.results .days button:disabled{opacity:.45;cursor:default}
+fieldset{border:0;padding:0;margin:20px 0 0;min-width:0}
+legend{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:17px;color:var(--accent);padding:0;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;width:100%}
+legend .linkbtn{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-size:13.5px}
+.checks{display:grid;grid-template-columns:1fr;gap:6px}
+@media (min-width:560px){.checks.two{grid-template-columns:1fr 1fr}}
+.chk{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:9px 10px;cursor:pointer;font-size:15px;min-width:0}
+.chk input{width:18px;height:18px;margin:0;accent-color:var(--brand);flex:0 0 auto}
+.chk .lab{flex:1;min-width:0;overflow-wrap:anywhere}
+.chk .c{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chk:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:14.5px;font-variant-numeric:tabular-nums}
+.pill input{position:absolute;opacity:0;pointer-events:none}
+.pill:has(input:checked){background:var(--brand);border-color:var(--brand);color:#fff}
+.pill:has(input:focus-visible){outline:2px solid var(--salmon)}
+.subsearch{width:100%;font:inherit;font-size:16px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);margin-bottom:8px}
+.kwbox{max-height:340px;overflow:auto;padding-right:2px}
+.more{margin-top:8px}
+
+footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+</head>
+<body>
+<style>
+.teststrip{background:#F2C230;color:#2a1a00;font-size:12.5px;font-weight:700;text-align:center;letter-spacing:.04em;padding:3px 8px}
+.install{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 16px;display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start}
+.install img{width:56px;height:56px;border-radius:13px}
+.install h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:19px;margin:0 0 4px;color:var(--accent)}
+.install p{margin:0 0 8px;font-size:14.5px}
+.install ol{margin:6px 0 0;padding-left:20px;font-size:14.5px;display:grid;gap:4px}
+.install .ibtn{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font-weight:600;font-size:15px;cursor:pointer;margin-top:4px}
+.install .ok{color:var(--now);font-weight:600}
+.install .hint{font-size:13px;color:var(--muted);margin-top:8px}
+.install svg{width:16px;height:16px;vertical-align:-3px}
+.stamp{margin:10px 0 0;font-size:13px;opacity:.9}
+.offbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#2a1a00;color:#FFE7A3;font-size:13.5px;font-weight:600;text-align:center;padding:9px max(16px,env(safe-area-inset-right,0px)) calc(9px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+</style>
+<div class="offbar" id="offbar" hidden>Sem internet: exibindo a última versão salva da programação.</div>
+<script>
+(function(){
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(ua);
+  const inApp = /FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter|TikTok|LinkedInApp|; wv\)/.test(ua);
+  const iosOther = isIOS && /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  let deferred = null;
+  const ICON = 'assets/icon-192.png';
+  const SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
+
+  window.PWA_INSTALL_HTML = function(){
+    let body;
+    if (standalone()) {
+      body = '<p class="ok">App instalado neste celular.</p><p>Com internet, ele sempre mostra a programação mais recente. Sem internet, abre a última versão salva.</p>';
+    } else if (inApp) {
+      body = '<p>Você abriu o link dentro de outro aplicativo. Para instalar, abra no navegador do celular:</p><ol><li>Toque no menu (<b>⋮</b> ou <b>•••</b>) desta tela.</li><li>Escolha <b>Abrir no navegador</b> (ou “Abrir no Safari”/“Abrir no Chrome”).</li></ol>';
+    } else if (isIOS) {
+      body = (iosOther ? '<p>No iPhone, a instalação é mais simples pelo <b>Safari</b>. Copie o link e abra no Safari, ou tente pelo menu Compartilhar deste navegador.</p>' : '<p>Instale em três toques, sem passar pela App Store:</p>') +
+        '<ol><li>Toque em <b>Compartilhar</b> ' + SHARE + ' (se não aparecer, toque em <b>•••</b> ao lado do endereço).</li><li>Escolha <b>Adicionar à Tela de Início</b>.</li><li>Toque em <b>Adicionar</b>.</li></ol>';
+    } else if (isAndroid) {
+      body = deferred
+        ? '<p>Instale o app com um toque, sem passar pela Play Store.</p><button class="ibtn" id="pwa-install" type="button">Instalar app</button>'
+        : '<p>Instale sem passar pela Play Store:</p><ol><li>Toque no menu <b>⋮</b> do navegador.</li><li>Escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>';
+    } else {
+      body = '<p>Abra este link no celular para instalar o app na tela inicial.</p>';
+    }
+    return '<section class="install" id="pwa-box"><img src="' + ICON + '" alt=""><div><h2>App no celular</h2>' + body +
+      (standalone() ? '' : '<p class="hint">Instalar é opcional: o app funciona igual pelo navegador.</p>') + '</div></section>';
+  };
+
+  function refreshBox(){ const b = document.getElementById('pwa-box'); if (b) b.outerHTML = window.PWA_INSTALL_HTML(); }
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; refreshBox(); });
+  window.addEventListener('appinstalled', () => { deferred = null; refreshBox(); });
+  document.addEventListener('click', async ev => {
+    if (!ev.target.closest('#pwa-install') || !deferred) return;
+    deferred.prompt();
+    try { await deferred.userChoice; } catch(e){}
+    deferred = null; refreshBox();
+  });
+
+  function net(){ const o = document.getElementById('offbar'); if (o) o.hidden = navigator.onLine !== false; }
+  window.addEventListener('online', net); window.addEventListener('offline', net); net();
+
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {}); });
+  }
+})();
+</script>
+
+<header class="top" id="hdr">
+  <div class="teststrip">VERSÃO DE TESTE · não divulgar este endereço</div><div class="brandbar"><div class="wrap">
+    <img class="logo" src="data:image/webp;base64,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" alt="CNC 2026" width="306" height="116">
+    <div class="ttl"><b>27 a 30 de outubro de 2026</b>Gramado/RS</div>
+  </div></div>
+  <nav class="tabs" aria-label="Seções"><div class="wrap" role="tablist" id="tabs"></div></nav>
+  <div class="active-filters" id="af" hidden><div class="wrap" id="afw"></div></div>
+</header>
+
+<main>
+  <section class="view" id="v-inicio" hidden style="padding-top:0"></section>
+  <section class="view wrap" id="v-filtros" hidden></section>
+  <section class="view wrap" id="v-dia" hidden></section>
+  <section class="view wrap" id="v-favoritos" hidden></section>
+</main>
+
+<script>
+const BUILD_STAMP = '22/10 às 12:22';
+/* PROGRAMAÇÃO — XXVIII CNC 2026
+   Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
+   tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
+          X expositor · S SINAB · I institucional · T a confirmar · V pôsteres · B intervalo
+   selos: l = tradução por legendas · r = palestrante/instrutor remoto · n = levar notebook · s = SINAB */
+const EVENTS = [
+/* ===== 27/10 — Minicursos ===== */
+[27,'08:00','12:10','AUD','', 'I','Reunião CONDPCi','','',''],
+[27,'08:00','15:00','TAU','', 'S','Visita técnica à fábrica da Taurus','','SINAB',''],
+[27,'08:00','12:10','AMA','PA.N.1','M','Curso de Geotecnologias aplicadas à Perícia Criminalística (módulo remoto)','Christhian Cunha - Empresa/Ambgeo','Geoprocessamento','rn'],
+[27,'12:10','13:00','', '', 'B','Intervalo de almoço','','',''],
+[27,'13:00','17:15','AUD','', 'I','Reunião CONDPCi','','',''],
+[27,'13:00','17:15','JSL','CP.M.2','M','Técnicas e ferramentas para descriptografia de dados','Instrutor: Matheus Bichara - Polícia Federal (Perito Criminal)','Computação forense','n'],
+[27,'13:00','17:15','IBE','EF.M.2','M','Perícia de Incêndio em Edificações: Da Teoria à Prática','Instrutor: Carlos Alberto Trindade - PCF/MG','Incêndio',''],
+[27,'13:00','17:15','MQU','EF.M.1','M','Practical Evidence Interpretation for Traffic Accident Reconstruction','Instrutor: John Daily - Jackson Hole Scientific Investigations Inc','Acidente de trânsito','l'],
+[27,'13:00','17:15','MSC','QB.M.1','M','Avaliação da Incerteza de Medição na Perícia Criminal: Fundamentos e Aplicações','Instrutora: Profa. Sarah Eller - UFCSPA','Análises laboratoriais',''],
+[27,'13:00','17:15','DMA','', 'I','Reunião ABC','','',''],
+[27,'13:00','17:15','JGU','DF.M.2','M','Claude AI nas ciências forenses','Instrutor: Carlos Chelfo - CRCRJ','Contabilidade forense|Gestão e inovação|Computação forense',''],
+[27,'13:00','17:15','AMA','PA.N.1','M','Curso de Geotecnologias aplicadas à Perícia Criminalística: Sensoriamento Remoto, Inteligência Artificial e Computação em Nuvem','Instrutor: Christhian Cunha - Empresa/Ambgeo','Geoprocessamento','rn'],
+[27,'15:00','15:15','', '', 'B','Coffee break dos minicursos','','',''],
+[27,'18:30','20:30','EVE','', 'I','Cerimônia de abertura','','',''],
+
+/* ===== 28/10 ===== */
+[28,'09:00','10:00','EXP','', 'A','*Reconstrução de Colisões Veiculares*;;*Fundamentos de Estatística Aplicados na Reconstrução de Acidentes de Trânsito* (2ª edição)','Autores: Wilson Toresan Jr. (responsável pela sessão) e Nortthon Didyk','Livros|Acidente de trânsito',''],
+[28,'15:30','16:30','EXP','', 'A','*Entomologia Forense: quando os insetos são vestígios* (4ª edição);;*Entomologia Forense Médico-Legal: da cronotanatognose à entomogenética*;;*Entomologia Forense no Brasil: insetos peritos*','Vários autores;;Responsável pela sessão: Janyra Oliveira-Costa','Livros|Entomologia forense',''],
+[28,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
+[28,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
+[28,'10:00','10:55','TEA','GI.P.3','P','Ensino, Pesquisa e Inovação na Polícia Científica do Paraná','Alexandre Lara - PCI/PR','Inovação',''],
+[28,'11:00','11:55','TEA','GI.P.5','P','Aplicação da IA na perícia criminal federal','Itamar Almeida de Carvalho - PCF/DF','Inovação|Inteligência artificial',''],
+[28,'10:00','10:55','ARE','EX.9','X','Hyperspectral imaging in forensics - the foundations behind blindsite','Teclab','',''],
+[28,'11:00','11:55','ARE','EX.4','X','Pequenas Digitais, Grandes Possibilidades: Inovação Tecnológica na Identificação Biométrica Neonatal','Aline Borges Teixeira - Griaule','',''],
+[28,'10:00','10:55','JSL','DF.P.9','P','A inteligência artificial aplicada à perícia contábil','Carlos Chelfo - CRCRJ','Contabilidade forense|Inteligência artificial',''],
+[28,'11:00','11:55','JSL','DF.P.1','P','Perícia Contábil Judicial e Extrajudicial','Raimundo Humberto Sena de Oliveira - PCE/PA','Contabilidade forense',''],
+[28,'10:00','10:55','IBE','LC.P.3','P','HemoVision 3D BPA Analysis: Aprendizado de Máquina na Análise de Manchas de Sangue','Philip Joris - Forentrics (Bélgica)','Crimes contra a pessoa','lr'],
+[28,'11:00','11:55','IBE','PA.P.3','P','Quando o Veneno se Torna Crime: Envenenamento de Animais e a Atuação da Perícia Criminal Médico-Veterinária','Regina Maurício Santos - PCI/PI','Agrotóxicos|Maus-tratos a animais',''],
+[28,'10:00','11:55','MQU','QB.R.3','R','Aplicações da Espectrometria de Massas de Alta Resolução em Química e Toxicologia Forense','Mediadora: Lara Regina Soccol Gris - IGP/RS;;Debatedores: Marcos Paulo Thomé - IGP/RS e Tiago Franco de Oliveira - UFCSPA','Química e toxicologia forense',''],
+[28,'10:00','10:55','MSC','', 'T','Palestra a confirmar','','',''],
+[28,'11:00','11:55','MSC','CP.P.9','P','Recuperação de dados em dispositivos de armazenamento danificados','Wellington Rodrigues - Empresa/Legacy','Computação forense',''],
+[28,'10:00','10:55','EVE','OE.P.6','P','Atuação e avanços da SENASP','João Alberto Nogueira Junior - SENASP e Beatriz Figueiredo - SENASP','',''],
+[28,'11:00','11:50','EVE','OE.P.7','P','O papel da Polícia Científica no fortalecimento de Políticas Públicas sobre Drogas','João Carlos Laboissière Ambrósio - SENAD','Drogas',''],
+[28,'09:45','10:55','DMA','BA.P.5','P','Balística Forense e SINAB: estado da arte, visão de futuro e integração internacional','Lehi Sudy dos Santos - Polícia Federal','Balística forense|SINAB','s'],
+[28,'11:00','11:30','DMA','', 'S','Implicações da análise de padrões para a seleção e inserção de projéteis de chumbo nu no BNPB','Vanduir Soares - João Pessoa/PB','SINAB',''],
+[28,'11:30','12:00','DMA','', 'S','Análise das armas de fogo apreendidas em megaoperação policial no Rio de Janeiro: desafios de identificação e integração ao Banco Nacional de Perfis Balísticos','Priscila Madela e Laura Biondo - Rio de Janeiro/RJ','SINAB',''],
+[28,'10:00','10:55','JGU','ML.P.8','P','Entomologia Médico-legal: como o tempo de colonização dos insetos nos corpos reflete o intervalo pós-morte mínimo','Janyra Oliveira Costa - PC/RJ','Entomologia forense',''],
+[28,'11:00','11:55','JGU','ML.C.1','C','Reunião de coordenadores em Medicina Legal','','',''],
+[28,'10:00','10:55','AMA','EX.10','X','A cena que nunca se apaga: preservando a cadeia de custódia da cena do crime em 3D','Karin Kawakami De Vicente - Santiago e Cintra','',''],
+[28,'11:00','11:55','AMA','LC.C.1','C','Reunião de coordenadores em Perícias de locais de morte e patrimônio','','',''],
+[28,'11:55','13:30','', '', 'B','Intervalo de almoço','','',''],
+[28,'13:30','18:05','AUD','', 'I','Reunião ABC','','',''],
+[28,'13:30','14:25','TEA','EF.P.5','P','Crash Tests Through the Years in USA','John Daily - Jackson Hole Scientific Investigations Inc','Acidente de trânsito','l'],
+[28,'14:30','15:25','TEA','BA.P.4','P','AFTE Theory Of Identification Revision Update','Zachary Carr - Cadre Forensics/Chicago/EUA','Microcomparação','l'],
+[28,'13:30','14:25','ARE','EX.8','X','Da Cadeia de Custódia à Cadeia de Confiança: Como a Automação e governança protegem o que a perícia constrói','Techbiz Forense Digital','',''],
+[28,'14:30','15:25','ARE','EX.1','X','Tablet Multiespectral Forenscope: Aplicações e Potencialidades na Perícia Criminal','Equipatec','',''],
+[28,'13:30','14:25','JSL','GI.P.9','P','Da negação à acreditação: qualidade que garante prova','Tatiana Gonzalez - IGP/RS e Mara Regina Netto Benetti - IGP/RS','Gestão da qualidade',''],
+[28,'14:30','15:25','JSL','EF.P.6','P','Novos Paradigmas da Análise de Evitabilidade de Colisão Veicular','Wilson Toresan Jr - IGP/RS','Acidente de trânsito',''],
+[28,'13:30','13:55','IBE','GI.O.13','O','Centralização das contratações para modernização da Polícia Científica, realizadas pelo Fundo Nacional de Segurança Pública - SENASP/MJSP, como meio para economicidade','Ladislau Brito Santos Júnior (SENASP) - apresentador, Marcio Batista Nunes Homem (SENASP), Douglas Dantas Silveira (SENASP), Eduardo de Oliveira Manso (SENASP), Daniel Francisco Espíndola Júnior (SENASP)','',''],
+[28,'14:30','15:25','IBE','QB.P.9','P','Integrating Technological Innovations Across a High-Throughput DNA Reference Workflow','Lieutenant-Colonel Pascaline Tesio - Gendarmerie Nationale/França','Genética forense|Crimes contra o patrimônio','lr'],
+[28,'13:30','14:25','MQU','QB.P.1','P','Avanços recentes em entomologia forense','Janyra Oliveira Costa - DGPTC/RJ','Entomologia forense',''],
+[28,'14:30','15:25','MQU','ML.P.1','P','Certificação dos IMLs: evolução e profissionalização','Carlos Durão - Instituto Nacional de Medicina Legal e Ciências Forenses de Lisboa','Medicina legal',''],
+[28,'13:30','14:25','MSC','DF.P.6','P','Casos práticos de aplicação da Inteligência Artificial nas Ciências Forenses','Carlos Chelfo - CRCRJ','Inteligência artificial',''],
+[28,'14:30','15:25','MSC','DF.P.7','P','Reinventando a Grafoscopia: do papel ao pixel - a inteligência artificial na análise de imagens de assinaturas','Ênio Rodrigues Viana - Pefoce/CE','Documentoscopia|Inteligência artificial',''],
+[28,'13:30','14:25','EVE','LC.P.5','P','Utilização de tablet multiespectral em Locais de Crime contra o patrimônio','André Gardelino Savino - SPTC/SP','Crimes contra o patrimônio',''],
+[28,'14:30','15:25','EVE','LC.P.4','P','Tribunal do crime e a importância dos Microvestígios','Leonardo Kanashiro - SPTC/SP e Monica Midori Marcon Uchida Sguazzardi - SPTC/SP','Crimes contra a pessoa|Geologia forense',''],
+[28,'13:30','14:25','DMA','CP.P.7','P','Uso de LLMs com ferramenta IPED para análise de conversas de WhatsApp e outros aplicativos','Matheus Bichara - Polícia Federal (Perito Criminal)','Computação forense|Inovação|Inteligência artificial',''],
+[28,'14:30','15:25','DMA','CP.P.6','P','Perícia em criptoativos e carteiras digitais','Maurício Pretto - Chainalysis','Computação forense|Perícia documental e financeira',''],
+[28,'13:30','14:25','JGU','BA.P.1','P','Material experimental para avaliação de desempenho balístico terminal: Gelatina Balística padrão FBI e padrão OTAN','João Paulo Mardegan Issa - USP','Balística forense',''],
+[28,'14:30','15:25','JGU','GI.P.6','P','Gestão do Fundo Nacional de Segurança Pública','Camila Pintarelli - Ministério da Justiça e Segurança Pública','Gestão pericial',''],
+[28,'13:30','14:25','AMA','PA.P.5','P','Considerações sobre a prescrição de Crimes Ambientais','Ana Maria Moreira Marchesan - Procuradora de Justiça do MP/RS','Direito ambiental',''],
+[28,'14:30','15:25','AMA','PA.P.4','P','Avaliação de Anilhas no recebimento de passeriformes oriundos do tráfico de animais silvestres','Alice Soares de Oliveira - Secretaria do Meio Ambiente de São Paulo','Crimes contra a fauna',''],
+[28,'15:25','16:10','', '', 'B','Coffee break','','',''],
+[28,'16:10','17:05','TEA','CP.P.4','P','How to protect children from abuse and exploitation in the digital age','Brian Herrick - Thorn','CSAM|Crimes digitais|Infância protegida','l'],
+[28,'17:10','18:05','TEA','BA.P.8','P','3D Printed Firearm Evidence','Eugene Liscio - ai2-3D / Universidade de Toronto','Balística forense','l'],
+[28,'16:10','17:05','ARE','EX.7','X','O desenvolvimento e evolução das redes balísticas nacionais na América do Sul e resultados no IBIN','Vicente Flores - IAFIS','',''],
+[28,'17:10','18:05','ARE','ML.P.7','P','O caso do acidente com o histórico elevador da Glória - um caso de DVI em Lisboa - o que podemos aprender?','Carlos Alberto Farinha - Interpol/Portugal','Antropologia forense|Medicina legal',''],
+[28,'16:10','17:05','JSL','GI.P.7','P','Uma década de integração forense internacional: a participação dos laboratórios estaduais brasileiros nos Exercícios Colaborativos do UNODC','Luciano Chaves Arantes - Universidade de Brasília','Laboratórios forenses|Química forense|Toxicologia forense',''],
+[28,'17:10','17:35','JSL','EF.O.11','O','Acidentes de trabalho: limitações das abordagens periciais e a necessidade de uma compreensão sistêmica','Cainã Britto do Amaral (IGP-RS) - apresentador, Adriana de Paula Lacerda Santos (UFPR)','',''],
+[28,'17:40','18:20','JSL','EX.6','X','Além do Dano Visível: O Diagnóstico Eletrônico na Perícia Automotiva','Rodrigo Galski - Regula','',''],
+[28,'16:10','17:05','IBE','DF.P.2','P','Novas Dinâmicas de Coleta e Documentação na Perícia Grafoscópica','Maitê Cevallos Mijan Kessler - Instituto de Criminalística/DF','Documentoscopia',''],
+[28,'17:10','18:05','IBE','DF.P.10','P','Doença, Envelhecimento ou Fraude? Parâmetros para distinguir as principais causas modificativas da escrita','Eduardo Lima e Silva - IGP/RS','Grafoscopia',''],
+[28,'16:10','17:05','MQU','QB.P.5','P','Validação de software de análise de mistura','Aline Minervino - INC/PF','Genética forense',''],
+[28,'17:10','18:05','MQU','QB.C.2','C','Reunião de coordenadores em Genética Forense','','',''],
+[28,'16:10','17:05','MSC','BA.P.3','P','Uso de IA na análise de imagens de orifícios gerados pelo impacto de projéteis','Maurício Araújo Dias - UNESP/Presidente Prudente','Balística forense|Computação forense|Crimes contra a pessoa|Inteligência artificial',''],
+[28,'17:10','18:05','MSC','CP.P.5','P','Quando o relógio do smartphone não conta a verdade: interpretação e validação de evidências temporais em Android e iOS','Michael Andre Hempkemeyer - PCI/PR','Perícias em dispositivos digitais móveis',''],
+[28,'16:10','17:05','EVE','LC.P.1','P','Vieses Cognitivos no atendimento de Local de Crime','Aline Teixeira - PCI/SC','Crimes contra a pessoa|Crimes contra o patrimônio',''],
+[28,'17:10','18:05','EVE','LC.P.6','P','Reprodução Simulada, Balística e Perícias Audiovisuais: atuação conjunta em análise de viabilidade de autoria em caso de homicídio por disparo de arma de fogo','Bárbara Zaffari Cavedon - IGP/RS, Cátia Moura Fert - IGP/RS, Luciano Beux - IGP/RS e Juliana Walenciuk Ferreira - IGP/RS','Crimes contra o patrimônio|Crimes contra a pessoa',''],
+[28,'16:10','16:35','DMA','ML.O.4','O','Explosão na ENAEX - um estudo de caso sobre aplicação de protocolo DVI (disaster victims identification) na identificação de vítimas do acidente ocorrido em fábrica de explosivos localizada em Quatro Barras - Paraná','Margarida Neves Souza (PCI PR) - apresentadora, Leonel Letnar Junior (PCI PR), Raisa Requi Jakubiak (PCI PR)','',''],
+[28,'16:40','17:05','DMA','ML.O.3','O','A busca ativa na política de identificação de pessoas desaparecidas: relato de caso em antropologia forense sob a perspectiva dos direitos humanos','Raul Messias Lessa (PCI-PR) - apresentador, Eduardo Attuy Carvalho (PCI-PR), Jeronimo de Alencar Nogueira (PCI-PR), Ricardo Langwinski (PCI-PR)','',''],
+[28,'17:10','17:35','DMA','ML.O.2','O','O passivo de ossadas no Amapá (2013-2023): estudo transversal e proposta de protocolo multidisciplinar','Adriely Aline Moreira Silva (UNESP) - apresentadora','',''],
+[28,'17:40','18:05','DMA','ML.O.1','O','Avaliação de fragmentos de cérebro, fígado e músculo esquelético humano, obtidos por procedimento minimamente invasivo em diferentes intervalos post mortem','Anna Luísa de Loreto Patti (UNIFESP), Lara Lopes Rebelo de Lima (UNIFESP) - apresentadora, Grazielli Alves Pereira Gomes (UNIFESP), Lara Souza Dutra Silva (UNIFESP), Jair Theodoro Filho (USP), Paulo Hilário Nascimento Saldiva (USP), Marcelo de Souza Silva (UNIFESP), Andrea Moraes Malinverni (UNIFESP), Edna Sadayo Miazato Iwamura (UNIFESP)','',''],
+[28,'16:10','17:05','JGU','PA.P.7','P','"A grama do vizinho é sempre mais verde": demandas e carências da Gestão da Perícia Criminal Ambiental','Renata Cardoso Vieira - IGP/RS','Perícia ambiental',''],
+[28,'17:10','18:05','JGU','PA.P.10','P','Primeiras aplicações utilizando ferramentas e datasets do Google Earth Engine na perícia criminal ambiental do RS','Daniel Cristiano Paim - IGP/RS','',''],
+[28,'16:10','17:05','AMA','EF.P.8','P','Desenvolvendo um POP para a Identificação Veicular','Josué Tadeu Borba - PCI/PR','Identificação veicular',''],
+[28,'17:10','18:05','AMA','EF.C.1','C','Reunião de coordenadores em Engenharia Forense','','',''],
+
+/* ===== 29/10 ===== */
+[29,'09:00','10:00','EXP','', 'A','*Reprodução Simulada dos Fatos: Fundamentos da Reconstrução Criminal*','Autor: Andrei Röehrs Portinho (responsável pela sessão)','Livros',''],
+[29,'15:30','18:00','EXP','', 'A','*Criminalística: procedimentos e metodologias* (6ª edição)','Vários autores;;Responsáveis pela sessão: Gabrielle Virgínia Ferreira Cardoso e Celso Felipe Bandeira de Sá','Livros',''],
+[29,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
+[29,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
+[29,'09:45','10:55','TEA','BA.P.9','P','Subclass and Individual Characteristics in the 3D Era: Lessons from Virtual Comparison Microscopy Research','Zachary Carr - Cadre Forensics/Chicago/EUA','Microcomparação|SINAB','ls'],
+[29,'11:00','11:55','TEA','GI.P.2','P','Introduction to 3D Forensics','Eugene Liscio - ai2-3D / Universidade de Toronto','Inovação|Crimes contra a pessoa|Crimes contra o patrimônio','l'],
+[29,'10:00','10:55','ARE','EX.2','X','A Utilização de Deposição de Metal a Vácuo (VMD) na revelação de Vestígios Papiloscópicos: Aplicações e Perspectivas na Papiloscopia Forense','Equipatec','',''],
+[29,'11:00','11:25','ARE','LC.O.2','O','Atendimento pericial em local de suspeita de envenenamento com múltiplas vítimas: relato técnico do caso do “bolo envenenado” no litoral norte do Rio Grande do Sul','Andrei Röehrs Portinho (IGP-RS) - apresentador','',''],
+[29,'11:30','11:55','ARE','LC.O.1','O','Análise pericial de adulteração de carga como modalidade de fraude patrimonial: correlação entre vestígios físicos e evidências bromatológicas','Mariane de Lima (ICAP, DPT/BA), Raissa de Jesus Nascimento (ICAP, DPT/BA) - apresentadora','',''],
+[29,'10:00','10:55','JSL','EX.3','X','Tempo como Variável Estratégica: A Tecnologia Griaule na Construção da Segurança Pública','Jemima de Jesus Santos - Griaule','',''],
+[29,'11:00','11:55','JSL','EX.5','X','Veículos Eletrificados: Os Desafios da Perícia na Nova Era Automotiva — como identificar riscos, avaliar danos em baterias de alta tensão e entender as particularidades de um sinistro envolvendo veículos híbridos e elétricos','Rodrigo Galski - Regula','',''],
+[29,'10:00','10:25','IBE','EF.O.9','O','Inteligência artificial especializada aplicada à investigação pericial de incêndios: apoio metodológico e padronização do raciocínio causal','Leandro Goulart Dias (SPTC) - apresentador','',''],
+[29,'10:30','10:55','IBE','CP.O.6','O','A contribuição da computação forense na investigação de eventos críticos em ambiente hospitalar: correlação temporal e análise multissistêmica de uma ocorrência no Distrito Federal','Gabriel Velasco Braga (PCDF) - apresentador, Eduardo Mallmann (PCDF), Leandro Oliveira (PCDF)','',''],
+[29,'11:00','11:30','IBE','', 'S','Atendendo confrontos requisitados no SINAB para pedidos com múltiplos inquéritos','Francisco Martins - Maringá/PR','SINAB',''],
+[29,'11:30','12:00','IBE','', 'S','Uma proposta de indicadores de desempenho para o Sistema Nacional de Análise Balística','Rodrigo Londe Moura - Goiânia/GO','SINAB',''],
+[29,'10:00','10:55','MQU','OE.P.1','P','A Autonomia da Perícia Científica e seus Reflexos na Atuação da Advocacia','Diogo Ramos - Presidente da Comissão Nacional de Perícias do Conselho Federal da OAB','Autonomia da perícia|Devido processo legal',''],
+[29,'11:00','11:55','MQU','OE.P.2','P','Prova Pericial no Processo Judicial: Limites, Garantias e a Intervenção Estratégica do Advogado','Mônica Silva - Presidente da Comissão de Perícias da OAB São Paulo','Autonomia da perícia|Devido processo legal',''],
+[29,'10:00','10:25','MSC','ML.O.5','O','O fenómeno “canine rescue” – relato de uma morte altruísta - a importância do exame do local no esclarecimento da morte violenta','Carlos Henrique da Silva Durão (INMLCF) - apresentador, Dina Durão (INSA)','',''],
+[29,'10:30','10:55','MSC','ML.O.6','O','Violência Sistemática: Bullying e Cyberbullying','Maria Flávia Gondim de Morais Spinelli Alves (UPE) - apresentadora, Ana Claudia Gomes Dourado (UPE), Ligia Ferreira Costa (UPE), Magaly Bushastsky (UPE)','',''],
+[29,'11:00','11:25','MSC','ML.O.7','O','Adultização de crianças e adolescentes e o ECA digital','Maria Flávia Gondim de Morais Spinelli Alves (UPE) - apresentadora, Vilaneida Parente Aguiar (PCPE), Ligia Ferreira Costa (UPE), Magaly Bushastsky (UPE)','',''],
+[29,'11:30','11:55','MSC','ML.O.8','O','Como policiar a misoginia? Fatores da masculinidade em casos de massacres escolares','Sofia Falsetti Xavier (PUCC) - apresentadora, Wanderlei Abadio de Oliveira (PUCC)','',''],
+[29,'10:00','10:55','EVE','CP.P.1','P','A IA é a nossa evolução ou a nossa extinção programada?','Gustavo Vilar - Polícia Federal (Perito Criminal)','Inteligência artificial',''],
+[29,'11:00','11:55','EVE','CP.P.2','P','Rastreabilidade em sistemas de pagamento: Do Hacker ao Estelionatário','Andre Pretto - Consultor em Cibersegurança','Computação forense',''],
+[29,'10:00','11:55','DMA','QB.R.1','R','Etapa pré-analítica: a gênese de resultados confiáveis','Mediadora: Paulini Braun Wegner - IGP/RS;;Debatedores: Elvis Medeiros - SPTC/SP e Danielle Magalhães - MJSP/SENAD','Toxicologia forense',''],
+[29,'10:00','10:55','JGU','GI.P.1','P','Criação e implementação do NUCOPE (Núcleo de Combate à Pedofilia e ao Abuso Infantojuvenil)','Marcelo Nadler - IGP/RS','Inovação|Sexologia forense|Psicologia forense|Extração de dados',''],
+[29,'11:00','11:55','JGU','GI.P.4','P','Padrões mundiais da Qualidade nas Ciências Forenses','Jéferson Sangalin - PCF/RS','Gestão da qualidade',''],
+[29,'10:00','11:55','AMA','DF.C.1','C','Reunião de coordenadores de perícias em Documentoscopia','','',''],
+[29,'11:55','13:30','', '', 'B','Intervalo de almoço','','',''],
+[29,'13:30','18:05','AUD','', 'I','Reunião ABC','','',''],
+[29,'13:30','14:25','TEA','ML.P.6','P','Abuso sexual contra crianças e adolescentes: da identificação à prevenção','Geise Machado Jacobsen - IGP/RS e Renata Cortez - IGP/RS','Psiquiatria|Psicologia',''],
+[29,'14:30','15:25','TEA','ML.P.3','P','Crimes sexuais e os desafios da sexologia forense','Mariana da Silva Ferreira - SPTC/SP','Sexologia forense',''],
+[29,'13:30','14:25','ARE','QB.P.2','P','Perícia in loco de laboratórios clandestinos de drogas sintéticas','Sergio Cibreiros - PF','Química forense|Drogas',''],
+[29,'14:30','15:25','ARE','QB.P.6','P','Os atuais cenários das apreensões de drogas em Portugal: da apreensão ao laudo pericial','Maria João Caldeira - Polícia Judiciária (Portugal)','Química e toxicologia forense|Drogas',''],
+[29,'13:30','14:25','JSL','DF.P.5','P','Falsificações em Obras de Arte, a Perícia Grafodocumentoscópica','Claudia Souza - DGPTC/RJ','Documentoscopia',''],
+[29,'14:30','15:25','JSL','DF.P.4','P','Avanços na determinação da origem e rastreabilidade do ouro','Fábio Salvador - Polícia Federal','Merceologia forense',''],
+[29,'13:30','14:25','IBE','PA.P.2','P','Imagens de satélites: Você realmente sabe qual utilizar e como isso pode te ajudar?','Christhian Cunha - Empresa/Ambgeo','Geoprocessamento','r'],
+[29,'13:30','14:25','MQU','BA.P.6','P','Tópicos sobre tiro acidental','Alex Flores Mendes - IGP/RS','Balística forense',''],
+[29,'14:30','15:25','MQU','BA.P.7','P','Inteligência pericial e rastreamento de armas de fogo e munições: Um modelo contra o crime organizado','Robson Felix Mamedes - PCI/PB','SINAB|Balística forense|Microcomparação',''],
+[29,'13:30','14:25','MSC','QB.P.10','P','Implementação de Sistema de Gerenciamento de Informações Laboratoriais (LIMS) em laboratório de genética forense','Melina Guerreiro Rodrigues - SPTC/SP e Priscila Martins Pereira - SPTC/SP','Genética forense',''],
+[29,'14:30','14:55','MSC','QB.O.1','O','Análise comparativa dos perfis genéticos de amostras provenientes de crimes sexuais obtidos pelo processo de extração diferencial e de automação','Mariana Esposito Mendes (PCI/PR) - apresentadora, Jéssica Marina de Paiva Pereira (IPC/PB), Luciana Diniz Lima (IPC/PB), Ana Carolina Bernardi Della Giustina (IPC/PB)','',''],
+[29,'15:00','15:25','MSC','QB.O.2','O','Análise qualitativa e quantitativa de DNA de contato/traço obtidas de amostragem de suportes diversos coletados em local de crime','Pablo Abdon da Costa Francez (PCIAP) - apresentador, Gilcelene do Socorro de Brito Costa (PCIAP), Rafael de Almeida Monteiro (PCIAP), Eduardo Melo (PCIAP), Wendell Silva (PCIAP), Paulo Pacheco Junior (PCIAP), Gabriel Paulon (PCIAP), Ramilson Silva (PCIAP), Dalmira Fonseca (PCIAP)','',''],
+[29,'13:30','15:20','EVE','GI.R.1','R','Bancos de Dados Criminais','Gestão de bancos de dados criminais: Julio Torres - Pefoce/CE;;Papiloscopia: Raimundo Cleverlande Alves de Melo - PCDF;;Balística: Paulo da Cruz Barragan - IGP/RS;;Vestígios Digitais: Wilson Leite da Silva Filho - PCISC;;Toxicologia: Carlos Alberto Dal Cin - PCIES;;Genética: Claudinei Salomão - SPTC/SP;;Inteligência Pericial: Ciro José Cardoso Pimenta - PCI/PR;;Feminicídio e Violência contra a Mulher: Raquel Azevedo Carneiro da Cunha - IPC/PB','CONDPCi|Gestão pericial',''],
+[29,'15:00','15:25','IBE','GI.O.1','O','Automação da emissão de laudos periciais por inteligência artificial generativa: da concepção à adoção','Sanmya Beatriz Tiradentes Leite (DPTC/AM) - apresentadora','',''],
+[29,'14:30','14:55','IBE','DF.O.1','O','Influência de instruções ocultas na análise automatizada de documentos jurídicos: um estudo comparativo entre sistemas de inteligência artificial','Cristiane Viana Barbosa (UFF) - apresentadora, Dineusa Maria do Amaral (Sirius/Faculdade Sirus)','',''],
+[29,'13:30','13:55','DMA','LC.O.3','O','Desafios periciais na investigação de morte por asfixia por gás hélio: relato de caso','Humberto Leitão Riella (PCISC) - apresentador, Laura Adriano Corrêa (PCISC)','',''],
+[29,'14:00','14:25','DMA','LC.O.4','O','Do protocolo ao local de crime: análise pericial do overkill em feminicídios','Maria Carolina Vieira da Rocha (PCI PR; UFPR) - apresentadora, Érika Lorena Chrominski (PCI PR)','',''],
+[29,'14:30','15:25','DMA','LC.P.2','P','Entomologia Forense aplicada ao local de crime','Victor Botteon - PCI/SC','Crimes contra a pessoa|Entomologia forense',''],
+[29,'13:30','14:25','JGU','EF.P.9','P','Desabamento de estrutura incendiada','Claudio Heine - PCF/RJ','Desabamentos|Incêndio',''],
+[29,'14:30','15:25','JGU','EF.P.3','P','Atuação do Grupo Especializado em Bombas e Explosivos (GBE) da PF','Bernardo Balinhas Chiodelli - PCF/RS','Explosões',''],
+[29,'13:30','13:55','AMA','CP.O.1','O','Análise de audibilidade de disparo de arma de fogo em diferentes pavimentos de edificação: um estudo de caso com ensaios controlados e análise espectrográfica','Fernando Alves da Silva (SPTC-GO) - apresentador, Murilo Toscano de Carvalho (SPTC-GO), Lina Deise de Morais dos Santos (SPTC-GO)','',''],
+[29,'14:00','14:25','AMA','CP.O.2','O','Análise de viabilidade técnica pericial aplicada a vestígios digitais em exames forenses de verificação e de atribuição de autoria da emissão de voz e de fala','Tatiane Alves Braga (PUCRS) - apresentadora, Samantha Barcelos Moraes (FFRS)','',''],
+[29,'14:30','14:55','AMA','CP.O.3','O','Análise forense de vídeo e modelagem computacional 3D aplicadas à reconstituição de cena de crime: estudo do caso de tiroteio em restaurante em Belém-PA','Ibsen Rodrigues Maciel (PCIPA) - apresentador','',''],
+[29,'15:00','15:25','AMA','CP.O.4','O','Comparação facial assistida por inteligência artificial, com expressão do resultado em LR','Antonio César Morant Braid (DPT) - apresentador','',''],
+[29,'15:25','16:10','', '', 'B','Coffee break','','',''],
+[29,'16:10','17:05','TEA','CP.P.3','P','Identificação de vítimas em materiais CSAM (PIJ)','Brian Herrick - Thorn','Identificação criminal em meios digitais|CSAM','l'],
+[29,'17:10','18:05','TEA','CP.P.8','P','Audio Analysis of Firearms','Eugene Liscio - ai2-3D / Universidade de Toronto','Perícias em áudio|Balística forense|Local de crime','l'],
+[29,'16:10','16:35','ARE','DF.O.2','O','Autenticidade além da assinatura: fundamentos materiais e históricos na perícia de documentos e obras de arte','Renata de Lamare São Paulo Silveira (LLP) - apresentadora, Mario Ernesto de Oliveira Alves (APJESC)','',''],
+[29,'16:40','17:05','ARE','DF.O.3','O','Aplicação de técnicas espectroscópicas na diferenciação de tintas de caneta esferográfica: um relato de caso sobre adulteração por acréscimo em documento manuscrito','Marina Stroski (PCIPR), Gisele Floriani (PCIPR) - apresentadora, Frederico Soares (UFPR), Victor Oliveira (UFPR)','',''],
+[29,'17:10','17:35','ARE','DF.O.4','O','Avaliação de sequência de traços em documentos questionados utilizando espectroscopia Raman e métodos colorimétricos','Denise Gonçalves de Moraes Rivera (ICCE) - apresentadora, Luciano Segné (ICCE; UFF), Gustavo N. O. Segné (UFF)','',''],
+[29,'17:40','18:05','ARE','DF.O.5','O','Escrita além da morte? Uma análise pericial de carta psicografada','Denise Gonçalves de Moraes Rivera (DPGE) - apresentadora','',''],
+[29,'16:10','17:05','JSL','ML.P.5','P','Antropologia Forense Contemporânea: reflexões sobre a identificação humana','Rosane Pérez Baldasso - IGP/RS','Odontologia legal|Antropologia forense',''],
+[29,'17:10','18:05','JSL','ML.P.4','P','Ler o passado para proteger o futuro - O papel preventivo da medicina legal entre a saúde e a justiça','Carlos Durão - Instituto Nacional de Medicina Legal e Ciências Forenses de Lisboa','Medicina legal',''],
+[29,'16:10','17:05','IBE','QB.P.7','P','O que está acontecendo no mundo da genética forense animal?','Andrea Marrero - UFSC','Genética forense',''],
+[29,'17:10','18:05','IBE','QB.P.8','P','Exame toxicológico utilizando o besouro Oxelytrum discicolle (Coleoptera: Staphylinidae): o primeiro caso de entomotoxicologia forense da Polícia Científica de Santa Catarina','Victor Botteon - PCI/SC','Toxicologia forense|Entomologia forense',''],
+[29,'16:10','18:05','MQU','BA.R.1','R','Laudos do SINAB e seu impacto nas investigações criminais','Mediadora: Juliana Dora W. Ferreira - IGP/RS;;Debatedores: Marcelo Tubino Vieira - MP/RS, Mario Francisco Pereira Vargas de Souza - PC/RS e Jonathan Tobias Ramos - IGP/RS','SINAB|Crimes contra a pessoa',''],
+[29,'16:10','16:35','MSC','ML.O.12','O','Frequência de sintomas relacionados a trauma e a estressores em crianças e adolescentes vítimas de violência sexual','Geise Machado Jacobsen (IGPRS) - apresentadora','',''],
+[29,'16:40','17:05','MSC','ML.O.9','O','A relação das variações climáticas com o aumento da incidência de violência','Pietra Barcelos Markowski (ULBRA) - apresentadora, Fernanda Cavinatto Pinto (ULBRA), Ana Paula de Almeida Aguiar (ULBRA), Eduardo Meira Taschetto Mota (ULBRA), Fernanda Adriane de Castro Eddtrella (ULBRA), Maria Luiza Oliveira Matheus (ULBRA), Rafaela Bittencourt Müller (ULBRA), Silvia Lemke Guterres (ULBRA; IGPRS)','',''],
+[29,'17:10','17:35','MSC','LC.O.5','O','A perícia de local na identificação de tomada de território por facção em ocorrências de morte violenta: estudo de caso','Susyara Medeiros de Souza (IPC/PB) - apresentadora, Bianca Marques Santiago (IPC/PB), Evelyne Pessoa Soriano (UPE; IPC/PB), Marcus Vitor Diniz de Carvalho (UPE)','',''],
+[29,'17:40','18:05','MSC','GI.O.11','O','Sistema de gestão da qualidade na divisão de toxicologia forense do IGP-RS - conquistas e desafios','Adriana Santos Andrade (IGP/RS), Carla Cafarate Nunes (IGP/RS) - apresentadora, Fabiane Marconato Stringhini (IGP/RS), Carolina Lupi Dias (IGP/RS)','',''],
+[29,'16:10','18:05','EVE','OE.R.3','R','Da Produção da Prova às Nulidades Processuais: Interfaces entre Ciência Forense e Direito na cadeia de custódia, nos protocolos de investigação e na demonstração do prejuízo processual','Mediador: Marcos Secco - Presidente da ABC;;Debatedores: Desembargadora Viviane de Faria Miranda - TJRS, André Luis Dal Molin Flores - MPRS, Álvaro Roberto Antanavicius Fernandes - Defensoria Pública do RS e Carlo Velho Masi - Presidente ABACRIM-RS','Cadeia de custódia|Devido processo legal',''],
+[29,'16:10','18:05','DMA','GI.R.2','R','Perícia Integrada','Debatedores: Carlos Eduardo Palhares Machado - PCF/DF e Diana Brito da Justa Neves - PCF/DF','Gestão pericial|Perícia integrada',''],
+[29,'16:10','17:05','JGU','EF.P.7','P','Incêndio em Veículos Comerciais: Caminhões e Ônibus','Rodrigo Kleinubing - IGP/RS','Incêndio veicular',''],
+[29,'17:10','18:05','JGU','EF.P.4','P','Colapso do prédio da Secretaria de Segurança Pública em Porto Alegre/RS: Análise do incêndio e das condições estruturais','Ângela Graeff - UFRGS','Incêndio|Desabamentos',''],
+[29,'16:10','18:05','AMA','PA.C.1','C','Reunião de coordenadores em perícias Ambientais','','',''],
+
+/* ===== 30/10 ===== */
+[30,'09:00','10:00','EXP','', 'A','*Vestígios*, volumes 1, 2 e 3','Autor: Anderson Fraga Morales (responsável pela sessão)','Livros',''],
+[30,'15:30','16:30','EXP','', 'A','*Uma Introdução à Criminalística: Guia Prático para Perícia Criminal e Concursos*;;*A Lei Antifacção: Quando a Comunidade é o Corpo de Delito*;;*Impressões Humanas na Cena do Crime: Papiloscopia e outros vestígios corporais de contato*','Autor: Paulo Ricardo Ost Frank (responsável pela sessão)','Livros',''],
+[30,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
+[30,'09:00','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
+[30,'09:15','10:25','IBE','', 'S','IBIS – Melhores Práticas: Maximizando os Dados de Entrada e os Resultados','Petar Zancovich - Leads Online/Canadá','SINAB',''],
+[30,'10:30','12:00','IBE','', 'S','Evento exclusivo: Reunião com os Administradores Locais e Usuários do SINAB','Thiago Sampaio e Rafael Davet - Comitê Gestor/MJSP','SINAB',''],
+[30,'10:00','11:55','TEA','LC.P.7','P','iPhone LiDAR For Crime Scene Documentation','Eugene Liscio - ai2-3D / Universidade de Toronto','Crimes contra o patrimônio|Crimes contra a pessoa','l'],
+[30,'10:00','10:25','ARE','GI.O.2','O','Padronização e escalabilidade na extração de dados forenses: arquitetura operacional de um laboratório especializado','Michael André Hempkemeyer (PCIPR) - apresentador','',''],
+[30,'10:30','10:55','ARE','GI.O.3','O','CHARLIE: assistente de IA em criminalística','Leandro Dias Carneiro (PCDF) - apresentador','',''],
+[30,'11:00','11:25','ARE','GI.O.4','O','Xandroid: plataforma de auditoria de campo e blindagem da cadeia de custódia por criptografia offline','Alexandre Davila Moura (ICPCDF) - apresentador','',''],
+[30,'11:30','11:55','ARE','GI.O.5','O','O último em 27 entes federativos: a proposta do instituto de criminalística da PCDF para consolidar-se como ponto central e exclusivo no processo de extração de dados de dispositivos de informática','Leandro de Souza Oliveira (IC/PCDF) - apresentador','',''],
+[30,'10:00','11:55','JSL','CP.C.1','C','Reunião de coordenadores em Informática Forense','','',''],
+[30,'10:00','11:55','MQU','OE.R.2','R','Da Identificação à Identidade. A construção da identidade no Estado contemporâneo: interfaces entre Ciência Forense, Administração Pública, segurança jurídica e produção da prova','Mediadora: Rosane Pérez Baldasso - IGP/RS;;Debatedores: Desembargador Márcio Schlee - TJRS, Marcio Abreu Ferreira da Cunha - MPRS, Rafael Raphaelli - Defensoria Pública do RS, Representante da Polícia Civil RS e Representante ABACRIM','Identificação humana|Devido processo legal',''],
+[30,'10:00','10:25','MSC','EF.O.1','O','Colapso estrutural em oficina mecânica: análise diagnóstica forense de engenharia e mecanismos de carbonatação do concreto','Abner Pedro Queiroz de Souza (PCIPE), Jorge Augusto Wissmann (PCIPR) - apresentador, Mikael Santos de Lima (PCIPE), Carlos Armando Correia Lyra (PCIPE), Maria Gabriela de Araujo Specht (PCIPE)','',''],
+[30,'10:30','10:55','MSC','EF.O.2','O','Retroanálise da estabilidade geotécnica em um caso de deslizamento de talude no aterro sanitário da região metropolitana de Curitiba','Bruno Tonel Otsuka (PCIPR) - apresentador, Emilio Graciliano Ferreira Mercuri (UFPR), Matheus Pereira Nogueira e Silva (PCIPR)','',''],
+[30,'11:00','11:25','MSC','PA.O.1','O','Investigação pericial de envenenamento animal: análise de casos submetidos à necropsia e exame toxicológico','Gustavo de Carvalho Dalton (IC/DPT/PCDF) - apresentador, Yasmin Nunes (IC/DPT/PCDF; LPPV/UnB), Márcio Botelho (LPPV/UnB), Ettore Ferrari (IC/DPT/PCDF)','',''],
+[30,'11:30','11:55','MSC','QB.O.3','O','A genética forense como ferramenta de precisão na identificação de conflitos homem-fauna: o caso do ataque de onça-pintada (Panthera onca) no Pantanal sul-mato-grossense','Tayana Serpa Ortiz Tanaka (PCI-PR) - apresentadora, Willian Nassar Moreira Eduardo (IALF/CGP/MS), Ana Gabrielle Lubas Arruda (IALF/CGP/MS), Josemirtes Socorro Fonseca Prado da Silva (IALF/CGP/MS)','',''],
+[30,'10:00','11:55','EVE','ML.R.1','R','Violência contra a mulher: do atendimento humanizado às provas periciais','Mediadora: Renata Cortez - IGP/RS;;Debatedores: Mariana da Silva Ferreira - SPTC/SP, Marcelo Cardoso - IGP/RS e Angelita Maria Ferreira Machado Rios - IGP/RS','Psiquiatria|Psicologia|Medicina legal|Crimes contra a pessoa|Radiologia forense',''],
+[30,'10:00','10:55','DMA','EF.P.1','P','Uso do EDR em Colisões Veiculares','Emerson Costa - Empresa/Perito Judicial','Acidente de trânsito',''],
+[30,'11:00','11:55','DMA','EF.P.2','P','Análise de Incêndios Veiculares','Thales Molinari - Empresa Iratus/Perito Judicial','Incêndio|Incêndio veicular',''],
+[30,'10:00','10:55','JGU','OE.P.3','P','A Perícia Produz Evidências. Mas Quem Produz Evidências Sobre a Perícia?','Alberto Kopptike - Diretor Executivo do Instituto Cidade Segura','Autonomia da perícia|Gestão pericial',''],
+[30,'11:00','11:25','JGU','DF.O.6','O','Game over no Tigrinho: a importância da perícia merceológica no desmantelo da lavagem de dinheiro nos crimes virtuais de azar','Alison André Ximenes Soares (NRPC PHB/DEPOC-PI) - apresentador','',''],
+[30,'11:30','11:55','JGU','DF.O.7','O','Ponderações sobre exames periciais em documentos PDF assinados digitalmente via GOV.BR e obtidos de sistemas judiciais eletrônicos','Robson Tirotti Felipe (RTF) - apresentador','',''],
+[30,'10:00','11:55','AMA','QB.C.1','C','Reunião de coordenadores de Química e Toxicologia Forense','','',''],
+[30,'11:55','13:30','', '', 'B','Intervalo de almoço','','',''],
+[30,'13:30','18:05','AUD','', 'I','Reunião ABC','','',''],
+[30,'13:30','15:25','TEA','CP.R.1','R','Limites legais na custódia de evidências digitais e na quebra de sigilo dos dados em dispositivos móveis','Mediador: Márcio Gil Faccin - IGP/RS;;Debatedores: Daniel Ribeiro Surdi de Avelar - Juiz auxiliar da presidência do CNJ, Maristela Schneider - Promotora de Justiça/RS e Vander Oliveira - SPTC/SP','Perícias em dispositivos digitais móveis|Gestão pericial',''],
+[30,'13:30','14:25','ARE','LC.P.8','P','Novas Tecnologias na Perícia Criminal: repensando o laudo pericial','Murillo Toscano de Carvalho - SPTC/GO','Crimes contra a pessoa|Crimes contra o patrimônio',''],
+[30,'14:30','14:55','ARE','LC.O.6','O','Suicídio ou homicídio? Análise de casos reportados como suicídio por enforcamento com reclassificação da maneira da morte pela perícia criminal','Marcos Patrício Macedo (PCDF) - apresentador','',''],
+[30,'15:00','15:25','ARE','LC.O.7','O','Do local de crime ao exame de manuscritos: a extensão do processamento pericial ao ambiente relacionado na identificação de perfil letal reativo do agressor','Susyara Medeiros de Souza (IPC/PB) - apresentadora, Bianca Marques Santiago (IPC/PB), Evelyne Pessoa Soriano (IPC/PB; UPE), Marcus Vitor Diniz de Carvalho (UPE)','',''],
+[30,'13:30','13:55','JSL','EF.O.3','O','Airbag e EDR – funcionamento, extração de dados e sua utilização forense: Takata e outros casos','Walter Kauffmann Neto (Kauffmann Engenharia; TJRS) - apresentador','',''],
+[30,'14:00','14:25','JSL','EF.O.4','O','Inovação pericial: Event Data Recorder (EDR) e a validação multidisciplinar da prova material em crime de trânsito na cidade de Goiânia – relato de caso','Leticia Prado Castanheira Costa (PCIGO) - apresentadora, Denise Vaz de Almeida (PCIGO), Carla Fonseca Arantes (PCIGO)','',''],
+[30,'14:30','14:55','JSL','EF.O.5','O','Análise comparativa entre fotogrametria digital e 3D Gaussian Splatting para documentação forense de vestígios veiculares','Fernando Alves da Silva (SPTC-GO; UFG) - apresentador, Anselmo Rafael Cukla (UFSM), Symone Gomes Soares Alcalá (UFG)','',''],
+[30,'15:00','15:25','JSL','EF.O.6','O','Por que a perícia tradicional falha em cruzamentos R-2? A solução do software INCA entre a estatística e a simulação','Alexandre Magno Bernardo Fontoura (PCI/PR) - apresentador, Manoel José Rodrigues Martins (PCDF), Juliano de Andrade Gomes (PCDF), Charles Albert Andrade (PCDF)','',''],
+[30,'13:30','14:25','IBE','BA.P.2','P','Análise temporal da integridade dos microelementos identificadores de projéteis de arma de fogo após imersão em sangue suíno','Simone Vasconcelos Santana Rotta - PCI/PR','Balística forense|Crimes contra a pessoa|Medicina legal',''],
+[30,'14:30','14:55','IBE','BA.O.2','O','Influência da carga de propelente nas marcações balísticas de carabina 5.56 x 45 mm – estudo preliminar de uma Imbel modelo IA2','Bruno Telles (PCDF) - apresentador, Eduardo José Jucá Mallmann (PCDF)','',''],
+[30,'15:00','15:25','IBE','BA.O.3','O','Análise de dano e balística terminal em metaestruturas auxéticas sob impacto de projéteis 9mm','Fernanda Dias Troysi (UFG) - apresentadora, Adiel L. Pessôa (UFV), Alexandre Clemente da Costa (UFG; PPGO), Eliene Oliveira Lucas (UFV)','',''],
+[30,'13:30','13:55','MQU','ML.O.11','O','Produção da prova pericial em violência contra a mulher: desafios e perspectivas na implantação do núcleo de perícia psicológica do DPT-BA','Danielle Sodré Nery Rosa (DPT-BA) - apresentadora','',''],
+[30,'14:00','14:25','MQU','ML.O.10','O','Violência contra mulheres em perspectiva global: determinantes estruturais, produção científica e desafios para políticas públicas','Felipe Correa Bitencourt (UFRGS) - apresentador, Eduarda Tessari Pereira (UFRGS; UFCSPA), Lucas Gonçalves Ferraz (UFCSPA), João Pedro dos Santos Dutra (UFCSPA), Gabriela Petri Airoldi da Rocha (UFCSPA), Helena Ferreira Moura (UnB), Joana Corrêa Magalhães Narvaez (UFCSPA)','',''],
+[30,'14:30','15:25','MQU','ML.P.2','P','Entrevista forense com crianças e adolescentes vítimas de violência','Luiziana Souto Schaefer - IGP/RS','Psiquiatria|Psicologia',''],
+[30,'13:30','14:25','MSC','QB.P.3','P','Estatística no monitoramento de métodos em genética forense','Eduardo Ávila - UFRGS','Genética forense',''],
+[30,'14:30','14:55','MSC','DF.O.8','O','Locard PDF: módulo integrado de análise forense de documentos PDF para o framework audiovisual Locard','Ênio Rodrigues Viana (PEFOCE; UFC) - apresentador, Francisco Ítalo Guilherme da Silva (UFC)','',''],
+[30,'15:00','15:25','MSC','DF.O.9','O','SigForense — Sistema multiagente de verificação forense de assinaturas manuscritas com razão de verossimilhança Bayesiana','Ênio Rodrigues Viana (PEFOCE; UFC) - apresentador, Francisco Ítalo Guilherme da Silva (UFC)','',''],
+[30,'13:30','15:25','EVE','OE.R.1','R','Rede PCI Conecta e a Integração Nacional da Criminalística: desafios, governança e implementação na identificação de pessoas desaparecidas. Da fragmentação à interoperabilidade: a perícia criminal brasileira está pronta para operar em rede?','Debatedores: Carlos Eduardo Palhares Machado - PCF/DF, Rosane Pérez Baldasso - IGP/RS e Frederico Mamede Santos Furtado - Coordenador Forense do Comitê Internacional da Cruz Vermelha','Perícia integrada|Pessoas desaparecidas',''],
+[30,'13:30','14:25','DMA','OE.P.4','P','PNIDD: desafios, avanços e perspectivas para a integração dos dados periciais sobre drogas','Danielle Magalhães - MJSP/SENAD e Marcos Paulo Thomé - MJSP/SENAD','Drogas|Toxicologia forense',''],
+[30,'14:30','14:55','DMA','QB.O.4','O','Fotoluminescência na perícia de obras de arte com tintas a óleo: pigmentos, solventes e misturas','Thiago Zipperer Trevisan (UFPR) - apresentador, Evaldo Ribeiro (UFPR)','',''],
+[30,'15:00','15:25','DMA','QB.O.5','O','Entomologia forense além do intervalo pós-morte: novas abordagens e aplicações periciais','Giovana Viana Oliveira da Silva (Donaduzzi/Faculdade Donaduzzi) - apresentadora','',''],
+[30,'13:30','13:55','JGU','PA.O.2','O','A linha tênue entre a fatalidade e o crime: análise pericial de dois casos de asfixia em cães','Alison André Ximenes Soares (NRPC-PHB/DEPOC-PI) - apresentador, Gustavo Parreira Rojas (NRPC-PHB/DEPOC-PI)','',''],
+[30,'14:00','14:25','JGU','PA.O.3','O','Proposta metodológica para valoração de fauna em casos de crimes contra o meio ambiente','Elizabeth Gonçalves (CEUB), Rodrigo Correa (IC/PCDF), Gustavo de Carvalho Dalton (IC/PCDF) - apresentador','',''],
+[30,'14:30','15:25','JGU','PA.P.8','P','Implantação e operação do Laboratório de Análise de Água e Efluentes da PCI/SC: desafios estruturais, técnicos e institucionais','João Pedro Pinheiro Vieira - PCI/SC','Poluição|Análises laboratoriais',''],
+[30,'13:30','13:55','AMA','GI.O.6','O','Espaço de voz: proposta de protocolo de intervenção psicossocial e rodas de escuta para servidores da perícia oficial','Marilia da Costa Ribas (IGPRS) - apresentadora','',''],
+[30,'14:00','14:25','AMA','GI.O.7','O','A perícia integradora como resposta criminalística ao domínio social estruturado','Paulo Ricardo Ost Frank (IGP/RS; UFRGS) - apresentador','',''],
+[30,'14:30','14:55','AMA','GI.O.8','O','A dualidade espacial do risco: análise quanti-qualitativa da percepção de segurança entre operadores da perícia','Marilia da Costa Ribas (IGPRS) - apresentadora, Alex Niche Teixeira (UFRGS)','',''],
+[30,'15:00','15:25','AMA','GI.O.9','O','Maturidade da gestão do conhecimento nos órgãos de perícia oficial de natureza criminal do Brasil: ênfase na Polícia Técnica da Bahia','Zidalva de Souza Moraes (DPT-SSP/BA) - apresentadora, Gregório Varvakis (UFSC-PPGEGC)','',''],
+[30,'15:25','16:10','', '', 'B','Coffee break','','',''],
+[30,'16:10','18:05','TEA','BA.P.10','P','3D Imaging and Virtual Comparison Microscopy for Firearms and Toolmarks','Zachary Carr - Cadre Forensics','Microcomparação','l'],
+[30,'16:10','16:35','ARE','EF.O.7','O','Limitações da equação de Torricelli na estimativa de velocidade por marcas de frenagem','Walter Kauffmann Neto (Kauffmann Engenharia; TJRS) - apresentador','',''],
+[30,'16:40','17:05','ARE','EF.O.8','O','A relevância da assistência técnica pericial no processo criminal e a discussão sobre o dolo eventual na elucidação de sinistros de trânsito (caso real)','Christian Tombini (OAB/RS) - apresentador, Rodrigo Kleinubing (IGP/RS)','',''],
+[30,'17:10','17:35','ARE','EF.O.10','O','Revisão de casos de desabamento por ruptura de consolo em concreto pré-moldado: achados periciais, retroanálises e recomendações','Jorge Augusto Wissmann (PCIPR; UNIOESTE) - apresentador, Marcelo Mazzuco (PCIPR), Joel Heron Freitas (PCISC), Guilherme de Lima Dutra (UNIOESTE)','',''],
+[30,'17:40','18:05','ARE','', 'T','Palestra a confirmar','','',''],
+[30,'16:10','16:35','JSL','OE.O.2','O','18 mil itens por ano: como a Informática Forense de Santa Catarina enfrentou o passivo','Wilson Leite da Silva Filho (PCISC) - apresentador','',''],
+[30,'16:40','17:05','JSL','CP.O.5','O','Exame forense em câmeras espiãs de baixo custo: da extração de memória flash à vinculação ao suspeito','Mateus Bizzotto Nunes (PCI SC) - apresentador','',''],
+[30,'17:10','17:35','JSL','CP.O.7','O','Violence as a Service (VaaS) e Crime as a Service (CaaS): aspectos essenciais da perícia computacional para atuação de combate no ecossistema cibercriminoso transnacional','João Benedito dos Santos Junior (PUC Minas) - apresentador','',''],
+[30,'17:40','18:05','JSL','CP.O.8','O','Análise forense do mecanismo de bloqueio de aplicativos (app lock) em dispositivos Xiaomi: identificação de artefatos e inferência de credenciais','Michael André Hempkemeyer (PCI) - apresentador','',''],
+[30,'16:10','17:05','IBE','PA.P.1','P','Aplicação do POP de maus-tratos em SP','Felipe Martins dos Santos - SPTC/SP','Maus-tratos a animais',''],
+[30,'17:10','18:05','IBE','PA.P.6','P','Do Ruído ao Laudo: a Prática Pericial de Poluição Sonora com Apoio da Inteligência Artificial','Leandro Goulart Dias - SPTC/SP','Poluição sonora|Inteligência artificial',''],
+[30,'16:10','18:05','MQU','ML.R.2','R','O papel dos centros integrados na proteção de crianças e adolescentes e a importância da perícia criminal dentro do processo judicial','Mediadora: Michelle Larissa Zini Lise - IGP/RS;;Debatedores: Rodrigo da Silva Brandalise - MPRS, Ivia Carla Nunes Ferreira - PCI/GO e Andrea Goya Tocchetto Osowski - IGP/RS','Psiquiatria|Psicologia|Medicina legal',''],
+[30,'16:10','16:35','MSC','QB.O.6','O','Análise toxicológica forense da formação de cocaetileno em casos de uso concomitante de cocaína e etanol: estudo de 4 vítimas','Francisco Deivis Jacinto Rebouças (PEFOCE) - apresentador','',''],
+[30,'16:40','17:05','MSC','QB.O.7','O','Perfil toxicológico das amostras analisadas na divisão de toxicologia forense do Instituto-Geral de Perícias do Rio Grande do Sul e a correlação com histórico das ocorrências','Gabriela Pessin Meyer (IGP-RS), Bruna da Silva Plachi (IGP-RS), Carla Cafarate Nunes (IGP-RS) - apresentadora','',''],
+[30,'17:10','18:05','MSC','QB.P.4','P','SAR - Sistema de Alerta Rápido','Luíza Brandão Caldas - SENAD/PF','Química e toxicologia forense|Drogas',''],
+[30,'16:10','18:05','EVE','LC.R.2','R','Avanços da perícia criminal em casos de feminicídio','Debatedoras: Monica Midori Marcon Uchida Sguazzardi - SPTC/SP, Keila Aparecida de Almeida - SPTC/SP e Yara Jennings - PCEPA','Crimes contra a pessoa',''],
+[30,'16:10','16:35','DMA','GI.O.10','O','Inovação e eficiência forense: automação, inteligência artificial e gestão orientada por dados para sustentabilidade da genética forense na Politec-MT','Rosangela Maria Guarienti Ventura (POLITEC-MT) - apresentadora','',''],
+[30,'16:40','17:05','DMA','GI.O.12','O','Prova pericial proativa: modelo técnico-operacional de classificação de risco letal em violência de gênero','Teogenes Matias de Souza (PCI) - apresentador','',''],
+[30,'17:10','17:35','DMA','BA.O.4','O','Validação estatística do desempenho do sistema quantum como ferramenta de apoio ao SINAB','Gervasio Fontenelle de Castro e Silva (PEFOCE) - apresentador','',''],
+[30,'17:40','18:05','DMA','BA.O.1','O','Microcomparação balística como ferramenta de vinculação entre locais de crime distintos: estudo de caso com 23 ocorrências nos municípios de Manaus e Iranduba - AM','José Matias da Rocha Junior (PCAM/DPTC) - apresentador, Joermerson Braga (PCAM/DPTC), Ulisses Neiss (PCAM/DPTC), Alessandro Alves Pereira (PCAM/DPTC)','',''],
+[30,'16:10','17:05','JGU','', 'T','Palestra a confirmar','','',''],
+[30,'17:10','18:05','JGU','OE.P.5','P','Programa SINAPSE: perícia em abordagem integrativa para produção de Inteligência Forense','Carlos Eduardo Palhares Machado - PCF/DF','',''],
+[30,'16:10','17:05','AMA','OE.C.1','C','Reunião de coordenadores em Centrais e procedimentos de custódia de vestígios (físicos e digitais)','','',''],
+[30,'17:10','18:05','AMA','OE.C.2','C','Reunião de coordenadores em Ensino - Grade de formação básica e continuada','','',''],
+[30,'18:30','20:30','TEA','', 'I','Cerimônia de premiação e encerramento','','',''],
+];
+
+/* PÔSTERES — [dia, início, fim, nº, área, título (convertido), autores (instituição), título original da planilha] */
+const POSTERS = [[28, "08:30", "10:00", "393", "BA", "Análise forense da composição e permanência em superfícies de resíduos de arma de fogo usando munição não tóxica", "Bruna Herzog (UFPR), Evaldo Ribeiro (UFPR), Emílio Merino (PCP)", "ANÁLISE FORENSE DA COMPOSIÇÃO E PERMANÊNCIA EM SUPERFÍCIES DE RESÍDUOS DE ARMA DE FOGO USANDO MUNIÇÃO NÃO TÓXICA"], [28, "08:30", "10:00", "400", "BA", "Ghost guns e armas de fogo impressas em 3D: a escalada da ameaça, o vácuo pericial e a urgência de respostas jurídicas", "Lucas Nicolas Assad (PCIPR), Emilio Merino de Paz Junior (PCIPR), Alexandre Guilherme de Lara (PCIPR), Rodrigo Londe Moura (SPTC/GO), Sophia Wieczorek Lobo (SPTC/GO)", "GHOST GUNS E ARMAS DE FOGO IMPRESSAS EM 3D: A ESCALADA DA AMEAÇA, O VÁCUO PERICIAL E A URGÊNCIA DE RESPOSTAS JURÍDICAS"], [28, "08:30", "10:00", "515", "BA", "Análise temporal da integridade dos microelementos identificadores de projéteis de arma de fogo após imersão em sangue suíno", "Simone Vasconcelos Santana Rotta (PCIPR), Luiz Henrique da Silva Rotta (PCIPR), Daniele de Freitas Garcia (UNESPAR)", "ANÁLISE TEMPORAL DA INTEGRIDADE DOS MICROELEMENTOS IDENTIFICADORES DE PROJÉTEIS DE ARMA DE FOGO APÓS IMERSÃO EM SANGUE SUÍNO"], [28, "08:30", "10:00", "520", "BA", "Avaliação de métodos de limpeza de projéteis de arma de fogo e seus impactos no exame de confronto balístico: análise de amostras expostas ao sangue suíno ao longo do tempo", "Luiz Henrique da Silva Rotta (PCIPR), Simone Vasconcelos Santana Rotta (PCIPR), Daniele de Freitas Garcia (UNESPAR)", "AVALIAÇÃO DE MÉTODOS DE LIMPEZA DE PROJÉTEIS DE ARMA DE FOGO E SEUS IMPACTOS NO EXAME DE CONFRONTO BALÍSTICO: ANÁLISE DE AMOSTRAS EXPOSTAS AO SANGUE SUÍNO AO LONGO DO TEMPO"], [28, "08:30", "10:00", "523", "BA", "Comparação da visualização de um projétil de arma de fogo por microscopia eletrônica de varredura e microscopia óptica em microcomparador balístico", "Daniele de Freitas Garcia (UNESPAR), Simone Vasconcelos Santana Rotta (PCIPR), Silvia Luciana Fávaro Rosa (COMCAP / UEM), Rosimar Maria Marques (COMCAP / UEM), Luiz Henrique da Silva Rotta (PCIPR)", "COMPARAÇÃO DA VISUALIZAÇÃO DE UM PROJÉTIL DE ARMA DE FOGO POR MICROSCOPIA ELETRÔNICA DE VARREDURA E MICROSCOPIA ÓPTICA EM MICROCOMPARADOR BALÍSTICO"], [28, "08:30", "10:00", "375", "CP", "Diarização não supervisionada de embeddings de voz aplicada à comparação forense de locutores", "Tiago Samir de Sousa Freire (PEFOCE)", "DIARIZAÇÃO NÃO SUPERVISIONADA DE EMBEDDINGS DE VOZ APLICADA À COMPARAÇÃO FORENSE DE LOCUTORES"], [28, "08:30", "10:00", "376", "CP", "Corpus Forense do Ceará: um banco de vozes para a validação de perícias fonéticas", "Célio Rogério Nunes Almeida Filho (PEFOCE)", "CORPUS FORENSE DO CEARÁ: UM BANCO DE VOZES PARA A VALIDAÇÃO DE PERÍCIAS FONÉTICAS"], [28, "08:30", "10:00", "557", "CP", "Desafios da análise acústica no exame de comparação forense de locutor: revisão da literatura", "Lucilene Aparecida Forcin Cazumbá (MPSP), Flávia Rodrigues dos Santos Gianini (MPSP), Ana Paula Sanches (MPSP), Jessica Aparecida de Brito (MPSP)", "DESAFIOS DA ANÁLISE ACÚSTICA NO EXAME DE COMPARAÇÃO FORENSE DE LOCUTOR: REVISÃO DA LITERATURA."], [28, "08:30", "10:00", "637", "CP", "Impacto de plataformas de videoconferência na análise acústica da fala: implicações para exames periciais de comparação forense de locutores", "Tatiane Alves Braga (PUCRS), Paola Baron (UFSC), Samantha Barcelos Moraes (FFRS), Ana Paula Sanches (MPSP)", "IMPACTO DE PLATAFORMAS DE VIDEOCONFERÊNCIA NA ANÁLISE ACÚSTICA DA FALA: IMPLICAÇÕES PARA EXAMES PERICIAIS DE COMPARAÇÃO FORENSE DE LOCUTORES"], [28, "08:30", "10:00", "642", "CP", "Estimação de degradação espectral acumulativa em cadeias de codificação com perdas em áudio forense: estudo com 32.292 amostras", "Erlon Goncalves Reis (PCERJ-ICCE)", "ESTIMAÇÃO DE DEGRADAÇÃO ESPECTRAL ACUMULATIVA EM CADEIAS DE CODIFICAÇÃO COM PERDAS EM ÁUDIO FORENSE: ESTUDO COM 32.292 AMOSTRAS"], [28, "08:30", "10:00", "555", "DF", "Análise documentoscópica de arquivos digitais: abordagem perceptual, contextual e de metadados na detecção de fraudes em pregão eletrônico", "Lucilene Aparecida Forcin Cazumbá (MPSP), Ana Paula Sanches (MPSP), Flávia Rodrigues dos Santos Gianini (MPSP), Jessica Aparecida de Brito (MPSP)", "ANÁLISE DOCUMENTOSCÓPICA DE ARQUIVOS DIGITAIS: ABORDAGEM PERCEPTUAL, CONTEXTUAL E DE METADADOS NA DETECÇÃO DE FRAUDES EM PREGÃO ELETRÔNICO."], [28, "08:30", "10:00", "558", "DF", "Documentoscopia em transição: do papel ao digital no TJ/SP (2019–2026)", "Lucilene Aparecida Forcin Cazumbá (MPSP), Márcia Aparecida Lopes da Silva (TJSP), Pedro Lopes Sanches Neves (PUCCAMPINAS)", "Documentoscopia em Transição: do Papel ao Digital no TJ/SP (2019–2026)"], [28, "08:30", "10:00", "586", "DF", "Decodificação de QR code para aplicação na identificação veicular", "Marc Waxman Braga (DPT)", "DECODIFICAÇÃO DE QR CODE PARA APLICAÇÃO NA IDENTIFICAÇÃO VEICULAR"], [28, "08:30", "10:00", "367", "EF", "Métodos simplificados para estimativa de velocidade em acidentes de trânsito", "Jonathan Silva Souza (DPT/BA), João Gabriel do Nascimento Souza (DPT/BA)", "MÉTODOS SIMPLIFICADOS PARA ESTIMATIVA DE VELOCIDADE EM ACIDENTES DE TRÂNSITO"], [28, "08:30", "10:00", "432", "EF", "Inovação pericial: Event Data Recorder (EDR) e a validação multidisciplinar da prova material em crime de trânsito na cidade de Goiânia – relato de caso", "Leticia Prado Castanheira Costa (PCIGO), Denise Vaz de Almeida (PCIGO), Carla Fonseca Arantes (PCIGO)", "INOVAÇÃO PERICIAL: EVENT DATA RECORDER (EDR) E A VALIDAÇÃO MULTIDISCIPLINAR DA PROVA MATERIAL EM CRIME DE TRÂNSITO NA CIDADE DE GOIÂNIA – RELATO DE CASO."], [28, "08:30", "10:00", "505", "EF", "Metodologia semiassistida por imagem para mensuração de deformações veiculares e estimativa da EES pelo método CRASH3", "Bruno Pessôa Neves (PCI/RN), José Germano da Silva Neto (PCI/RN), Renilson De Oliveira Mapele (PCI/RN)", "METODOLOGIA SEMIASSISTIDA POR IMAGEM PARA MENSURAÇÃO DE DEFORMAÇÕES VEICULARES E ESTIMATIVA DA EES PELO MÉTODO CRASH3"], [28, "08:30", "10:00", "652", "EF", "Modelagem de tombamento de automóvel induzido por colisão perpendicular de motocicleta", "Alexandre Magno Bernardo Fontoura (PCI/PR), Rodrigo Galvão (PCI/PR)", "MODELAGEM DE TOMBAMENTO DE AUTOMÓVEL INDUZIDO POR COLISÃO PERPENDICULAR DE MOTOCICLETA"], [28, "08:30", "10:00", "433", "GI", "Fatores da especialização pericial: desafios e impactos no atendimento a locais de crime em Goiânia e em regionais de grande porte", "Leticia Prado Castanheira Costa (PCIGO), Tássio Ramos Fagundes (PCIGO), Denise Vaz de Almeida (PCIGO)", "FATORES DA ESPECIALIZAÇÃO PERICIAL: DESAFIOS E IMPACTOS NO ATENDIMENTO A LOCAIS DE CRIME EM GOIÂNIA E EM REGIONAIS DE GRANDE PORTE"], [28, "08:30", "10:00", "525", "GI", "Xandroid: plataforma de auditoria de campo, padronização taxonômica e blindagem da cadeia de custódia por criptografia SHA-256 offline e inteligência artificial assistida", "Alexandre D'ávila Moura (ICPCDF)", "Xandroid: plataforma de auditoria de campo, padronização taxonômica e blindagem da cadeia de custódia por criptografia SHA-256 offline e inteligência artificial assistida"], [28, "08:30", "10:00", "591", "GI", "Busca ativa como função pericial estratégica na identificação e na destinação de corpos sob custódia do estado", "Anelisi de Lima Araújo (IGP-RS), Adriana Ubirajara Silva Petry (IGP-RS), Patrícia Vasconcelos Machado (IGP-RS), Beatriz da Fontoura Pinheiro Beck (IGP-RS), Rosane Perez Baldasso (IGP-RS), Kleber Cardoso Crespo (IGP-RS), Marcelo Cardoso Barros (IGP-RS), Diana Maria Fernandez Montallvo Mendonça (IGP-RS), Patricia Marin (IGP-RS)", "BUSCA ATIVA COMO FUNÇÃO PERICIAL ESTRATÉGICA NA IDENTIFICAÇÃO E NA DESTINAÇÃO DE CORPOS SOB CUSTÓDIA DO ESTADO"], [28, "08:30", "10:00", "628", "GI", "O emprego da tecnologia de scanner 3D no contexto da reprodução simulada dos fatos", "Cátia Tatiana Kochemborger Moura Fert (IGP/RS), Carolina Brandt Gualdi (IGP/RS), Luciano Beux (IGP/RS), Barbara Zaffari Cavedon (IGP/RS), Francine Barbisan D'E Palma (IGP/RS)", "O EMPREGO DA TECNOLOGIA DE SCANNER 3D NO CONTEXTO DA REPRODUÇÃO SIMULADA DOS FATOS"], [28, "08:30", "10:00", "472", "LC", "A importância da preservação do local de crime e da utilização de técnicas forenses na elucidação de casos de estupro e homicídio", "Julianna Kesselring Romero (SPTC-IC)", "A IMPORTÂNCIA DA PRESERVAÇÃO DO LOCAL DE CRIME E DA UTILIZAÇÃO DE TÉCNICAS FORENSES NA ELUCIDAÇÃO DE CASOS DE ESTUPRO E HOMICÍDIO"], [28, "08:30", "10:00", "489", "LC", "Assistentes de inteligência artificial e a dinâmica dos fatos: a relevância do acesso imediato a vestígios digitais em locais de crime", "Bruno Henz Mossmann (PCi-SC), Mably Rosalina Fernandes (PUCPR)", "ASSISTENTES DE INTELIGÊNCIA ARTIFICIAL E A DINÂMICA DOS FATOS: A RELEVÂNCIA DO ACESSO IMEDIATO A VESTÍGIOS DIGITAIS EM LOCAIS DE CRIME"], [28, "08:30", "10:00", "512", "LC", "Análise pericial de adulteração de carga como modalidade de fraude patrimonial: correlação entre vestígios físicos e evidências bromatológicas", "Raissa de Jesus Nascimento (ICAP, DPT/BA), Mariane de Lima (ICAP, DPT/BA)", "ANÁLISE PERICIAL DE ADULTERAÇÃO DE CARGA COMO MODALIDADE DE FRAUDE PATRIMONIAL: CORRELAÇÃO ENTRE VESTÍGIOS FÍSICOS E EVIDÊNCIAS BROMATOLÓGICAS"], [28, "08:30", "10:00", "545", "LC", "A reprodução simulada dos fatos como instrumento de validação da prova testemunhal: relato de caso em crime de latrocínio no oeste do Paraná", "Raul Messias Lessa (PCI-PR), Jeronimo de Alencar Nogueira (PCI-PR), Eduardo Attuy Carvalho (PCI-PR), Dayana Rodrigues da Silva (PCI-PR), Talita Odriane Custódio Leite (PCI-PR)", "A REPRODUÇÃO SIMULADA DOS FATOS COMO INSTRUMENTO DE VALIDAÇÃO DA PROVA TESTEMUNHAL: RELATO DE CASO EM CRIME DE LATROCÍNIO NO OESTE DO PARANÁ."], [28, "08:30", "10:00", "600", "LC", "Análise pericial de disparo acidental por queda em arma de pressão modificada: um estudo de caso", "Eduardo Attuy Carvalho (PCI-PR), Dayana Rodrigues da Silva (PCI-PR), Raul Messias Lessa (PCI-PR), Jeronimo de Alencar Nogueira (PCI-PR)", "ANÁLISE PERICIAL DE DISPARO ACIDENTAL POR QUEDA EM ARMA DE PRESSÃO MODIFICADA: UM ESTUDO DE CASO"], [28, "08:30", "10:00", "467", "ML", "Padronização metodológica de procedimento minimamente invasivo em casos de autópsia", "Lara Lopes Rebelo Lima (UNIFESP), Anna Luísa de Loreto Patti (UNIFESP), Lara Souza Dutra Silva (UNIFESP), Grazielli Alves Pereira Gomes (UNIFESP), Marcelo de Souza Silva (UNIFESP), Jair Theodoro Filho (USP), Paulo Hilário Nascimento Saldiva (USP), Andrea Moraes Malinverni (UNIFESP), Edna Sadayo Miazato Iwamura (UNIFESP)", "PADRONIZAÇÃO METODOLÓGICA DE PROCEDIMENTO MINIMAMENTE INVASIVO EM CASOS DE AUTÓPSIA"], [28, "08:30", "10:00", "509", "ML", "Infanticídio ou natimortalidade? O papel da perícia médico-legal na definição do caso", "João Norival Lima Júnior (NRPC-Oeiras; DEPOC; PCPI), Marcos Antônio de Araújo Santos Filho (IMLGV; DEPOC; PCPI)", "INFANTICÍDIO OU NATIMORTALIDADE? O PAPEL DA PERÍCIA MÉDICO-LEGAL NA DEFINIÇÃO DO CASO"], [28, "08:30", "10:00", "602", "ML", "Relato de caso: intoxicação exógena por arsênio", "Anelisi de Lima Araújo (DML- IGP-RS), Adriana Ubirajara Silva Petry (DML- IGP-RS), Kleber Cardoso Crespo (DML- IGP-RS), Rosane Perez Baldasso (DML- IGP-RS), Clarissa Cassini Bettoni (DPL- IGP-RS), Viviane Fassina (DPL- IGP-RS), Renata Cardoso Vieira (DC- IGP-RS), Daniel Cristiano Paim (DC- IGP-RS), Dienifer Cunha dos Santos (DC- IGP-RS), Marcelo Cardoso Barros (DML- IGP-RS)", "RELATO DE CASO: INTOXICAÇÃO EXÓGENA POR ARSÊNIO"], [28, "08:30", "10:00", "429", "PA", "A voz da vítima silvestre: identificação taxonômica e elucidação de crime ambiental em fauna no extremo sul da Bahia", "Camilla Borges Gazolla (DPT)", "A Voz da Vítima Silvestre: Identificação Taxonômica e Elucidação de Crime Ambiental em Fauna no Extremo Sul da Bahia"], [28, "08:30", "10:00", "503", "PA", "Maus-tratos contra animais: um estudo documental de laudos periciais da Polícia Civil do Distrito Federal (2021-2025)", "Giovana Sant'Anna (UnB), Gustavo de Carvalho Dalton (UnB), Ayeska Maia (IC), Luís Deus (IC), Anderson Trein (IC), Pedro Naves (IC), Yasmin Fonseca (IC), Dyego Luz (IC), Maria Berçot (IC)", "MAUS-TRATOS CONTRA ANIMAIS: UM ESTUDO DOCUMENTAL DE LAUDOS PERICIAIS DA POLÍCIA CIVIL DO DISTRITO FEDERAL (2021-2025)"], [28, "08:30", "10:00", "511", "PA", "Crueldade animal como marcador de violência interpessoal: óbito provocado por trauma não acidental com lesões térmicas pós-morte – relato de caso", "Bruna Elisa Patini (PCI-GO)", "CRUELDADE ANIMAL COMO MARCADOR DE VIOLÊNCIA INTERPESSOAL: ÓBITO PROVOCADO POR TRAUMA NÃO ACIDENTAL COM LESÕES TÉRMICAS PÓS-MORTE – RELATO DE CASO"], [28, "08:30", "10:00", "549", "PA", "Análise forense integrada em cadáver de *Hydrochoerus hydrochaeris* - capivara", "Juliana Maria Maczuga (PCIPR), Angela Andreassa (PCIPR), Anne Caroline Bressan (PCIPR), Barbara Maria Santano Chalcoski (PCIPR), Bruna Balbinotti Mileki (PCIPR), Kelly Cristina Cancela (PCIPR), Stella Costa Jorge (PCIPR), Natalia Wistuba (PCIPR)", "ANÁLISE FORENSE INTEGRADA EM CADÁVER DE HYDROCHOERUS HYDROCHAERIS - CAPIVARA."], [28, "08:30", "10:00", "554", "PA", "Levantamento de fauna no Distrito Federal entre 2009 e 2025", "Juliane Sato (UnB; IC), Maria Berçot (IC), Pedro Naves (IC), Anderson Trein (IC), Luís Deus (IC), Ayeska Maia (IC), Dyego Luz (IC), Yasmin Fonseca (IC), Fernando Rodrigues (UnB), Gustavo de Carvalho Dalton (UnB)", "LEVANTAMENTO DE FAUNA NO DISTRITO FEDERAL ENTRE 2009 E 2025"], [28, "08:30", "10:00", "656", "PA", "A linha tênue entre a fatalidade e o crime: análise pericial de dois casos de asfixia em cães", "Alison André Ximenes Soares (NRPC-PHB/DEPOC-PI), Gustavo Parreira Rojas (NRPC-PHB/DEPOC-PI)", "A LINHA TÊNUE ENTRE A FATALIDADE E O CRIME: ANÁLISE PERICIAL DE DOIS CASOS DE ASFIXIA EM CÃES"], [28, "08:30", "10:00", "508", "QB", "Divulgação da importância dos insetos para a investigação criminal", "Beatriz Esteves de Souza (UNIRIO), Jéssica da Silva Costa (UNIRIO), Debora Ramos (UNIRIO), Larissa Thans Carneiro (UFRJ), Valéria Magalhães Aguiar (UNIRIO)", "DIVULGAÇÃO DA IMPORTÂNCIA DOS INSETOS PARA A INVESTIGAÇÃO CRIMINAL"], [28, "08:30", "10:00", "533", "QB", "Desenvolvimento de método analítico para determinação de ácido fórmico em amostras de sangue e humor vítreo, empregando a cromatografia gasosa com detector por ionização em chama", "Ravena Souza de Almeida Azevedo (DPT BA), Ginaldo da Conceição Filho (DPT BA), Izabel Santos (DPT BA), Luciene Pereira (DPT BA)", "DESENVOLVIMENTO DE MÉTODO ANALÍTICO PARA DETERMINAÇÃO DE ÁCIDO FÓRMICO EM AMOSTRAS DE SANGUE E HUMOR VÍTREO, EMPREGANDO A CROMATOGRAFIA GASOSA COM DETECTOR POR IONIZAÇÃO EM CHAMA"], [28, "08:30", "10:00", "611", "QB", "Desenvolvimento de método simultâneo de pesquisa e dosagem de álcool metílico e álcool etílico nos casos de suspeita de intoxicação por bebidas adulteradas no Brasil em 2025 no estado do Rio Grande do Sul", "Carla Cafarate Nunes (IGP-RS), Vanessa de Borba Domingos (IGP-RS), Adriana Santos Andrade (IGP-RS)", "DESENVOLVIMENTO DE MÉTODO SIMULTÂNEO DE PESQUISA E DOSAGEM DE ÁLCOOL METÍLICO E ÁLCOOL ETÍLICO NOS CASOS DE SUSPEITA DE INTOXICAÇÃO POR BEBIDAS ADULTERADAS NO BRASIL EM 2025 NO ESTADO DO RIO GRANDE DO SUL"], [28, "08:30", "10:00", "616", "QB", "Análise toxicológica de monóxido de carbono por método otimizado e correlação de achados periciais: relato de caso em Maceió/AL", "Ayala Nara Pereira Gomes (POLCAL), Lívia Rafaella Menezes da Rocha Goulart (POLCAL), Maria Vitória Santos (UFAL), Nathália Lins Gonzaga (POLCAL), Renata Brandão Leite (POLCAL), Thalmanny Fernandes Goulart (POLCAL)", "ANÁLISE TOXICOLÓGICA DE MONÓXIDO DE CARBONO POR MÉTODO OTIMIZADO E CORRELAÇÃO DE ACHADOS PERICIAIS: RELATO DE CASO EM MACEIÓ/AL."], [28, "08:30", "10:00", "620", "QB", "Desenvolvimento de método para pesquisa e dosagem de arsênio em material bruto e em matrizes biológicas por espectrometria de absorção atômica com atomização eletrotérmica em forno de grafite (ETAAS)", "Adriana Santos Andrade (IGP-RS), Marcos José Souza Carpes (IGP-RS), Carla Cafarate Nunes (IGP-RS), Giulia Carli Lorenzini (IGP-RS), Daniel Scolmeister (IGP-RS)", "DESENVOLVIMENTO DE MÉTODO PARA PESQUISA E DOSAGEM DE ARSÊNIO EM MATERIAL BRUTO E EM MATRIZES BIOLÓGICAS POR ESPECTROMETRIA DE ABSORÇÃO ATÔMICA COM ATOMIZAÇÃO ELETROTÉRMICA EM FORNO DE GRAFITE (ETAAS)"], [28, "08:30", "10:00", "626", "QB", "Desenvolvimento de método para análise semi-quantitativa de lítio em sangue por espectrometria de absorção atômica com atomização eletrotérmica em forno de grafite (ETAAS)", "Adriana Santos Andrade (IGP-RS), Marcos José Souza Carpes (IGP-RS), Carla Cafarate Nunes (IGP-RS), Edson Bernardi (IGP-RS)", "DESENVOLVIMENTO DE MÉTODO PARA ANÁLISE SEMI-QUANTITATIVA DE LÍTIO EM SANGUE POR ESPECTROMETRIA DE ABSORÇÃO ATÔMICA COM ATOMIZAÇÃO ELETROTÉRMICA EM FORNO DE GRAFITE (ETAAS)"], [28, "08:30", "10:00", "645", "QB", "Intoxicação por gás GLP e benzodiazepínicos: investigação toxicológica de um caso fatal", "Thiara Vanessa Barbosa da Silva (PEFOCE)", "INTOXICAÇÃO POR GÁS GLP E BENZODIAZEPÍNICOS: INVESTIGAÇÃO TOXICOLÓGICA DE UM CASO FATAL"], [29, "08:30", "10:00", "499", "BA", "Análise das forças aerodinâmicas em projéteis e sua aplicação à balística forense: uma proposta didática para o ensino", "Deivid Gomes de Medeiros (PEFOCE)", "ANÁLISE DAS FORÇAS AERODINÂMICAS EM PROJÉTEIS E SUA APLICAÇÃO À BALÍSTICA FORENSE: UMA PROPOSTA DIDÁTICA PARA O ENSINO."], [29, "08:30", "10:00", "513", "BA", "Fenômeno do tiro encaixado: relato de caso", "Elys Rayssa Neres Lima (DPT-BA), Messias Silva Nascimento (DPT-BA), Ricardo Costa de Moraes Júnior (DPT-BA)", "FENÔMENO DO TIRO ENCAIXADO: RELATO DE CASO"], [29, "08:30", "10:00", "635", "BA", "Eficiência e prestabilidade em munições sem utilização de arma(s) de fogo", "Gilmar Dias Rodrigues (PCMG)", "EFICIÊNCIA E PRESTABILIDADE EM MUNIÇÕES SEM UTILIZAÇÃO DE ARMA(S) DE FOGO"], [29, "08:30", "10:00", "672", "BA", "Ensaio sobre adequabilidade em balística forense", "Eduardo José Jucá Mallmann (PCDF), Rodrigo Studart Correa (PCDF), Bruno Zschaber Mavignier de Castro (PCDF), Renner Miranda da Silva (PCDF)", "ENSAIO SOBRE ADEQUABILIDADE EM BALÍSTICA FORENSE"], [29, "08:30", "10:00", "362", "CP", "O impacto dos recursos nativos de exclusão de mensagens do WhatsApp na análise forense móvel", "Marcio Gil Faccin (IGP-RS), Marcos Vinícius Rodrigues (IGP-RS), Flávio D´Arriaga Tarrago (IGP-RS)", "O impacto dos recursos nativos de exclusão de mensagens do WhatsApp na análise forense móvel"], [29, "08:30", "10:00", "378", "CP", "Desbloqueio de dispositivos móveis e extração avançada de dados: análise forense em ambientes Android e iOS", "Ibsen Rodrigues Maciel (PCIPA)", "DESBLOQUEIO DE DISPOSITIVOS MÓVEIS E EXTRAÇÃO AVANÇADA DE DADOS: ANÁLISE FORENSE EM AMBIENTES ANDROID E IOS."], [29, "08:30", "10:00", "386", "CP", "iOS com proteção contra roubo ativa: metodologia para extração e pós-processamento de conversas do WhatsApp", "Natanael Pinto de Carvalho Neto (PCiPA), Lucila Helena Santiago de Almeida (PCiPA)", "IOS COM PROTEÇÃO CONTRA ROUBO ATIVA: METODOLOGIA PARA EXTRAÇÃO E PÓS-PROCESSAMENTO DE CONVERSAS DO WHATSAPP"], [29, "08:30", "10:00", "605", "CP", "Vestígios e estratégias para mitigar o impacto dos recursos nativos de exclusão de mensagens do WhatsApp na análise forense móvel", "Marcos Vinícius Rodrigues (IGP/RS), Marcio Gil Faccin (IGP/RS), Flávio D´Arriaga Tarrago (IGP/RS)", "VESTÍGIOS E ESTRATÉGIAS PARA MITIGAR O IMPACTO DOS RECURSOS NATIVOS DE EXCLUSÃO DE MENSAGENS DO WHATSAPP NA ANÁLISE FORENSE MÓVEL"], [29, "08:30", "10:00", "392", "DF", "A necessidade de inclusão da seção de razão de verossimilhança em laudos de perícia grafoscópica", "Célio Rogério Nunes Almeida Filho (PEFOCE)", "A NECESSIDADE DE INCLUSÃO DA SEÇÃO DE RAZÃO DE VEROSSIMILHANÇA EM LAUDOS DE PERÍCIA GRAFOSCÓPICA"], [29, "08:30", "10:00", "590", "DF", "Aplicação de técnicas espectroscópicas na diferenciação de tintas de caneta esferográfica: um relato de caso sobre adulteração por acréscimo em documento manuscrito", "Marina Stroski (PCIPR), Gisele Floriani (PCIPR), Frederico Soares (UFPR), Victor Oliveira (UFPR)", "APLICAÇÃO DE TÉCNICAS ESPECTROSCÓPICAS NA DIFERENCIAÇÃO DE TINTAS DE CANETA ESFEROGRÁFICA: UM RELATO DE CASO SOBRE ADULTERAÇÃO POR ACRÉSCIMO EM DOCUMENTO MANUSCRITO"], [29, "08:30", "10:00", "406", "EF", "Análise pericial de desabamento parcial em edificação multifamiliar em Fortaleza-CE", "Fernando Viana da Silva Queiroz (PEFOCE)", "ANÁLISE PERICIAL DE DESABAMENTO PARCIAL EM EDIFICAÇÃO MULTIFAMILIAR EM FORTALEZA-CE"], [29, "08:30", "10:00", "481", "EF", "Retroanálise geotécnica como ferramenta pericial na determinação das causas de acidente por ruptura de talude em pedreira", "Mariana da Silva Carretta (IGP/RS), Alexandre Timm do Espirito Santo (IGP/RS), Paulo Ricardo Ost Frak (IGP/RS)", "RETROANÁLISE GEOTÉCNICA COMO FERRAMENTA PERICIAL NA DETERMINAÇÃO DAS CAUSAS DE ACIDENTE POR RUPTURA DE TALUDE EM PEDREIRA"], [29, "08:30", "10:00", "630", "EF", "Retroanálise da estabilidade geotécnica em um caso de deslizamento de talude no aterro sanitário da região metropolitana de Curitiba", "Bruno Tonel Otsuka (PCIPR), Emilio Graciliano Ferreira Mercuri (UFPR), Matheus Pereira Nogueira e Silva (PCIPR)", "RETROANÁLISE DA ESTABILIDADE GEOTÉCNICA EM UM CASO DE DESLIZAMENTO DE TALUDE NO ATERRO SANITÁRIO DA REGIÃO METROPOLITANA DE CURITIBA"], [29, "08:30", "10:00", "677", "EF", "Análise pericial de colapso estrutural de laje nervurada em edificação comercial: estudo de caso em engenharia forense no município do Recife-PE", "Abner Pedro Queiroz de Souza (PCIPE), Jorge Augusto Wissmann (PCIPE), Mikael Santos de Lima (PCIPE), Carlos Armando Correia Lyra (PCIPE), Maria Gabriela de Araujo Specht (PCIPE)", "ANÁLISE PERICIAL DE COLAPSO ESTRUTURAL DE LAJE NERVURADA EM EDIFICAÇÃO COMERCIAL: ESTUDO DE CASO EM ENGENHARIA FORENSE NO MUNICÍPIO DO RECIFE-PE"], [29, "08:30", "10:00", "368", "GI", "Capacitação pericial e segurança pública baseada em evidências: resultados e desdobramentos do Projeto Trilhas de Evidências", "Carla Martins Kaneto (UESC; DPT), Amanda Cabral Sales Souza (DPT), Marco Antonio Oliveira Lima (DPT)", "CAPACITAÇÃO PERICIAL E SEGURANÇA PÚBLICA BASEADA EM EVIDÊNCIAS: RESULTADOS E DESDOBRAMENTOS DO PROJETO TRILHAS DE EVIDÊNCIAS"], [29, "08:30", "10:00", "399", "GI", "“Trabalho sujo”: aspectos sociais do trabalho na Polícia Científica", "Joara de Paula Campos (PCI-PR; UFG)", "“TRABALHO SUJO”: ASPECTOS SOCIAIS DO TRABALHO NA POLÍCIA CIENTÍFICA."], [29, "08:30", "10:00", "496", "GI", "Automação da emissão de laudos periciais por inteligência artificial generativa: da concepção à adoção", "Sanmya Beatriz Tiradentes Leite (DPTC-AM)", "AUTOMAÇÃO DA EMISSÃO DE LAUDOS PERICIAIS POR INTELIGÊNCIA ARTIFICIAL GENERATIVA: DA CONCEPÇÃO À ADOÇÃO"], [29, "08:30", "10:00", "501", "GI", "Instituto Central de Custódia de Vestígios na Polícia Científica da Bahia: estratégia inovadora na perícia baiana", "Luana Santos de Carvalho (DPT; UFBA), Bruno Gil de Carvalho Lima (DPT; UFBA), Alexsandro Fiscina de Santana (DPT; UFBA)", "INSTITUTO CENTRAL DE CUSTÓDIA DE VESTÍGIOS NA POLÍCIA CIENTÍFICA DA BAHIA: ESTRATÉGIA INOVADORA NA PERÍCIA BAIANA"], [29, "08:30", "10:00", "506", "GI", "O impacto da regionalização da perícia criminal na demanda pericial: evidências do controle sintético para Santa Cruz do Sul/RS", "Alexandre Timm do Espirito Santo (IGP-RS), Mariana da Silva Carretta (IGP-RS)", "O Impacto da Regionalização da Perícia Criminal na Demanda Pericial: Evidências do Controle Sintético para Santa Cruz do Sul/RS"], [29, "08:30", "10:00", "568", "GI", "A importância do sistema de custos como ferramenta de gestão na perícia criminal", "Marconi Ferreira de Medeiros (PCiRN)", "A IMPORTÂNCIA DO SISTEMA DE CUSTOS COMO FERRAMENTA DE GESTÃO NA PERÍCIA CRIMINAL.."], [29, "08:30", "10:00", "587", "GI", "Inteligência pericial e inovação tecnológica: a experiência da COINP na manipulação de dados e geração de informações estratégicas", "Janiele Nogueira da Silva (PEFOCE), Isabela Lobo Mesquita (PEFOCE)", "INTELIGÊNCIA PERICIAL E INOVAÇÃO TECNOLÓGICA: A EXPERIÊNCIA DA COINP NA MANIPULAÇÃO DE DADOS E GERAÇÃO DE INFORMAÇÕES ESTRATÉGICAS"], [29, "08:30", "10:00", "597", "GI", "Otimização da gestão de equipamentos forenses: a automatização de registros como ferramenta de garantia da qualidade", "Luiza Teixeira da Silva (UFPR), Samara Medeiros Dias (PCIPR), Marianna Maia Taulois do Rosário (PCIPR)", "OTIMIZAÇÃO DA GESTÃO DE EQUIPAMENTOS FORENSES: A AUTOMATIZAÇÃO DE REGISTROS COMO FERRAMENTA DE GARANTIA DA QUALIDADE"], [29, "08:30", "10:00", "650", "GI", "Liderança tóxica e saúde mental no serviço público de segurança: evidências da literatura científica e reflexões para as instituições de segurança pública", "Maria Cecília Begnossi (PCIPR)", "LIDERANÇA TÓXICA E SAÚDE MENTAL NO SERVIÇO PÚBLICO DE SEGURANÇA: EVIDÊNCIAS DA LITERATURA CIENTÍFICA E REFLEXÕES PARA AS INSTITUIÇÕES DE SEGURANÇA PÚBLICA"], [29, "08:30", "10:00", "655", "GI", "IDILT: interface de desenvolvimento integrado de laudo técnico", "Daniel Freitas (Unifesspa), Enzo Silva (Unifesspa), Petra Lino (Unifesspa), Fernanda Ferreira (Unifesspa), Marcela Souza (Unifesspa), Hugo Kuribayashi (Unifesspa)", "IDILT: INTERFACE DE DESENVOLVIMENTO INTEGRADO DE LAUDO TÉCNICO"], [29, "08:30", "10:00", "663", "GI", "A importância da perícia criminal militar nos corpos de bombeiros militares", "Moacyr Fiares Pereira Junior (CBMERJ), Priscilla Prates de Oliveira (CBMERJ), Tatiana Vivas da Silva (CBMERJ)", "A IMPORTÂNCIA DA PERÍCIA CRIMINAL MILITAR NOS CORPOS DE BOMBEIROS MILITARES"], [29, "08:30", "10:00", "484", "LC", "Perfil pericial dos suicídios examinados em Porto Alegre/RS em 2020: achados de local, necroscópicos e laboratoriais", "Anderson Fraga Morales (IGP/RS)", "Perfil pericial dos suicídios examinados em Porto Alegre/RS em 2020: achados de local, necroscópicos e laboratoriais"], [29, "08:30", "10:00", "562", "LC", "Documentação aérea em antropologia forense: uso de aeronaves remotamente pilotadas (RPA) na gestão de exumações forenses", "Larissa Yano Souza Martins (IML-SPTC/SP), Bruno Costa Pitanga Maia (CNDCF-INC/PF; INC/PF), Melina Calmon Silva (FMRP/USP; CNDCF-INC/PF; CEUB), Thayla Eugenia da Silva Tomé (FMRP/USP; CNDCF-INC/PF), Antonia de Souza Costa (INC/PF), Carlos Eduardo Palhares Machado (FMRP/USP; INC/PF), Marco Aurélio Guimarães (FMRP/USP), Alexandre Raphael Deitos (FMRP/USP; INC/PF)", "DOCUMENTAÇÃO AÉREA EM ANTROPOLOGIA FORENSE: USO DE AERONAVES REMOTAMENTE PILOTADAS (RPA) NA GESTÃO DE EXUMAÇÕES FORENSES"], [29, "08:30", "10:00", "606", "LC", "Atendimento em local de autoeliminação por método não usual: asfixia por gás hélio", "Humberto Leitão Riella (PCISC), Laura Adriano Corrêa (PCISC)", "ATENDIMENTO EM LOCAL DE AUTOELIMINAÇÃO POR MÉTODO NÃO USUAL: ASFIXIA POR GÁS HÉLIO"], [29, "08:30", "10:00", "614", "LC", "Distribuição geográfica da tipologia de instrumentos em homicídios noturnos em Manaus", "Thiago Soares Marques (DPTC-AM)", "DISTRIBUIÇÃO GEOGRÁFICA DA TIPOLOGIA DE INSTRUMENTOS EM HOMICÍDIOS NOTURNOS EM MANAUS"], [29, "08:30", "10:00", "647", "LC", "Do protocolo ao local de crime: análise pericial do overkill em feminicídios", "Maria Carolina Vieira da Rocha (PCI PR; UFPR), Érika Lorena Chrominski (PCI PR)", "DO PROTOCOLO AO LOCAL DE CRIME: ANÁLISE PERICIAL DO OVERKILL EM FEMINICÍDIOS"], [29, "08:30", "10:00", "408", "ML", "Distribuição dos serviços de verificação de óbito no Brasil: análise da implementação da rede nacional frente à previsão normativa", "Michelle Larissa Zini Lise (IGP/RS; ABRAMEL), Pablo Canez Farias (IGP/RS; ABRAMEL), Lilian Cantos Marques Farias (UCPEL)", "DISTRIBUIÇÃO DOS SERVIÇOS DE VERIFICAÇÃO DE ÓBITO NO BRASIL: ANÁLISE DA IMPLEMENTAÇÃO DA REDE NACIONAL FRENTE À PREVISÃO NORMATIVA"], [29, "08:30", "10:00", "420", "ML", "Exumação na antropologia forense como ferramenta diagnóstica em suspeita de envenenamento em série: relato de caso", "Larissa Yano Souza Martins (IML/SPTC-SP), Diógenes Tadeu de Freitas Cardoso (IML/SPTC-SP), Leonardo Monteiro Mendes (IML/SPTC-SP), Guilhermy Tristão Rodrigues (IML/SPTC-SP), Victor Alexandre Percinio Gianvecchio (IC/SPTC-SP), Elvis Medeiros de Aquino (IC/SPTC-SP), Paulo Akinori Okuyama (IC/SPTC-SP), Alexandre Raphael Deitos (INC/PF)", "EXUMAÇÃO NA ANTROPOLOGIA FORENSE COMO FERRAMENTA DIAGNÓSTICA EM SUSPEITA DE ENVENENAMENTO EM SÉRIE: RELATO DE CASO"], [29, "08:30", "10:00", "423", "ML", "Decomposição em ambiente interno: estudo comparativo experimental da influência da entomofauna em *Sus scrofa domesticus* e correlação com casuística pericial", "Larissa Yano Souza Martins (IML-SPTC/SP), Melina Calmon Silva (FMRP/USP; INC/PF; CEUB), Thayla Eugenia da Silva Tomé (FMRP/USP; INC/PF), Leonardo Monteiro Mendes (IML-SPTC/SP), Carlos Eduardo Palhares Machado (INC/PF), Marco Aurélio Guimarães (FMRP/USP), Alexandre Raphael Deitos (INC/PF)", "DECOMPOSIÇÃO EM AMBIENTE INTERNO: ESTUDO COMPARATIVO EXPERIMENTAL DA INFLUÊNCIA DA ENTOMOFAUNA EM SUS SCROFA DOMESTICUS E CORRELAÇÃO COM CASUÍSTICA PERICIAL"], [29, "08:30", "10:00", "448", "ML", "Síndrome compartimental em criança após fratura: relato de caso com desfecho grave e discussão médico-legal", "Michelle Larissa Zini Lise (IGPRS; ABRAMEL), Carlos Durão (INMLCF; HVFX), Leonardo da Silva Galloni (IGPRS), Alexandre Michelin (IGPRS)", "SÍNDROME COMPARTIMENTAL EM CRIANÇA APÓS FRATURA: RELATO DE CASO COM DESFECHO GRAVE E DISCUSSÃO MÉDICO-LEGAL"], [29, "08:30", "10:00", "471", "ML", "Estimativa de intervalo pós-morte utilizando o cupim *Nasutitermes itapocuensis* (Isoptera, Termitidae, Nasutitermitinae) em um estudo de caso antropológico", "Victor Wilson Botteon (PCISC), Anderson Gaedke (PCISC), Paulo Miamoto (PCISC), Marcelle Cristina Simioni Chupel (PCISC), Luiz Roberto Fontes (IML SP), Denise Mouga (Univille)", "ESTIMATIVA DE INTERVALO PÓS-MORTE UTILIZANDO O CUPIM NASUTITERMES ITAPOCUENSIS (ISOPTERA, TERMITIDAE, NASUTITERMITINAE) EM UM ESTUDO DE CASO ANTROPOLÓGICO"], [29, "08:30", "10:00", "547", "ML", "Avanços na radiografia digital em sistema flatscan dedicado como método complementar à autópsia em cadáveres putrefeitos", "Diana Maria Fernández Montalvo Mendonça (ESP/RS), Patricia Marin (IGP/RS; ESP/RS), Anelise Araújo (ESP/RS; IGP/RS), Rosane Baldasso (IGP/RS), Paulo Barragan (IGP/RS), Tamara Campos (IGP/RS), Mateus Caon (IGP/RS), Adriana Petry (ESP/RS; IGP/RS), Maycon Miranda (ESP/RS; IGP/RS), Marcelo Barros (ESP/RS; IGP/RS)", "AVANÇOS NA RADIOGRAFIA DIGITAL EM SISTEMA FLATSCAN DEDICADO COMO MÉTODO COMPLEMENTAR À AUTÓPSIA EM CADÁVERES PUTREFEITOS"], [29, "08:30", "10:00", "585", "ML", "Identificação de vítimas em desastres em massa: análise comparativa entre os desastres de Mariana e Brumadinho", "Pietra Barcelos Markowski (ULBRA), Eduarda Kingeski Gomes (ULBRA), Roberta DIncao Henckel (ULBRA), Sílvia Lemke Guterres (ULBRA; IGP/RS)", "IDENTIFICAÇÃO DE VÍTIMAS EM DESASTRES EM MASSA: ANÁLISE COMPARATIVA ENTRE OS DESASTRES DE MARIANA E BRUMADINHO"], [29, "08:30", "10:00", "390", "PA", "Incêndio florestal no Parque Estadual Cocó: uma abordagem pericial sobre as causas e consequências", "Fernando Viana da Silva Queiroz (PEFOCE)", "INCÊNDIO FLORESTAL NO PARQUE ESTADUAL COCÓ: UMA ABORDAGEM PERICIAL SOBRE AS CAUSAS E CONSEQUÊNCIAS"], [29, "08:30", "10:00", "527", "PA", "Dano climático associado a crimes ambientais no Cerrado: aplicação do custo social do carbono", "Maria de Albuquerque Berçot (IC/PCDF; UnB), Fátima de Souza Freire (UnB), Vitor Carlos Pereira (IC/PCDF), Pedro Henrique Coelho Naves (IC/PCDF), Caio Gustavo Mesquita Ângelo (IC/PCDF), Gustavo de Carvalho Dalton (IC/PCDF)", "DANO CLIMÁTICO ASSOCIADO A CRIMES AMBIENTAIS NO CERRADO: APLICAÇÃO DO CUSTO SOCIAL DO CARBONO"], [29, "08:30", "10:00", "618", "PA", "Desmatamento e valoração ambiental: contribuições metodológicas à perícia criminal no âmbito da Mata Atlântica em Pé 2025", "Themis Collares Antunes (IGP-RS), Renata Cardoso Vieira (IGP-RS)", "DESMATAMENTO E VALORAÇÃO AMBIENTAL: CONTRIBUIÇÕES METODOLÓGICAS À PERÍCIA CRIMINAL NO ÂMBITO DA MATA ATLÂNTICA EM PÉ 2025"], [29, "08:30", "10:00", "434", "QB", "A importância do banco de dados de perfis genéticos de cadáveres de identidade desconhecida no estado do Pará", "Elzemar Ribeiro-Rodrigues (PA), Hiago Sousa (PA), Maria do Socorro Costa (PA), Rachel Iespa (PA), Maria das Merces Paula (PA)", "A IMPORTÂNCIA DO BANCO DE DADOS DE PERFIS GENÉTICOS DE CADÁVERES DE IDENTIDADE DESCONHECIDA NO ESTADO DO PARÁ"], [29, "08:30", "10:00", "487", "QB", "Intralaboratorial: um complemento às atividades de ensaio de proficiência para a garantia da validade dos resultados em genética forense", "Vanessa Vitcoski Daitx (IGP-RS), Ana Paula M. Leboute (IGP-RS), Ellen Costa (IGP-RS), Mara Regina Netto Benetti (IGP-RS), Tatiana Pereira Gonzalez (IGP-RS)", "INTRALABORATORIAL: UM COMPLEMENTO ÀS ATIVIDADES DE ENSAIO DE PROFICIÊNCIA PARA A GARANTIA DA VALIDADE DOS RESULTADOS EM GENÉTICA FORENSE"], [29, "08:30", "10:00", "604", "QB", "Caracterização da distribuição de matches em crimes de roubo: análise das coincidências genéticas relacionadas ao assalto à empresa de valores em Guarapuava (2022)", "Maria Paula Balthazar Celli (UFPR; PCI PR), Paula Eidt Fornari (PCI PR), Josiane Brodzinski (PCI PR), Anna Carolina Braga (PCI PR), Claudia Marina Schellin-Becker (PCI PR), Marcelo Malaghini (PCI PR), Marianna Maia Taulois do Rosário (PCI PR), Pedro Henrique Canezin (PCI PR), Jaqueline Trentin Luz (PCI PR), Luciellen d'Avila Giacomel Kobachuk (PCI PR)", "CARACTERIZAÇÃO DA DISTRIBUIÇÃO DE MATCHES EM CRIMES DE ROUBO: ANÁLISE DAS COINCIDÊNCIAS GENÉTICAS RELACIONADAS AO ASSALTO À EMPRESA DE VALORES EM GUARAPUAVA (2022)"], [29, "08:30", "10:00", "609", "QB", "Identificação humana no Paraná: processamento de amostras biológicas de cadáveres custodiadas (2014–2025) e integração ao Banco Nacional de Perfis Genéticos", "Keissielly Marques da Silva (UFPR), Tayana Tanaka (PCIPR), Ricardo Maia (PCIPR), Margarida Souza (PCIPR), Thais Belo (PCIPR)", "IDENTIFICAÇÃO HUMANA NO PARANÁ: PROCESSAMENTO DE AMOSTRAS BIOLÓGICAS DE CADÁVERES CUSTODIADAS (2014–2025) E INTEGRAÇÃO AO BANCO NACIONAL DE PERFIS GENÉTICOS"], [29, "08:30", "10:00", "622", "QB", "Desempenho do RapidHIT ID em amostras de referência e questionadas: análise retrospectiva de dados", "Vivian Altmann (IGP-RS), Cláudio Xavier Machado (IGP-RS)", "DESEMPENHO DO RAPIDHIT ID EM AMOSTRAS DE REFERÊNCIA E QUESTIONADAS: ANÁLISE RETROSPECTIVA DE DADOS"], [30, "08:30", "10:00", "504", "BA", "Relato sobre as primeiras contribuições do Sistema Nacional de Análise Balística para a Polícia Científica do estado do Amazonas", "Alessandro Alves-Pereira (IC-LSB / DPTC AM), Fabiola Albuquerque (IC-LSB / DPTC AM), Joermerson Braga (IC-LSB / DPTC AM), Ulisses Neiss (IC-LSB / DPTC AM), Jefferson Holanda (IC-LSB / DPTC AM), José Matias (IC-LSB / DPTC AM)", "RELATO SOBRE AS PRIMEIRAS CONTRIBUIÇÕES DO SISTEMA NACIONAL DE ANÁLISE BALÍSTICA PARA A POLÍCIA CIENTÍFICA DO ESTADO DO AMAZONAS"], [30, "08:30", "10:00", "629", "BA", "Avaliação quantitativa de perfis balísticos gerados por cartuchos calibre nominal .38 TPC em pistolas calibre nominal 9 mm Luger", "Rafael Franco Zardo (PCI/SC), Marcelo Boscaro Alberca Fernandes (PCI/SC), Gilberto Fortkamp (PCI/SC), Rafaelle Dirschnabel (PCI/SC)", "AVALIAÇÃO QUANTITATIVA DE PERFIS BALÍSTICOS GERADOS POR CARTUCHOS CALIBRE NOMINAL .38 TPC EM PISTOLAS CALIBRE NOMINAL 9 MM LUGER"], [30, "08:30", "10:00", "644", "BA", "É válida a inserção de padrões de arma de fogo artesanal no SINAB? Estudo de caso sobre a identificação de uma arma de fogo artesanal tipo submetralhadora utilizada em local de homicídio no Amazonas com auxílio do Banco Nacional de Perfis Balísticos", "Ulisses Gaspar Neiss (DPTC/AM), José Matias Rocha Júnior (DPTC/AM), Joermerson Silva Braga (DPTC/AM), Jefferson Mendes Holanda (DPTC/AM), Alessandro Alves-Pereira (DPTC/AM)", "É VÁLIDA A INSERÇÃO DE PADRÕES DE ARMA DE FOGO ARTESANAL NO SINAB? ESTUDO DE CASO SOBRE A IDENTIFICAÇÃO DE UMA ARMA DE FOGO ARTESANAL TIPO SUBMETRALHADORA UTILIZADA EM LOCAL DE HOMICÍDIO NO AMAZONAS COM AUXÍLIO DO BANCO NACIONAL DE PERFIS BALÍSTICOS"], [30, "08:30", "10:00", "660", "BA", "Harpia Forensis: análise de dados balísticos do SINAB", "Viegas Dantas Martins (PCIPA), Natascha Morganna de Carvalho Maia Martins (UFPA)", "HARPIA FORENSIS: ANÁLISE DE DADOS BALÍSTICOS DO SINAB"], [30, "08:30", "10:00", "374", "CP", "Resort do crime: fraudes bancárias operadas remotamente a partir de refúgios criminosos no Rio de Janeiro", "Felipe Costa Ferreira (PEFOCE)", "RESORT DO CRIME: FRAUDES BANCÁRIAS OPERADAS REMOTAMENTE A PARTIR DE REFÚGIOS CRIMINOSOS NO RIO DE JANEIRO"], [30, "08:30", "10:00", "475", "CP", "Formatos digitais de arquivos de imagem na fotografia criminalística: integridade e valor probatório", "Tiago Felipe Baldasso (IGP/RS), Guilherme de Moraes Alvarez (IGP/RS)", "FORMATOS DIGITAIS DE ARQUIVOS DE IMAGEM NA FOTOGRAFIA CRIMINALÍSTICA: INTEGRIDADE E VALOR PROBATÓRIO"], [30, "08:30", "10:00", "517", "CP", "Exame forense em câmeras espiãs de baixo custo: da extração de memória flash à vinculação ao suspeito", "Mateus Bizzotto Nunes (PCI)", "EXAME FORENSE EM CÂMERAS ESPIÃS DE BAIXO CUSTO: DA EXTRAÇÃO DE MEMÓRIA FLASH À VINCULAÇÃO AO SUSPEITO"], [30, "08:30", "10:00", "676", "CP", "Google Street View (Maps API): medindo referências no plano da pista e calibrando parâmetros de câmeras externas", "Gustavo Maia Queiroz de Mendonça (SEPOL-RJ), Leandro Nascimento (SPTC-GO)", "GOOGLE STREET VIEW (MAPS API): MEDINDO REFERÊNCIAS NO PLANO DA PISTA E CALIBRANDO PARÂMETROS DE CÂMERAS EXTERNAS"], [30, "08:30", "10:00", "383", "DF", "Autenticidade além da assinatura: fundamentos materiais e históricos na perícia de documentos e obras de arte", "Renata de Lamare São PauloSilveira (LPP), Mario Ernesto de Oliveira Alves (APJESC)", "AUTENTICIDADE ALÉM DA ASSINATURA: FUNDAMENTOS MATERIAIS E HISTÓRICOS NA PERÍCIA DE DOCUMENTOS E OBRAS DE ARTE"], [30, "08:30", "10:00", "493", "DF", "Análise grafoscópica longitudinal das inscrições manuscritas de Juarez Machado (1964–2015): permanências e senescência gráfica em cinco décadas", "Sonia Regina Ribas Timi (UFPR)", "ANÁLISE GRAFOSCÓPICA LONGITUDINAL DAS INSCRIÇÕES MANUSCRITAS DE JUAREZ MACHADO (1964–2015): PERMANÊNCIAS E SENESCÊNCIA GRÁFICA EM CINCO DÉCADAS"], [30, "08:30", "10:00", "537", "DF", "Game over no Tigrinho: a importância da perícia merceológica no desmantelo da lavagem de dinheiro nos crimes virtuais de azar", "Alison André Ximenes Soares (NRPC PHB/DEPOC-PI)", "GAME OVER NO TIGRINHO: A IMPORTÂNCIA DA PERÍCIA MERCEOLÓGICA NO DESMANTELO DA LAVAGEM DE DINHEIRO NOS CRIMES VIRTUAIS DE AZAR"], [30, "08:30", "10:00", "407", "EF", "Perícia do invisível: metodologia por triangulação de dados para exames de engenharia forense em obras concluídas", "Marjore Scanagatta Howe (PCIPR), Jefferson Leite (PCIPR)", "PERÍCIA DO INVISÍVEL: METODOLOGIA POR TRIANGULAÇÃO DE DADOS PARA EXAMES DE ENGENHARIA FORENSE EM OBRAS CONCLUÍDAS"], [30, "08:30", "10:00", "453", "EF", "Estudo de caso de acidente de trabalho: eletroplessão em motor elétrico acoplado ao aparelho desintegrador, picador e moedor (DPM)", "Omolabake Alhambra Silva Arimoro (PCP), Jonatas Cesar Morais (PCP)", "ESTUDO DE CASO DE ACIDENTE DE TRABALHO: ELETROPLESSÃO EM MOTOR ELÉTRICO ACOPLADO AO APARELHO DESINTEGRADOR, PICADOR E MOEDOR (DPM)"], [30, "08:30", "10:00", "485", "EF", "Aplicação de aerofotogrametria com drone na determinação de ângulos de derrapagem e reconstrução de dinâmica veicular: estudo de caso pericial", "José Germano Silva Neto (PCIRN), Bruno Pessoa Neves (PCIRN), Marcelo Nunes Slva (PCIRN)", "APLICAÇÃO DE AEROFOTOGRAMETRIA COM DRONE NA DETERMINAÇÃO DE ÂNGULOS DE DERRAPAGEM E RECONSTRUÇÃO DE DINÂMICA VEICULAR: ESTUDO DE CASO PERICIAL"], [30, "08:30", "10:00", "542", "EF", "Análise comparativa entre fotogrametria digital e 3D Gaussian Splatting para documentação forense de vestígios veiculares", "Fernando Alves da Silva (UFG; SPTC-GO), Anselmo Rafael Cukla (UFSM), Symone Gomes Soares Alcalá (UFG)", "ANÁLISE COMPARATIVA ENTRE FOTOGRAMETRIA DIGITAL E 3D GAUSSIAN SPLATTING PARA DOCUMENTAÇÃO FORENSE DE VESTÍGIOS VEICULARES"], [30, "08:30", "10:00", "631", "EF", "Inteligência artificial especializada aplicada à investigação pericial de incêndios: apoio metodológico e padronização do raciocínio causal", "Leandro Goulart Dias (SPTC)", "INTELIGÊNCIA ARTIFICIAL ESPECIALIZADA APLICADA À INVESTIGAÇÃO PERICIAL DE INCÊNDIOS: APOIO METODOLÓGICO E PADRONIZAÇÃO DO RACIOCÍNIO CAUSAL"], [30, "08:30", "10:00", "658", "EF", "Extensão da razão cruzada para 6 pontos colineares com aplicação em fotogrametria forense: formulação matemática, análise de incerteza e aplicação em estimativa de velocidade veicular", "Isaac Newton Lima da Silva (IGPRS), Éder Fernandes (UNISINOS)", "EXTENSÃO DA RAZÃO CRUZADA PARA 6 PONTOS COLINEARES COM APLICAÇÃO EM FOTOGRAMETRIA FORENSE: FORMULAÇÃO MATEMÁTICA, ANÁLISE DE INCERTEZA E APLICAÇÃO EM ESTIMATIVA DE VELOCIDADE VEICULAR"], [30, "08:30", "10:00", "490", "GI", "Do contexto investigativo à evidência: qualificando a coleta de DNA de contato em veículos", "Laiana Silveira Beltrami (IGP-RS), Ulisses Vargas Pereira (IGP-RS), Gustavo Lucena Kortmann (IGP-RS)", "DO CONTEXTO INVESTIGATIVO À EVIDÊNCIA: QUALIFICANDO A COLETA DE DNA DE CONTATO EM VEÍCULOS"], [30, "08:30", "10:00", "538", "GI", "Inovações no laboratório de genética forense da Polícia Científica do Pará: desenvolvimento de um software para gestão da qualidade", "Bianca Alcântara (PCIPA), Elzemar Rodrigues (PCIPA), Mayko Ribeiro (PCIPA)", "INOVAÇÕES NO LABORATÓRIO DE GENÉTICA FORENSE DA POLÍCIA CIENTÍFICA DO PARÁ: DESENVOLVIMENTO DE UM SOFTWARE PARA GESTÃO DA QUALIDADE."], [30, "08:30", "10:00", "664", "GI", "Uma estrutura unificada para a qualidade forense: convergências entre a ISO/IEC 17025:2017 e a série ISO/IEC 21043:2025", "Vinícius Vieira de Araújo (INC), Rafael Rabelo Nunes (UnB)", "UMA ESTRUTURA UNIFICADA PARA A QUALIDADE FORENSE: CONVERGÊNCIAS ENTRE A ISO/IEC 17025:2017 E A SÉRIE ISO/IEC 21043:2025"], [30, "08:30", "10:00", "382", "LC", "Potencialidades e limitações no uso do scanner 3-D em tiros de armas de fogo em veículos", "André Luiz Martinelli Santos e Silva (IGP/RS), Wallace Cavalcante Ferrão (IGP/RS)", "POTENCIALIDADES E LIMITAÇÕES NO USO DO SCANNER 3-D EM TIROS DE ARMAS DE FOGO EM VEÍCULOS."], [30, "08:30", "10:00", "438", "LC", "Reprodução simulada dos fatos com imageamento 3D como recurso para elucidação de eventos complexos: homicídio ou disparo acidental por arma de fogo?", "Cátia Tatiana Kochemborger Moura Fert (IGP/RS), Francine Barbisan D'E Palma (IGP/RS), Luciano Beux (IGP/RS), Carolina Brandt Gualdi (IGP/RS), Barbara Zaffari Cavedon (IGP/RS)", "REPRODUÇÃO SIMULADA DOS FATOS COM IMAGEAMENTO 3D COMO RECURSO PARA ELUCIDAÇÃO DE EVENTOS COMPLEXOS: HOMICÍDIO OU DISPARO ACIDENTAL POR ARMA DE FOGO?"], [30, "08:30", "10:00", "494", "LC", "Pets que comem cadáveres: relatos de casos na perícia do RS e comparativo com outros animais", "Mariana Lopes Pellizzari (IGP-RS)", "PETS QUE COMEM CADÁVERES: RELATOS DE CASOS NA PERÍCIA DO RS E COMPARATIVO COM OUTROS ANIMAIS"], [30, "08:30", "10:00", "651", "LC", "Suicídio com arma de fogo e óbito tardio, relato de caso", "Rafael Heleno Campos (PCI-PR)", "SUICÍDIO COM ARMA DE FOGO E ÓBITO TARDIO, RELATO DE CASO."], [30, "08:30", "10:00", "370", "ML", "Como policiar a misoginia? Fatores da masculinidade em casos de massacres escolares", "Sofia Falsetti Xavier (PUCC), Wanderlei Abadio de Oliveira (PUCC)", "COMO POLICIAR A MISOGINIA? FATORES DA MASCULINIDADE EM CASOS DE MASSACRES ESCOLARES"], [30, "08:30", "10:00", "424", "ML", "Análise do perfil epidemiológico de vítimas e agressores em casos de feminicídio em Porto Alegre (RS) em 2024: uma abordagem pericial", "Rafaela Bittencourt Müller (ULBRA), Stefanie Ingrid dos Reis Schneider (ULBRA), Ana Carolina de Oliveira Lüdtke (ULBRA), Fernanda Cavinatto Pinto (ULBRA), Júlia Garcia Guimarães (ULBRA), Tainá Cazer (ULBRA), Silvia Lemke Guterres (ULBRA; IGP RS)", "ANÁLISE DO PERFIL EPIDEMIOLÓGICO DE VÍTIMAS E AGRESSORES EM CASOS DE FEMINICÍDIO EM PORTO ALEGRE (RS) EM 2024: UMA ABORDAGEM PERICIAL"], [30, "08:30", "10:00", "425", "ML", "Psicopatia e imputabilidade penal: limites da perícia psiquiátrica", "Rafaela Bittencourt Müller (ULBRA), Stefanie Ingrid dos Reis Schneider (ULBRA), Ana Carolina de Oliveira Lüdtke (ULBRA), Fernanda Cavinatto Pinto (ULBRA), Júlia Garcia Guimarães (ULBRA), Tainá Cazer (ULBRA), Silvia Lemke Guterres (ULBRA; IGP-RS)", "PSICOPATIA E IMPUTABILIDADE PENAL: LIMITES DA PERÍCIA PSIQUIÁTRICA"], [30, "08:30", "10:00", "488", "ML", "Os efeitos psicológicos atribuídos as mulheres que estão com monitoramento de agressores e medida protetivas judiciais para violência doméstica", "Maria Flávia Gondim de Morais Spinelli Alves (upe), Priscila Cristina de Oliveira (UNIFG), Andreia Durello (AHANGUERA EDUCACINAL SÃO PAULO), Carina da Silva Catanho (FACULDADE METROPOLITANA DO GRANDE RECIFE), Gisele Forte (UNIVERSIDADE PAULISTA SP), Joao Alberto Marques da Silva (CENTRO UNIVERSITARIO MAURICIO DE NASSAU- PE), Adriana de Almeida Conrado (UPE), ligia Ferreira Costa (UPE), Ana Claudia Gomes Dourado (UPE), Magaly Bushastsky (UPE)", "OS EFEITOS PSICOLÓGICOS ATRIBUÍDOS AS MULHERES QUE ESTÃO COM MONITORAMENTO DE AGRESSORES E MEDIDA PROTETIVAS JUDICIAIS PARA VIOLÊNCIA DOMÉSTICA"], [30, "08:30", "10:00", "593", "ML", "Violência letal contra mulheres e indicadores macroestruturais: evidências de um painel global para inteligência analítica em segurança pública", "Felipe Correa Bitencourt (UFCSPA), Eduarda Tessari Pereira (UFRGS), Lucas Ferraz (UFCSPA), João Pedro dos Santos Dutra (UFCSPA), Gabriela Petri Airoldi da Rocha (UFCSPA), Helena Ferreira Moura (UnB), Joana Corrêa Magalhães Narvaez (UFCSPA)", "VIOLÊNCIA LETAL CONTRA MULHERES E INDICADORES MACROESTRUTURAIS: EVIDÊNCIAS DE UM PAINEL GLOBAL PARA INTELIGÊNCIA ANALÍTICA EM SEGURANÇA PÚBLICA"], [30, "08:30", "10:00", "615", "ML", "Retrato da violência interpessoal/autoprovocada em mulheres no estado do Rio Grande do Sul no ano de 2025", "Pietra Barcelos Markowski (ULBRA), Ana Paula de Almeida Aguiar (ULBRA), Eduardo Meira Taschetto Mota (ULBRA), Fernanda Adriane De Castro (ULBRA), Silvia Lemke Guterres (ULBRA; IGP/RS)", "RETRATO DA VIOLÊNCIA INTERPESSOAL/AUTOPROVOCADA EM MULHERES NO ESTADO DO RIO GRANDE DO SUL NO ANO DE 2025"], [30, "08:30", "10:00", "674", "ML", "Corpos negros, laudos brancos: vieses raciais na produção de diagnósticos e laudos psiquiátricos", "Adrian de Oliveira Castro (UFCSPA), Marcelly Cruz (UFPR), Evelin Moreira (UFPR), Rafael Sepulveda (UFPR), Aline Santos (UFPR), Ayalla matos cunha (UFPR)", "CORPOS NEGROS, LAUDOS BRANCOS: VIESES RACIAIS NA PRODUÇÃO DE DIAGNÓSTICOS E LAUDOS PSIQUIÁTRICOS"], [30, "08:30", "10:00", "389", "PA", "Organização, padronização e otimização de processos no setor de perícias ambientais: impactos na eficiência operacional", "Katherine Kellermann (PCISC), Beatriz Suzana Machado (PCISC), João Pedro Pinheiro Vieira (PCISC)", "ORGANIZAÇÃO, PADRONIZAÇÃO E OTIMIZAÇÃO DE PROCESSOS NO SETOR DE PERÍCIAS AMBIENTAIS: IMPACTOS NA EFICIÊNCIA OPERACIONAL"], [30, "08:30", "10:00", "427", "PA", "Análise comparativa da oferta de vagas para peritos oficiais criminais médicos veterinários no Brasil em relação à promulgação da Lei nº 14.064/2020", "Letícia Canuto de Albuquerque (POLC/AL; UPE), Jana Kelly dos Santos (POLC/AL), Isadora Dar'c Davi de Souza (POLC/AL; UPE), Gabriela Granja Porto Petraki (UPE), Emanuel Sávio de Souza Andrade (UPE)", "ANÁLISE COMPARATIVA DA OFERTA DE VAGAS PARA PERITOS OFICIAIS CRIMINAIS MÉDICOS VETERINÁRIOS NO BRASIL EM RELAÇÃO À PROMULGAÇÃO DA LEI Nº 14.064/2020."], [30, "08:30", "10:00", "589", "PA", "Danos a geoglifos e a atuação da perícia criminal federal: análise de laudos periciais", "Marinei Augusto Simoes (PF), Roberto Feres (PF)", "DANOS A GEOGLIFOS E A ATUAÇÃO DA PERÍCIA CRIMINAL FEDERAL: ANÁLISE DE LAUDOS PERICIAIS"], [30, "08:30", "10:00", "634", "PA", "Análise pericial por meio do emprego de imagens de satélite do Programa Brasil MAIS para a determinação de ação antrópica como causa de incêndio ambiental de grandes proporções", "Allan Cavalcante Belo (PEFOCE)", "ANÁLISE PERICIAL POR MEIO DO EMPREGO DE IMAGENS DE SATÉLITE DO PROGRAMA BRASIL MAIS PARA A DETERMINAÇÃO DE AÇÃO ANTRÓPICA COMO CAUSA DE INCÊNDIO AMBIENTAL DE GRANDES PROPORÇÕES."], [30, "08:30", "10:00", "357", "QB", "Análise quantitativa das drogas apreendidas em ações criminais na região de atuação da Coordenadoria Regional de Polícia Técnica de Ilhéus", "Camila Maria da Paz Dantas (UESC), Marco Antonio Oliveira Lima (DPT), Danilo Ferreira Bastos (DPT), Ricardo Tadeu dos Santos Chagas (DPT), Jocimar Ferreira Santos (DPT), João Francisco Monteiro Barragan (DPT), Amanda Cabral Sales de Souza (DPT), Carla Martins Kaneto (DPT; UESC)", "ANÁLISE QUANTITATIVA DAS DROGAS APREENDIDAS EM AÇÕES CRIMINAIS NA REGIÃO DE ATUAÇÃO DA COORDENADORIA REGIONAL DE POLÍCIA TÉCNICA DE ILHÉUS"], [30, "08:30", "10:00", "405", "QB", "Avaliação do uso de furanos ativados por ácido carbônico na análise direta de drogas derivadas da feniletilamina", "Eliani Spinelli (UFF), Camila Varela (UFF)", "AVALIAÇÃO DO USO DE FURANOS ATIVADOS POR ÁCIDO CARBÔNICO NA ANÁLISE DIRETA DE DROGAS DERIVADAS DA FENILETILAMINA."], [30, "08:30", "10:00", "534", "QB", "Uso do FTIR-ATR para obter assinatura química em sola de calçados contrafeitos", "Carlos Ricardo Maneck Malfatti (PCiPR; UNICENTRO), Camilla Fagundes de Oliveira Bueno (UNICENTRO), Caroline Da Ros (UFPR), Marcus Peikriszwili Tartaruga (UNICENTRO), Andressa Dos Santos (UNICENTRO)", "USO DO FTIR-ATR PARA OBTER ASSINATURA QUÍMICA EM SOLA DE CALÇADOS CONTRAFEITOS"], [30, "08:30", "10:00", "536", "QB", "Uso da fotoluminescência na identificação de solventes em tintas para detecção de falsificações em obras de arte", "Thiago Zipperer Trevisan (DFis; UFPR), Evaldo RIbeiro (DFis; UFPR)", "USO DA FOTOLUMINESCÊNCIA NA IDENTIFICAÇÃO DE SOLVENTES EM TINTAS PARA DETECÇÃO DE FALSIFICAÇÕES EM OBRAS DE ARTE"], [30, "08:30", "10:00", "544", "QB", "Novas substâncias psicoativas: evolução no Brasil, dinâmica regulatória e desafios para perícia criminal", "Roberta Lícia Marques Pena (PCiRN)", "NOVAS SUBSTÂNCIAS PSICOATIVAS : EVOLUÇÃO NO BRASIL, DINÂMICA REGULATÓRIA E DESAFIOS PARA PERÍCIA CRIMINAL."], [30, "08:30", "10:00", "633", "QB", "Análise temporal do perfil de substâncias detectadas em selos de papel apreendidos no Rio Grande do Sul entre 2018 e 2025", "Marcos Paulo Thomé (IGP-RS), Bruna Gauer (IGP-RS), Daniel Scolmeister (IGP-RS), Silvana Maria Silva (IGP-RS)", "ANÁLISE TEMPORAL DO PERFIL DE SUBSTÂNCIAS DETECTADAS EM SELOS DE PAPEL APREENDIDOS NO RIO GRANDE DO SUL ENTRE 2018 E 2025"], [30, "08:30", "10:00", "636", "QB", "Aplicação da fluorescência de raios X portátil e técnicas quimiométricas na identificação de fraudes em farelo de soja", "Júlia Rosário Andrade (PCIPR; UNESPAR), Amanda Cristina de Jesus Cunha (PCIPR), Marina Gomes Sobral Stroski (PCIPR), Luis Henrique Ferreira de Moraes (PCIPR), Bruno Tonel Otsuka (PCIPR), Angela Andreassa (PCIPR), Sophia Wieczorek Lobo (PCIGO)", "APLICAÇÃO DA FLUORESCÊNCIA DE RAIOS X PORTÁTIL E TÉCNICAS QUIMIOMÉTRICAS NA IDENTIFICAÇÃO DE FRAUDES EM FARELO DE SOJA"], [30, "08:30", "10:00", "668", "QB", "Vestígios de fluidos corporais: um olhar sob a espectroscopia Raman", "Jeane Oliveira Santos (IPEN)", "VESTÍGIOS DE FLUIDOS CORPORAIS: UM OLHAR SOB A ESPECTROSCOPIA RAMAN"]];
+
+const LOGO_WM = "data:image/webp;base64,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";
+
+const ROOMS = {
+  AUD:{n:'Auditório Augusto Meyer'}, TEA:{n:'Teatro Lupicínio Rodrigues'}, ARE:{n:'Arena Elis Regina'},
+  JSL:{n:'Sala João Simões Lopes Neto',x:'Sala A'}, IBE:{n:'Sala Iberê Camargo',x:'Sala B'}, MQU:{n:'Sala Mário Quintana',x:'Sala C'},
+  MSC:{n:'Sala Moacyr Scliar'}, EVE:{n:'Sala Érico Veríssimo'}, DMA:{n:'Sala Dyonélio Machado'}, JGU:{n:'Sala Josué Guimarães'},
+  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores (térreo)'}, TAU:{n:'Fábrica da Taurus (visita externa)'}, GER:{n:'Andar superior'}
+};
+const ROOM_ORDER = Object.keys(ROOMS);
+const AREAS = {
+  EF:{n:'Engenharia Forense',c:'#F2EC1F',t:'#1A1A00'},
+  GI:{n:'Gestão e inovação',c:'#3A2A86',t:'#FFFFFF'},
+  DF:{n:'Perícias documentais, merceológicas e financeiras',c:'#D916CF',t:'#FFFFFF'},
+  PA:{n:'Perícias ambientais',c:'#3B7A39',t:'#FFFFFF'},
+  CP:{n:'Perícias audiovisuais e computacionais',c:'#94B8C7',t:'#0E1E26'},
+  BA:{n:'Perícias em armas de fogo e relacionados',c:'#E0131D',t:'#FFFFFF'},
+  LC:{n:'Perícias em locais de morte e patrimônio',c:'#0D0D0D',t:'#FFFFFF'},
+  ML:{n:'Perícias médicas, psíquicas e antropológicas',c:'#E8901A',t:'#1F1200'},
+  QB:{n:'Perícias químicas e biológicas',c:'#4A86E6',t:'#FFFFFF'},
+  OE:{n:'Plenárias multidisciplinares',c:'#FFFFFF',t:'#C10000'},
+  EX:{n:'Apresentações de expositores',c:'#FFFFFF',t:'#6B6B6B'},
+  SN:{n:'2ª Conferência do Sistema Nacional de Análise Balística - SINAB',c:'#FFFFFF',t:'#E8541C'}
+};
+const SINAB_TAG = '<span class="tag sinab" aria-label="SINAB">S<svg viewBox="0 0 10 32" aria-hidden="true"><path d="M5 0C7.4 4 8.2 8 8.2 12V27H1.8V12C1.8 8 2.6 4 5 0Z" fill="#E8541C"/><rect x="1" y="27.6" width="8" height="1.6" rx=".4" fill="#E8541C"/><rect x="1.6" y="29.8" width="6.8" height="2.2" rx=".4" fill="#E8541C"/></svg>NAB</span>';
+const EXTRA_AREAS = { 'OE.O.2':['GI','CP'] }; // áreas adicionais exibidas ao lado do código
+const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo',A:'Sessão de autógrafos e de lançamento'};
+const TYPE_FILTER = ['P','R','O','M','C','X','S','A','V','I'];
+const DAYS = [{d:27,w:'Terça',sub:'Minicursos e abertura'},{d:28,w:'Quarta',sub:''},{d:29,w:'Quinta',sub:''},{d:30,w:'Sexta',sub:'Premiação e encerramento às 18:30'}];
+const FLAGS = {
+  l:{t:'Tradução por legendas',i:'<path d="M3 5h18v12H8l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 10h6M7 13h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
+  r:{t:'Participação remota',i:'<rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
+  n:{t:'Levar notebook',i:'<rect x="5" y="5" width="14" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 19h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}
+};
+const ORG = [
+  ['Presidente da Associação Brasileira de Criminalística (ABC)','Marcos Antônio Contel Secco','POLITEC/MT'],
+  ['Presidente do XXVII Congresso Nacional de Criminalística','Cristiane Marzotto','IGP/RS'],
+  ['Coordenação Geral','Márcio Gil Faccin','IGP/RS'],
+  ['Coordenação Científica','Claudemir Rodrigues Dias Filho','SPTC/SP'],
+  ['Coordenação de Finanças','Greice Manoela de Amorim','IGP/RS'],
+  ['Coordenação Social','Lucas Toniolo da Silva','IGP/RS']
+];
+const SCI = [
+  ['EF',[['Wilson Toresan Júnior','IGP/RS',1],['Jair de Almeida','IGP/RS'],['Diogo Schwengber Posenatto','IGP/RS'],['Nortthon Didyk','PCI/PR']]],
+  ['GI',[['Sheila Cristina Wendt','IGP/RS',2],['Alvaro Ferrary Rocha de Bitencourt','IGP/RS']]],
+  ['DF',[['Eduardo Lima Silva','IGP/RS',1],['Raimundo Humberto Sena de Oliveira','PCE/PA'],['Nilton Thaumaturgo','DGPTC/RJ']]],
+  ['PA',[['Pedro Augusto Loguercio Bittencourt','IGP/RS',1],['Themis Collares Antunes','IGP/RS'],['Larissa Paludo Smaniotto','IGP/RS'],['Dienifer Cunha dos Santos','IGP/RS']]],
+  ['CP',[['Fábio Rodrigues Cieslak','IGP/RS',1],['Luciano Beux','IGP/RS'],['Laércio Silva de Campos Júnior','PCI/PR']]],
+  ['BA',[['Jonathan Tobias Ramos','IGP/RS',1],['Alex Flores Mendes','IGP/RS'],['Eduardo Dal Pont Morisso','IGP/RS'],['Juliana Dora Walenciuk Ferreira','IGP/RS'],['Lehi Sudy dos Santos','SEPBAL/INC/DITEC/PF']]],
+  ['LC',[['Monica Midori Marcon Uchida Sguazzardi','SPTC/SP',2],['Keila Aparecida de Almeida','SPTC/SP'],['Anderson Fraga Morales','IGP/RS'],['Barbara Zaffari Cavedon','IGP/RS']]],
+  ['ML',[['Renata Cortez','IGP/RS',2],['Michelle Larissa Zini Lise','IGP/RS']]],
+  ['QB',[['Milena Pellin Morsoletto','IGP/RS',2],['Lara Regina Soccol Gris','IGP/RS'],['Paulini Braun Wegner','IGP/RS'],['Tatiana Pereira Gonzalez','IGP/RS']]]
+];
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const mins = t => { const [h,m] = t.split(':'); return +h*60 + +m; };
+const store = {
+  get(k,f){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const ICON_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="currentColor"/></svg>';
+const ICON_STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+const ICON_SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+/* ---------- dados normalizados ---------- */
+const EV = [];
+EVENTS.forEach((r, i) => {
+  const [d,s,e,room,code,type,title,people,kw,flags] = r;
+  const pre = code ? code.split('.')[0] : '';
+  const areas = [];
+  if (AREAS[pre]) areas.push(pre);
+  (EXTRA_AREAS[code]||[]).forEach(a => { if (!areas.includes(a)) areas.push(a); });
+  if (type === 'S') areas.push('BA');
+  if (type === 'S' || flags.includes('s')) areas.push('SN');
+  let id = code ? code : `${d}-${room||'x'}-${s}`;
+  if (code && EVENTS.filter(x => x[4] === code).length > 1) id = `${code}@${d}-${s}`;
+  const kws = kw ? kw.split('|') : [];
+  const ev = { i, id, d, s, e, sm:mins(s), em:mins(e), room, code, type, title, people: people ? people.split(';;') : [], kws, flags, areas };
+  ev.hay = norm([code, title.replace(/\*/g,''), people, kw, ROOMS[room]?.n||'', ROOMS[room]?.x||'', TYPES[type], areas.map(a=>AREAS[a].n).join(' ')].join(' '));
+  EV.push(ev);
+});
+(typeof POSTERS !== 'undefined' ? POSTERS : []).forEach(([d,s,e,pid,area,title,authors,orig], k) => {
+  const ev = { i: EVENTS.length + k, id: 'POS-'+pid, pid, d, s, e, sm:mins(s), em:mins(e), room:'EXP', code:'', type:'V', title, people: authors ? [authors] : [], kws:[], flags:'', areas:[area] };
+  ev.orig = orig;
+  ev.hay = norm(['pôster poster', pid, title.replace(/\*/g,''), orig||'', authors, AREAS[area].n].join(' '));
+  EV.push(ev);
+});
+const ALL_KW = (() => { const m = new Map(); EV.forEach(e => e.kws.forEach(k => m.set(k, (m.get(k)||0)+1))); return [...m].sort((a,b) => a[0].localeCompare(b[0],'pt')); })();
+const SLOTS = ['08:00','08:30','09:00','09:15','09:30','09:45','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','15:30','16:10','16:40','17:10','17:40','18:30'];
+const PERIODS = {manha:['Manhã',0,mins('12:30')], tarde:['Tarde',mins('12:30'),mins('18:25')], noite:['Noite',mins('18:25'),24*60]};
+
+/* ---------- estado ---------- */
+const saved = store.get('cnc26_filters', {});
+const F = {
+  q: saved.q || '',
+  areas: new Set(saved.areas||[]), types: new Set(saved.types||[]), rooms: new Set(saved.rooms||[]),
+  periods: new Set(saved.periods||[]), slots: new Set(saved.slots||[]), kws: new Set(saved.kws||[])
+};
+const FAV = new Set(store.get('cnc26_favs', []));
+let view = 'inicio', curDay = 28;
+const openPosters = new Set(); // dias com pôsteres abertos (sem filtros)
+
+function saveF(){ store.set('cnc26_filters', {q:F.q, areas:[...F.areas], types:[...F.types], rooms:[...F.rooms], periods:[...F.periods], slots:[...F.slots], kws:[...F.kws]}); }
+function hasFilters(){ return !!F.q.trim() || F.areas.size || F.types.size || F.rooms.size || F.periods.size || F.slots.size || F.kws.size; }
+function match(e){
+  if (e.type === 'B') return false;
+  if (F.areas.size && !e.areas.some(a => F.areas.has(a))) return false;
+  if (F.types.size && !F.types.has(e.type)) return false;
+  if (F.rooms.size && !F.rooms.has(e.room)) return false;
+  if (F.kws.size && !e.kws.some(k => F.kws.has(k))) return false;
+  if (F.periods.size && ![...F.periods].some(p => { const [,a,b] = PERIODS[p]; return e.sm < b && e.em > a; })) return false;
+  if (F.slots.size && ![...F.slots].some(t => { const m = mins(t); return e.sm <= m && m < e.em; })) return false;
+  if (F.q.trim()) { const words = norm(F.q).split(/\s+/).filter(Boolean); if (!words.every(w => e.hay.includes(w))) return false; }
+  return true;
+}
+
+/* ---------- horário de Brasília ---------- */
+function nowSP(){
+  try{
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+    const isCongress = p.year === '2026' && p.month === '10' && +p.day >= 27 && +p.day <= 30;
+    return { day: isCongress ? +p.day : null, m: +p.hour*60 + +p.minute, hm: `${p.hour}:${p.minute}` };
+  }catch(e){ return {day:null,m:0,hm:''}; }
+}
+
+/* ---------- abas ---------- */
+function tabsHTML(){
+  const fil = hasFilters();
+  const t = [['inicio','Início'],['filtros','Filtros']];
+  DAYS.forEach(x => t.push(['dia'+x.d, x.d+'/10']));
+  t.push(['favoritos','Favoritos']);
+  return t.map(([k,l]) => {
+    let n = '';
+    if (k.startsWith('dia') && fil) n = EV.filter(e => e.d === +k.slice(3) && match(e)).length;
+    if (k === 'favoritos' && FAV.size) n = FAV.size;
+    if (k === 'filtros' && fil) n = activeList().length;
+    const sel = (view === k) || (view === 'dia' && k === 'dia'+curDay);
+    return `<button class="tab" role="tab" data-go="${k}" aria-selected="${sel}">${l}${n!==''?`<span class="n">${n}</span>`:''}</button>`;
+  }).join('');
+}
+function activeList(){
+  const a = [];
+  if (F.q.trim()) a.push(['q','', `“${F.q.trim()}”`]);
+  F.areas.forEach(x => a.push(['areas',x, x==='SN'?'SINAB':x+' · '+AREAS[x].n]));
+  F.types.forEach(x => a.push(['types',x, TYPES[x]]));
+  F.rooms.forEach(x => a.push(['rooms',x, ROOMS[x].n]));
+  F.periods.forEach(x => a.push(['periods',x, PERIODS[x][0]]));
+  F.slots.forEach(x => a.push(['slots',x, 'às '+x]));
+  F.kws.forEach(x => a.push(['kws',x, x]));
+  return a;
+}
+function renderAF(){
+  const af = $('#af'), list = activeList();
+  af.hidden = !(list.length && (view === 'dia' || view === 'favoritos'));
+  if (!af.hidden){
+    $('#afw').innerHTML = `<span class="lbl">Filtros:</span>` + list.map(([k,v,l]) =>
+      `<button class="af-chip" data-rm="${k}" data-v="${esc(v)}" aria-label="Remover filtro ${esc(l)}">${esc(l)}<span class="x" aria-hidden="true">×</span></button>`).join('') +
+      `<button class="linkbtn" data-clear>Limpar</button><button class="linkbtn" data-go="filtros">Editar</button>`;
+  }
+}
+function measureHeader(){ document.documentElement.style.setProperty('--hdr', $('#hdr').offsetHeight + 'px'); }
+
+/* ---------- cartão ---------- */
+function tagHTML(e){
+  if (e.pid){ const a = AREAS[e.areas[0]]; return `<span class="tag" style="--c:${a.c};--t:${a.t}">${e.areas[0]}</span><span class="tag pnum">Nº ${esc(e.pid)}</span>`; }
+  const sn = e.areas.includes('SN') ? SINAB_TAG : '';
+  if (e.code){ const a = AREAS[e.areas[0]] || AREAS.OE; const extra = (EXTRA_AREAS[e.code]||[]).map(k => `<span class="tag" style="--c:${AREAS[k].c};--t:${AREAS[k].t}">${k}</span>`).join(''); return `<span class="tag" style="--c:${a.c};--t:${a.t}">${esc(e.code)}</span>${extra}${sn}`; }
+  if (e.type === 'S') return `<span class="tag" style="--c:${AREAS.BA.c};--t:${AREAS.BA.t}">BA</span>${sn}`;
+  return '';
+}
+function card(e, opts = {}){
+  const now = opts.now, isNow = now && now.day === e.d && e.sm <= now.m && now.m < e.em;
+  const dim = ['I','T','V'].includes(e.type) && !e.pid;
+  const room = ROOMS[e.room];
+  const fav = FAV.has(e.id);
+  const people = e.people.map(p => `<span>${e.type === 'O' ? esc(p).replace(/ - (apresentadora?)\b/g,' - <em>$1</em>') : esc(p)}</span>`).join('');
+  const flags = [...e.flags].filter(f => FLAGS[f]).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${FLAGS[f].i}</svg>${FLAGS[f].t}</span>`).join('');
+  const sinab = '';
+  const kws = e.kws.filter(k => k !== 'Pôsteres').map(k => `<button class="kw${F.kws.has(k)?' on':''}" data-kw="${esc(k)}">${esc(k)}</button>`).join('');
+  const minicurso = e.type === 'M' && e.sm === mins('13:00') ? ' · intervalo 15:00–15:15' : '';
+  return `<article class="ev${dim?' dim':''}${isNow?' is-now':''}" data-id="${esc(e.id)}">
+    <div class="ev-main">
+      <div class="ev-top">${tagHTML(e)}<span class="type">${e.pid ? 'Pôster' : TYPES[e.type]}</span><span class="time">${opts.showDay?`${e.d}/10 · `:''}${e.s}–${e.e}${minicurso}</span>${isNow?'<span class="nowpill">Agora</span>':''}</div>
+      <h3${e.type==='A'?' class="books"':e.pid?' class="ptitle"':''}>${e.type==='A' ? e.title.split(';;').map(b => `<span class="book">${esc(b).replace(/\*([^*]+)\*/g,'<em>$1</em>')}</span>`).join('') : e.pid ? esc(e.title).replace(/\*([^*]+)\*/g,'<em>$1</em>') : esc(e.title)}</h3>
+      ${people?`<p class="ppl">${people}</p>`:''}
+      ${room?`<div class="room">${ICON_PIN}<span>${esc(room.n)}${room.x?` (${room.x})`:''}</span></div>`:''}
+      ${flags||sinab?`<div class="flags">${sinab}${flags}</div>`:''}
+      ${kws?`<div class="kws">${kws}</div>`:''}
+      ${opts.ptoggle?`<button class="ptoggle" data-ptoggle="${e.d}" aria-expanded="${opts.ptoggle.open}">${opts.ptoggle.open?'Recolher os pôsteres':`Ver os ${opts.ptoggle.n} pôsteres do dia`}</button>`:''}
+      ${opts.conflict?`<div class="conflict">Conflito de horário com ${esc(opts.conflict)}</div>`:''}
+    </div>
+    ${e.type === 'B' ? '' : `<button class="fav" data-fav="${esc(e.id)}" aria-pressed="${fav}" aria-label="${fav?'Remover dos':'Adicionar aos'} favoritos">${ICON_STAR}</button>`}
+  </article>`;
+}
+
+/* ---------- Início ---------- */
+function renderInicio(){
+  const now = nowSP();
+  const areaList = Object.entries(AREAS);
+  $('#v-inicio').innerHTML = `
+  <div class="hero"><canvas id="mesh" aria-hidden="true"></canvas><div class="wrap">
+    <img class="hero-logo" src="${LOGO_WM}" alt="" width="406" height="123">
+    <div class="eyebrow">27 a 30 de outubro de 2026 · Wish Serrano Resort · Gramado/RS</div>
+    <h1 class="sr">XXVIII Congresso Nacional de Criminalística</h1>
+    <p>Programação oficial: palestras, mesas-redondas, apresentações orais, minicursos e pôsteres.</p>
+    ${typeof BUILD_STAMP !== 'undefined' ? `<p class="stamp">Programação atualizada em ${BUILD_STAMP}</p>` : ''}
+    <div class="daygrid">${DAYS.map(x => `<button class="daybtn${now.day===x.d?' today':''}" data-go="dia${x.d}"><b>${x.d}/10</b><span>${x.w}</span></button>`).join('')}</div>
+    ${now.day ? `<div class="nowbar"><button data-now>Ver o que está acontecendo agora</button><span>${now.hm} em Gramado</span></div>` : ''}
+  </div></div>
+  <div class="wrap">
+    <div class="block prose">
+      <h2>Boas-vindas</h2>
+      <p>Bem-vindas e bem-vindos ao XXVIII Congresso Nacional de Criminalística. Durante quatro dias, peritas e peritos de todo o país e convidados do exterior apresentam o que há de mais recente nas áreas da criminalística, em até dez salas simultâneas.</p>
+      <p>Use este guia para montar o seu percurso. Na aba <b>Filtros</b>, escolha áreas temáticas, tópicos, salas ou horários; as abas de cada dia passam a mostrar só o que você selecionou. Toque na estrela de uma atividade para guardá-la em <b>Favoritos</b>.</p>
+    </div>
+    ${typeof PWA_INSTALL_HTML === 'function' ? PWA_INSTALL_HTML() : ''}
+    <div class="block">
+      <h2>Informações gerais</h2>
+      <ul class="info">
+        <li><b>27/10 · a partir das 8:00</b><span>Minicursos.</span></li>
+        <li><b>27/10 · 16:00–18:30</b><span>Espaço de exposições aberto ao público.</span></li>
+        <li><b>27/10 · 18:30</b><span>Cerimônia de abertura na Sala Érico Veríssimo.</span></li>
+        <li><b>28 a 30/10 · 8:30–10:00</b><span>Apresentação dos pôsteres com a presença dos autores, no saguão de expositores.</span></li>
+        <li><b>28 a 30/10 · 8:30–18:30</b><span>Espaço de exposições aberto ao público.</span></li>
+        <li><b>30/10 · 18:30</b><span>Cerimônia de premiação e encerramento no Teatro Lupicínio Rodrigues.</span></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h2>Áreas temáticas</h2>
+      <p class="note" style="margin:0 0 10px">O código de cada atividade indica a área (primeiras letras) e o tipo: P para palestra, R para mesa-redonda, O para apresentação oral, M e N para minicursos, C para reunião setorial de coordenadores. Toque numa área para filtrar.</p>
+      <div class="legend">${areaList.map(([k,a]) => `<button data-area="${k}">${k==='SN'?SINAB_TAG:`<span class="tag" style="--c:${a.c};--t:${a.t}">${k}</span>`}<span>${a.n}</span></button>`).join('')}</div>
+      <div class="flags-legend"><span class="fl-lbl">Legendas:</span>${Object.values(FLAGS).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${f.i}</svg>${f.t}</span>`).join('')}</div>
+    </div>
+    <div class="block">
+      <h2>Comissão Organizadora</h2>
+      <div class="orgs">${ORG.map(([r,n,o]) => `<div class="org"><span class="role">${esc(r)}</span><strong>${esc(n)}</strong> <span class="inst">(${esc(o)})</span></div>`).join('')}</div>
+      <h3 class="subh">Comissão Científica por Áreas Temáticas</h3>
+      <div class="committee">
+        ${SCI.map(([k,list]) => `<div class="grp"><h3><span class="dot" style="--c:${AREAS[k].c}"></span>${AREAS[k].n}</h3><ul>${list.map(([n,o,c]) => `<li><strong>${esc(n)}</strong> (${esc(o)})${c===1?' · Coordenador':c===2?' · Coordenadora':''}</li>`).join('')}</ul></div>`).join('')}
+      </div>
+    </div>
+    <footer>Programação sujeita a alterações. Realização: ACRIGS · Gerenciamento: Acontece Eventos.</footer>
+  </div>`;
+  drawMesh();
+}
+function drawMesh(){
+  const c = $('#mesh'); if (!c) return;
+  const r = c.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio||1);
+  c.width = r.width*dpr; c.height = r.height*dpr;
+  const x = c.getContext('2d'); x.scale(dpr,dpr);
+  let seed = 7; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
+  const W = r.width, H = r.height, pts = [];
+  const n = Math.round(Math.min(70, W/9));
+  for (let i=0;i<n;i++){ const px = W*0.45 + rnd()*W*0.58, py = rnd()*H; pts.push([px,py]); }
+  x.strokeStyle = 'rgba(255,255,255,.35)'; x.lineWidth = .7;
+  for (let i=0;i<n;i++) for (let j=i+1;j<n;j++){ const dx=pts[i][0]-pts[j][0], dy=pts[i][1]-pts[j][1]; if (dx*dx+dy*dy < 70*70){ x.beginPath(); x.moveTo(...pts[i]); x.lineTo(...pts[j]); x.stroke(); } }
+  pts.forEach(([px,py],i) => { x.fillStyle = i%11===0 ? '#F2C230' : 'rgba(255,255,255,.8)'; x.beginPath(); x.arc(px,py,i%11===0?2.6:1.6,0,7); x.fill(); });
+}
+
+/* ---------- Filtros ---------- */
+let kwQuery = '';
+function renderFiltros(){
+  const counts = DAYS.map(x => [x.d, EV.filter(e => e.d === x.d && match(e)).length]);
+  const total = counts.reduce((a,[,n]) => a+n, 0);
+  const cnt = (fn) => EV.filter(e => e.type !== 'B' && fn(e)).length;
+  const typeChecks = TYPE_FILTER.map(t => `<label class="chk"><input type="checkbox" data-f="types" value="${t}" ${F.types.has(t)?'checked':''}><span class="lab">${TYPES[t]}</span><span class="c">${cnt(e=>e.type===t)}</span></label>`).join('');
+  const areaChecks = Object.entries(AREAS).map(([k,a]) => `<label class="chk"><input type="checkbox" data-f="areas" value="${k}" ${F.areas.has(k)?'checked':''}>${k==='SN'?SINAB_TAG:`<span class="tag" style="--c:${a.c};--t:${a.t}">${k}</span>`}<span class="lab">${a.n}</span><span class="c">${cnt(e=>e.areas.includes(k))}</span></label>`).join('');
+  const roomChecks = ROOM_ORDER.filter(r => r!=='GER').map(r => `<label class="chk"><input type="checkbox" data-f="rooms" value="${r}" ${F.rooms.has(r)?'checked':''}><span class="lab">${ROOMS[r].n}${ROOMS[r].x?` <span class="c">(${ROOMS[r].x})</span>`:''}</span></label>`).join('');
+  const periodPills = Object.entries(PERIODS).map(([k,[l]]) => `<label class="pill"><input type="checkbox" data-f="periods" value="${k}" ${F.periods.has(k)?'checked':''}>${l}</label>`).join('');
+  const slotPills = SLOTS.map(s => `<label class="pill"><input type="checkbox" data-f="slots" value="${s}" ${F.slots.has(s)?'checked':''}>${s}</label>`).join('');
+  $('#v-filtros').innerHTML = `
+    <div class="search">${ICON_SEARCH}<input id="q" type="search" placeholder="Buscar tema, palestrante, instituição ou código" value="${esc(F.q)}" autocomplete="off" enterkeyhint="search" aria-label="Buscar na programação"><button class="clr" data-clrq aria-label="Limpar busca" ${F.q?'':'hidden'}>×</button></div>
+    <div class="results" id="results">${resultsHTML(counts,total)}</div>
+    <fieldset><legend>Áreas temáticas ${F.areas.size?'<button class="linkbtn" data-clrset="areas">limpar</button>':''}</legend><div class="checks two">${areaChecks}</div></fieldset>
+    <fieldset><legend>Tipo de atividade ${F.types.size?'<button class="linkbtn" data-clrset="types">limpar</button>':''}</legend><div class="checks two">${typeChecks}</div></fieldset>
+    <fieldset><legend>Horário ${F.periods.size||F.slots.size?'<button class="linkbtn" data-clrset="periods,slots">limpar</button>':''}</legend>
+      <div class="pills">${periodPills}</div>
+      <p class="note" style="margin:12px 0 6px">Ou escolha horários específicos (mostra o que está em andamento nesse momento):</p>
+      <div class="pills">${slotPills}</div></fieldset>
+    <fieldset><legend>Salas ${F.rooms.size?'<button class="linkbtn" data-clrset="rooms">limpar</button>':''}</legend><div class="checks two">${roomChecks}</div></fieldset>
+    <footer>Os filtros ficam salvos neste aparelho. Dentro de cada grupo, vale qualquer opção marcada; entre grupos, todas as condições precisam ser atendidas.</footer>`;
+}
+function kwChecks(){
+  const q = norm(kwQuery);
+  const list = ALL_KW.filter(([k]) => k !== 'Pôsteres' && (!q || norm(k).includes(q)));
+  if (!list.length) return `<p class="note">Nenhum tópico encontrado.</p>`;
+  return list.map(([k,n]) => `<label class="chk"><input type="checkbox" data-f="kws" value="${esc(k)}" ${F.kws.has(k)?'checked':''}><span class="lab">${esc(k)}</span><span class="c">${n}</span></label>`).join('');
+}
+function resultsHTML(counts,total){
+  if (!counts){ counts = DAYS.map(x => [x.d, EV.filter(e => e.d === x.d && match(e)).length]); total = counts.reduce((a,[,n]) => a+n, 0); }
+  const fil = hasFilters();
+  return `<div class="row"><span class="count">${fil ? `${total} ${total===1?'atividade encontrada':'atividades encontradas'}` : 'Nenhum filtro aplicado'}</span>${fil?'<button class="linkbtn" data-clear>Limpar tudo</button>':''}</div>
+    <div class="days">${counts.map(([d,n]) => `<button data-go="dia${d}" ${fil&&!n?'disabled':''}>${d}/10 ${fil?`<b>${n}</b>`:''}</button>`).join('')}</div>`;
+}
+
+/* ---------- Dia ---------- */
+function renderDia(){
+  const now = nowSP();
+  const day = DAYS.find(x => x.d === curDay);
+  const fil = hasFilters();
+  const dayPosters = EV.filter(e => e.d === curDay && e.pid).length;
+  const items = EV.filter(e => e.d === curDay && match(e) && (fil || !e.pid || openPosters.has(curDay)));
+  const breaks = fil ? [] : EV.filter(e => e.d === curDay && e.type === 'B');
+  const sortRoom = (a,b) => a.sm - b.sm || ROOM_ORDER.indexOf(a.room) - ROOM_ORDER.indexOf(b.room);
+  items.sort(sortRoom);
+  const groups = new Map();
+  items.forEach(e => { if (!groups.has(e.s)) groups.set(e.s, []); groups.get(e.s).push(e); });
+  const seq = [...groups.entries()].map(([s,l]) => ({k:'g', m:mins(s), s, l})).concat(breaks.map(b => ({k:'b', m:b.sm, b}))).sort((a,b) => a.m - b.m || (a.k==='b'?-1:1));
+  const isToday = now.day === curDay;
+  let html = `<div class="dayhead"><h2>${day.w}, ${curDay}/10</h2><span class="meta">${fil ? `${items.length} ${items.length===1?'atividade':'atividades'} com os filtros` : `${items.length} atividades`}${day.sub?` · ${day.sub}`:''}</span></div>`;
+  if (!items.length){
+    html += `<div class="empty"><b>Nada neste dia com os filtros atuais.</b>Experimente outro dia ou ajuste os filtros. <button class="linkbtn" data-clear>Limpar filtros</button></div>`;
+  }
+  let nowAnchor = null;
+  seq.forEach(x => {
+    if (x.k === 'b'){ html += `<div class="brk"><span><b>${x.b.s}–${x.b.e}</b> · ${esc(x.b.title)}</span></div>`; return; }
+    const live = isToday && x.l.some(e => e.sm <= now.m && now.m < e.em);
+    if (isToday && !nowAnchor && (live || x.m > now.m)) nowAnchor = x.s;
+    html += `<div class="slot" id="t${x.s.replace(':','')}"><div class="slot-h">${x.s}${live?'<span class="live">em andamento</span>':''}</div><div class="list">${x.l.map(e => card(e,{now, ptoggle: (!fil && e.type==='V' && !e.pid && dayPosters) ? {n:dayPosters, open:openPosters.has(curDay)} : null})).join('')}</div></div>`;
+  });
+  html += `<footer>Programação sujeita a alterações.${fil?'':' Intervalos aparecem quando nenhum filtro está aplicado.'}</footer>`;
+  $('#v-dia').innerHTML = html;
+  return nowAnchor;
+}
+
+/* ---------- Favoritos ---------- */
+function renderFavoritos(){
+  const favs = EV.filter(e => FAV.has(e.id)).sort((a,b) => a.d - b.d || a.sm - b.sm);
+  let html = `<div class="dayhead"><h2>Meus favoritos</h2><span class="meta">${favs.length} ${favs.length===1?'atividade':'atividades'} · salvos neste aparelho</span></div>`;
+  if (!favs.length){
+    html += `<div class="empty"><b>Você ainda não marcou nenhuma atividade.</b>Toque na estrela de uma palestra, mesa ou minicurso para guardá-la aqui. <button class="linkbtn" data-go="dia28">Ver programação de 28/10</button></div>`;
+  }
+  const now = nowSP();
+  DAYS.forEach(x => {
+    const l = favs.filter(e => e.d === x.d); if (!l.length) return;
+    html += `<div class="slot"><div class="slot-h">${x.d}/10 · ${x.w}</div><div class="list">${l.map(e => {
+      const c = l.find(o => o !== e && o.sm < e.em && e.sm < o.em);
+      return card(e,{now, conflict: c ? (c.code || c.title.replace(/\*/g,'').split(';;')[0].slice(0,40)) + ` (${c.s}–${c.e})` : ''});
+    }).join('')}</div></div>`;
+  });
+  if (favs.length) html += `<footer>Os favoritos ficam guardados no navegador deste aparelho. Se trocar de celular ou limpar os dados do navegador, será preciso marcar de novo.</footer>`;
+  $('#v-favoritos').innerHTML = html;
+}
+
+/* ---------- navegação ---------- */
+function go(k, opts = {}){
+  if (k.startsWith('dia')){ view = 'dia'; curDay = +k.slice(3); }
+  else view = k;
+  ['inicio','filtros','dia','favoritos'].forEach(v => $('#v-'+v).hidden = v !== view);
+  let anchor = null;
+  if (view === 'inicio') renderInicio();
+  if (view === 'filtros') renderFiltros();
+  if (view === 'dia') anchor = renderDia();
+  if (view === 'favoritos') renderFavoritos();
+  $('#tabs').innerHTML = tabsHTML();
+  renderAF(); measureHeader();
+  const sel = $('#tabs [aria-selected="true"]'); if (sel) sel.scrollIntoView({block:'nearest',inline:'center'});
+  try{ history.replaceState(null,'','#'+(view==='dia'?'dia'+curDay:view)); }catch(e){}
+  if (opts.toNow && anchor){ const el = document.getElementById('t'+anchor.replace(':','')); if (el){ window.scrollTo(0, el.getBoundingClientRect().top + scrollY - $('#hdr').offsetHeight - 4); return; } }
+  if (!opts.keepScroll) window.scrollTo(0,0);
+}
+function refresh(){ // re-render keeping scroll position
+  const y = scrollY;
+  if (view === 'filtros'){ $('#results').innerHTML = resultsHTML(); $('#tabs').innerHTML = tabsHTML(); return; }
+  go(view === 'dia' ? 'dia'+curDay : view, {keepScroll:true});
+  window.scrollTo(0,y);
+}
+
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('[data-go],[data-fav],[data-kw],[data-rm],[data-clear],[data-clrset],[data-clrq],[data-area],[data-now],[data-ptoggle]');
+  if (!t) return;
+  if (t.dataset.go){ go(t.dataset.go); return; }
+  if (t.dataset.fav){
+    const id = t.dataset.fav; FAV.has(id) ? FAV.delete(id) : FAV.add(id); store.set('cnc26_favs',[...FAV]);
+    if (view === 'favoritos') refresh();
+    else { const on = FAV.has(id); t.setAttribute('aria-pressed', on); t.setAttribute('aria-label', (on?'Remover dos':'Adicionar aos')+' favoritos'); $('#tabs').innerHTML = tabsHTML(); }
+    return;
+  }
+  if (t.dataset.kw){ const k = t.dataset.kw; F.kws.has(k) ? F.kws.delete(k) : F.kws.add(k); saveF(); refresh(); return; }
+  if (t.dataset.rm){ const k = t.dataset.rm; if (k === 'q') F.q = ''; else F[k].delete(t.dataset.v); saveF(); refresh(); return; }
+  if (t.hasAttribute('data-clear')){ F.q=''; ['areas','types','rooms','periods','slots','kws'].forEach(k => F[k].clear()); saveF(); view==='filtros' ? go('filtros',{keepScroll:true}) : refresh(); return; }
+  if (t.dataset.clrset){ t.dataset.clrset.split(',').forEach(k => F[k].clear()); saveF(); const y=scrollY; go('filtros',{keepScroll:true}); window.scrollTo(0,y); return; }
+  if (t.hasAttribute('data-clrq')){ F.q=''; saveF(); const i=$('#q'); i.value=''; t.hidden=true; refresh(); i.focus(); return; }
+  if (t.dataset.area){ F.areas.clear(); F.areas.add(t.dataset.area); saveF(); go('filtros'); return; }
+  if (t.dataset.ptoggle){ const d = +t.dataset.ptoggle; openPosters.has(d) ? openPosters.delete(d) : openPosters.add(d); refresh(); return; }
+  if (t.hasAttribute('data-now')){ const n = nowSP(); if (n.day) go('dia'+n.day,{toNow:true}); return; }
+});
+document.addEventListener('change', ev => {
+  const i = ev.target; if (!i.dataset || !i.dataset.f) return;
+  const set = F[i.dataset.f]; i.checked ? set.add(i.value) : set.delete(i.value);
+  saveF(); refresh();
+  const lg = i.closest('fieldset')?.querySelector('legend');
+  if (lg){ const has = i.dataset.f==='periods'||i.dataset.f==='slots' ? (F.periods.size||F.slots.size) : set.size; const b = lg.querySelector('.linkbtn'); if (has && !b) lg.insertAdjacentHTML('beforeend', `<button class="linkbtn" data-clrset="${i.dataset.f==='periods'||i.dataset.f==='slots'?'periods,slots':i.dataset.f}">limpar</button>`); if (!has && b) b.remove(); }
+});
+let qT;
+document.addEventListener('input', ev => {
+  if (ev.target.id === 'q'){ F.q = ev.target.value; $('[data-clrq]').hidden = !F.q; clearTimeout(qT); qT = setTimeout(() => { saveF(); refresh(); }, 180); }
+  if (ev.target.id === 'kwq'){ kwQuery = ev.target.value; $('#kwbox').innerHTML = kwChecks(); }
+});
+document.addEventListener('keydown', ev => { if (ev.target.id === 'q' && ev.key === 'Enter'){ ev.target.blur(); } });
+window.addEventListener('resize', () => { measureHeader(); if (view === 'inicio') drawMesh(); });
+setInterval(() => { if (view === 'dia' && nowSP().day === curDay) refresh(); }, 60000);
+
+/* ---------- início ---------- */
+(function boot(){
+  const h = (location.hash||'').slice(1);
+  const valid = ['inicio','filtros','favoritos','dia27','dia28','dia29','dia30'];
+  const n = nowSP();
+  if (valid.includes(h)) go(h);
+  else if (n.day) go('dia'+n.day, {toNow:true});
+  else go('inicio');
+})();
+</script>
+
+</body>
+</html>
