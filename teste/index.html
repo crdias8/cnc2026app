@@ -260,7 +260,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
     } else if (isAndroid) {
       body = deferred
         ? '<p>Instale o app com um toque, sem passar pela Play Store.</p><button class="ibtn" id="pwa-install" type="button">Instalar app</button>'
-        : '<p>Instale sem passar pela Play Store:</p><ol><li>Toque no menu <b>⋮</b> do navegador.</li><li>Escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>';
+        : '<p>Instale sem passar pela Play Store:</p><ol><li>Toque no menu <b>⋮</b> do navegador.</li><li>Escolha <b>Instalar e criar atalho</b>. Dependendo do celular, a opção pode aparecer como <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>';
     } else {
       body = '<p>Abra este link no celular para instalar o app na tela inicial.</p>';
     }
@@ -343,7 +343,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 </main>
 
 <script>
-const BUILD_STAMP = '22/10 às 14:05';
+const BUILD_STAMP = '22/10 às 14:13';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
