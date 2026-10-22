@@ -234,6 +234,11 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
   const iosOther = isIOS && /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
   const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   let deferred = null;
+  const FLAG = 'cnc26_app_instalado';
+  const getFlag = () => { try { return localStorage.getItem(FLAG) === '1'; } catch(e){ return false; } };
+  const setFlag = v => { try { v ? localStorage.setItem(FLAG,'1') : localStorage.removeItem(FLAG); } catch(e){} };
+  let installed = getFlag();
+  if (standalone()) { setFlag(true); installed = true; }
   const ICON = 'assets/icon-192.png';
   const SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
 
@@ -245,6 +250,8 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
     let body;
     if (standalone()) {
       body = '<p class="ok">App instalado neste celular.</p><p>Com internet, ele sempre mostra a programação mais recente. Sem internet, abre a última versão salva.</p>';
+    } else if (installed) {
+      body = '<p class="ok">O app já está instalado neste celular.</p><p>Para usar em tela cheia e também sem internet, abra pelo ícone <b>CNC Teste</b> na tela inicial.</p><p class="hint">Removeu o app? <button class="linkbtn" id="pwa-reinstall" type="button">Mostrar como instalar de novo</button></p>';
     } else if (inApp) {
       body = '<p>Você abriu o link dentro de outro aplicativo. Para instalar, abra no navegador do celular:</p><ol><li>Toque no menu (<b>⋮</b> ou <b>•••</b>) desta tela.</li><li>Escolha <b>Abrir no navegador</b> (ou “Abrir no Safari”/“Abrir no Chrome”).</li></ol>';
     } else if (isIOS) {
@@ -258,12 +265,23 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
       body = '<p>Abra este link no celular para instalar o app na tela inicial.</p>';
     }
     return '<section class="install" id="pwa-box"><img src="' + ICON + '" alt=""><div><h2>App no celular</h2>' + body +
-      (standalone() ? '' : '<p class="hint">Instalar é opcional: o app funciona igual pelo navegador.</p>') + '</div></section>';
+      ((standalone() || installed) ? '' : '<p class="hint">Instalar é opcional: o app funciona igual pelo navegador.</p>') + '</div></section>';
   }
 
   function refreshBox(){ const b = document.getElementById('pwa-box'); if (b) { const f = b.classList.contains('focus'); b.outerHTML = box(); if (f) { const n = document.getElementById('pwa-box'); if (n) n.classList.add('focus'); } } }
   window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; refreshBox(); });
-  window.addEventListener('appinstalled', () => { deferred = null; refreshBox(); });
+  window.addEventListener('appinstalled', () => { deferred = null; installed = true; setFlag(true); refreshBox(); });
+  // Android/Chrome: confirma pelo próprio navegador se o app está instalado
+  if (navigator.getInstalledRelatedApps) {
+    navigator.getInstalledRelatedApps().then(list => {
+      const has = Array.isArray(list) && list.length > 0;
+      if (has && !installed) { installed = true; setFlag(true); refreshBox(); }
+    }).catch(() => {});
+  }
+  document.addEventListener('click', ev => {
+    if (!ev.target.closest('#pwa-reinstall')) return;
+    installed = false; setFlag(false); refreshBox();
+  });
   document.addEventListener('click', async ev => {
     if (!ev.target.closest('#pwa-install') || !deferred) return;
     deferred.prompt();
@@ -325,7 +343,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 </main>
 
 <script>
-const BUILD_STAMP = '22/10 às 13:59';
+const BUILD_STAMP = '22/10 às 14:05';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores

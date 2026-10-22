@@ -6,6 +6,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "related_applications": [{ "platform": "webapp", "url": "https://crdias8.github.io/cnc2026app/teste/manifest.webmanifest" }],
   "orientation": "portrait",
   "background_color": "#8B0000",
   "theme_color": "#8B0000",
