@@ -98,6 +98,12 @@ section.view{padding-top:16px}
 .legend button:hover{border-color:var(--accent)}
 .flags-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .fl-lbl{font-weight:600;font-size:14px;align-self:center;margin-right:2px}
+.anais{margin-top:10px;background:var(--accent-soft);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.anais p{margin:0 0 10px;font-size:15px}
+.abtn{display:inline-block;background:var(--brand);color:#fff;text-decoration:none;font-weight:600;border-radius:999px;padding:10px 20px;font-size:15px}
+.abtn:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.anais .amini{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+.anais .amini a{color:var(--accent)}
 .orgs{display:grid;gap:8px;grid-template-columns:1fr}
 @media (min-width:560px){.orgs{grid-template-columns:1fr 1fr}}
 .org{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:15px}
@@ -297,7 +303,7 @@ const EVENTS = [
 [28,'17:10','17:35','JSL','EF.O.11','O','Acidentes de trabalho: limitações das abordagens periciais e a necessidade de uma compreensão sistêmica','Cainã Britto do Amaral (IGP-RS) - apresentador, Adriana de Paula Lacerda Santos (UFPR)','',''],
 [28,'17:40','18:20','JSL','EX.6','X','Além do Dano Visível: O Diagnóstico Eletrônico na Perícia Automotiva','Rodrigo Galski - Regula','',''],
 [28,'16:10','17:05','IBE','DF.P.2','P','Novas Dinâmicas de Coleta e Documentação na Perícia Grafoscópica','Maitê Cevallos Mijan Kessler - Instituto de Criminalística/DF','Documentoscopia',''],
-[28,'17:10','18:05','IBE','DF.P.10','P','Doença, Envelhecimento ou Fraude? Parâmetros para distinguir as principais causas modificativas da escrita','Eduardo Lima e Silva - IGP/RS','Grafoscopia',''],
+[28,'17:10','18:05','IBE','DF.P.10','P','Doença, Envelhecimento ou Fraude? Parâmetros para distinguir as principais causas modificativas da escrita','Eduardo Lima Silva - IGP/RS','Grafoscopia',''],
 [28,'16:10','17:05','MQU','QB.P.5','P','Validação de software de análise de mistura','Aline Minervino - INC/PF','Genética forense',''],
 [28,'17:10','18:05','MQU','QB.C.2','C','Reunião de coordenadores em Genética Forense','','',''],
 [28,'16:10','17:05','MSC','BA.P.3','P','Uso de IA na análise de imagens de orifícios gerados pelo impacto de projéteis','Maurício Araújo Dias - UNESP/Presidente Prudente','Balística forense|Computação forense|Crimes contra a pessoa|Inteligência artificial',''],
@@ -776,6 +782,11 @@ function renderInicio(){
         <li><b>28 a 30/10 · 8:30–18:30</b><span>Espaço de exposições aberto ao público.</span></li>
         <li><b>30/10 · 18:30</b><span>Cerimônia de premiação e encerramento no Teatro Lupicínio Rodrigues.</span></li>
       </ul>
+      <div class="anais">
+        <p>A versão preliminar dos anais já está disponível! Nela constam os resumos estendidos dos trabalhos apresentados na modalidade pôster e as ementas das apresentações orais de congressistas.</p>
+        <a class="abtn" href="https://crdias8.github.io/cnc2026app/anais/Anais_CNC2026_preliminar.pdf" target="_blank" rel="noopener">Baixe aqui os anais</a>
+        <p class="amini">PDF · 14 MB. Quer os anais em resolução maior? <a href="https://crdias8.github.io/cnc2026app/anais/Anais_CNC2026_preliminar_alta_resolucao.pdf" target="_blank" rel="noopener">Baixe aqui</a> (20 MB).</p>
+      </div>
     </div>
     <div class="block">
       <h2>Áreas temáticas</h2>
