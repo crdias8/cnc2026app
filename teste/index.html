@@ -215,6 +215,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 .install h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:19px;margin:0 0 4px;color:var(--accent)}
 .install p{margin:0 0 8px;font-size:14.5px}
 .install ol{margin:6px 0 0;padding-left:20px;font-size:14.5px;display:grid;gap:4px}
+.installtop{padding-block:14px}.installtop .install{margin-top:0}
 .install.focus{border-color:#E8A400;box-shadow:0 0 0 4px rgba(232,164,0,.35)}
 .install .ibtn{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font-weight:600;font-size:15px;cursor:pointer;margin-top:4px}
 .install .ok{color:var(--now);font-weight:600}
@@ -236,7 +237,11 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
   const ICON = 'assets/icon-192.png';
   const SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
 
-  window.PWA_INSTALL_HTML = function(){
+  const mobile = isIOS || isAndroid;
+  // No celular sem o app instalado: aviso no topo da aba Início. Instalado: não aparece. Computador: fica no meio da página.
+  window.PWA_INSTALL_TOP = function(){ return (mobile && !standalone()) ? '<div class="wrap installtop">' + box() + '</div>' : ''; };
+  window.PWA_INSTALL_HTML = function(){ return (!mobile && !standalone()) ? box() : ''; };
+  function box(){
     let body;
     if (standalone()) {
       body = '<p class="ok">App instalado neste celular.</p><p>Com internet, ele sempre mostra a programação mais recente. Sem internet, abre a última versão salva.</p>';
@@ -254,9 +259,9 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
     }
     return '<section class="install" id="pwa-box"><img src="' + ICON + '" alt=""><div><h2>App no celular</h2>' + body +
       (standalone() ? '' : '<p class="hint">Instalar é opcional: o app funciona igual pelo navegador.</p>') + '</div></section>';
-  };
+  }
 
-  function refreshBox(){ const b = document.getElementById('pwa-box'); if (b) { const f = b.classList.contains('focus'); b.outerHTML = window.PWA_INSTALL_HTML(); if (f) { const n = document.getElementById('pwa-box'); if (n) n.classList.add('focus'); } } }
+  function refreshBox(){ const b = document.getElementById('pwa-box'); if (b) { const f = b.classList.contains('focus'); b.outerHTML = box(); if (f) { const n = document.getElementById('pwa-box'); if (n) n.classList.add('focus'); } } }
   window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; refreshBox(); });
   window.addEventListener('appinstalled', () => { deferred = null; refreshBox(); });
   document.addEventListener('click', async ev => {
@@ -320,7 +325,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 </main>
 
 <script>
-const BUILD_STAMP = '22/10 às 13:47';
+const BUILD_STAMP = '22/10 às 13:59';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -779,6 +784,7 @@ function renderInicio(){
   const now = nowSP();
   const areaList = Object.entries(AREAS);
   $('#v-inicio').innerHTML = `
+  ${typeof PWA_INSTALL_TOP === 'function' ? PWA_INSTALL_TOP() : ''}
   <div class="hero"><canvas id="mesh" aria-hidden="true"></canvas><div class="wrap">
     <img class="hero-logo" src="${LOGO_WM}" alt="" width="406" height="123">
     <div class="eyebrow">27 a 30 de outubro de 2026 · Wish Serrano Resort · Gramado/RS</div>
