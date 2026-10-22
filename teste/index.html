@@ -110,6 +110,8 @@ section.view{padding-top:16px}
 .anais p{margin:0 0 10px;font-size:15px}
 .abtn{display:inline-block;background:var(--brand);color:#fff;text-decoration:none;font-weight:600;border-radius:999px;padding:10px 20px;font-size:15px}
 .abtn:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.anais .arow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.anais .asize{font-size:13.5px;color:var(--muted);font-weight:600}
 .anais .amini{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
 .anais .amini a{color:var(--accent)}
 .orgs{display:grid;gap:8px;grid-template-columns:1fr}
@@ -351,7 +353,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 </main>
 
 <script>
-const BUILD_STAMP = '22/10 às 16:53';
+const BUILD_STAMP = '22/10 às 16:55';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -911,8 +913,8 @@ function renderInicio(){
       </ul>
       <div class="anais">
         <p>A versão preliminar dos anais já está disponível! Nela constam os resumos estendidos dos trabalhos apresentados na modalidade pôster e as ementas das apresentações orais de congressistas.</p>
-        <a class="abtn" href="https://crdias8.github.io/cnc2026app/anais/Anais_CNC2026_preliminar.pdf" target="_blank" rel="noopener">Baixe aqui os anais</a>
-        <p class="amini">PDF · 14 MB. Quer os anais em resolução maior? <a href="https://crdias8.github.io/cnc2026app/anais/Anais_CNC2026_preliminar_alta_resolucao.pdf" target="_blank" rel="noopener">Baixe aqui</a> (20 MB).</p>
+        <div class="arow"><a class="abtn" href="https://crdias8.github.io/cnc2026app/anais/Anais_CNC2026_preliminar.pdf" target="_blank" rel="noopener">Baixe aqui os anais</a><span class="asize">PDF · 14 MB</span></div>
+        <p class="amini">Quer os anais em resolução maior? <a href="https://crdias8.github.io/cnc2026app/anais/Anais_CNC2026_preliminar_alta_resolucao.pdf" target="_blank" rel="noopener">Baixe aqui</a> (20 MB).</p>
       </div>
     </div>
     <div class="block">
