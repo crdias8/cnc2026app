@@ -1,7 +1,7 @@
 name: Atualizar painel de acessos
 on:
   schedule:
-    - cron: '7,37 * * * *'   # a cada 30 min
+    - cron: '10,40 * * * *'   # a cada 30 min
   workflow_dispatch: {}
 permissions:
   contents: write
