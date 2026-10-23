@@ -1,6 +1,6 @@
 """Busca as estatísticas anônimas do GoatCounter (cnc2026) e grava painel/stats.json.
 Roda no GitHub Actions a cada 30 min. A chave fica no segredo GOATCOUNTER_TOKEN (nunca no site)."""
-import json, os, sys, urllib.request, urllib.error, urllib.parse, datetime as dt
+import json, os, sys, time, urllib.request, urllib.error, urllib.parse, datetime as dt
 
 SITE = 'https://cnc2026.goatcounter.com/api/v0'
 START = '2026-10-23T00:00:00Z'          # início da contagem
@@ -21,14 +21,23 @@ def get(path, **params):
             q.append((k, str(v)))
     url = SITE + path + ('?' + urllib.parse.urlencode(q) if q else '')
     req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json'})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return json.load(r)
-    except urllib.error.HTTPError as e:
-        body = e.read()[:300].decode('utf-8', 'replace')
-        DEBUG.append({'path': path, 'code': e.code, 'body': body})
-        print('HTTP', e.code, path, body)
-        raise
+    last = None
+    for attempt in range(4):              # tenta de novo em quedas de conexão e erros temporários
+        if attempt: time.sleep(3 * attempt)
+        try:
+            time.sleep(0.3)                   # limite da API: 4 pedidos por segundo
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            body = e.read()[:300].decode('utf-8', 'replace')
+            DEBUG.append({'path': path, 'code': e.code, 'body': body, 'attempt': attempt})
+            print('HTTP', e.code, path, body)
+            last = e
+            if e.code in (401, 403): break
+        except Exception as e:
+            print('falha', type(e).__name__, path)
+            last = e
+    raise last
 
 def main():
     out = {'fetched_at': dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), 'start': START}
