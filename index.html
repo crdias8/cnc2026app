@@ -354,7 +354,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 09:06';
+const BUILD_STAMP = '23/10 às 09:10';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -792,7 +792,7 @@ function importFavs(str){
   if (n) store.set('cnc26_favs',[...FAV]);
   return n;
 }
-let IMPORTED = 0;
+let IMPORTED = 0, IMPMSG = '';
 (function(){
   const m = (location.hash||'').match(/[#&]favs=([^&]*)/); if (!m) return;
   try { IMPORTED = importFavs(decodeURIComponent(m[1])); } catch(e){}
@@ -1047,7 +1047,10 @@ function renderFavoritos(){
       return card(e,{now, conflict: c ? (c.code || c.title.replace(/\*/g,'').split(';;')[0].slice(0,40)) + ` (${c.s}–${c.e})` : ''});
     }).join('')}</div></div>`;
   });
-  if (!window.IS_TESTE) html += `<div class="impfav"><button class="linkbtn" type="button" data-impfav>Importar favoritos da versão de teste</button><div id="impbox" hidden><p>No app <b>CNC Teste</b>, toque em <b>Copiar meus favoritos</b>. Depois cole aqui:</p><textarea id="imptxt" rows="3" placeholder="CNC-FAVORITOS: ..."></textarea><button class="ibtn2" type="button" data-impok>Importar</button></div><div class="impmsg" id="impmsg"></div></div>`;
+  const ua_ = navigator.userAgent || '';
+  const isIOS_ = /iPhone|iPad|iPod/.test(ua_) || (/Macintosh/.test(ua_) && navigator.maxTouchPoints > 1);
+  if (IMPMSG) { html += `<div class="impfav"><div class="impmsg">${esc(IMPMSG)}</div></div>`; IMPMSG = ''; }
+  else if (!window.IS_TESTE && isIOS_ && !store.get('cnc26_favs_importados', false)) html += `<div class="impfav"><button class="linkbtn" type="button" data-impfav>Importar favoritos da versão de teste</button><div id="impbox" hidden><p>No app <b>CNC Teste</b>, toque em <b>Copiar meus favoritos</b>. Depois cole aqui:</p><textarea id="imptxt" rows="3" placeholder="CNC-FAVORITOS: ..."></textarea><button class="ibtn2" type="button" data-impok>Importar</button></div><div class="impmsg" id="impmsg"></div></div>`;
   if (favs.length) html += `<footer>Os favoritos ficam guardados no navegador deste aparelho. Se trocar de celular ou limpar os dados do navegador, será preciso marcar de novo.</footer>`;
   $('#v-favoritos').innerHTML = html;
 }
@@ -1056,7 +1059,10 @@ document.addEventListener('click', async ev => {
   const a = ev.target.closest('[data-impfav]'), ok = ev.target.closest('[data-impok]');
   if (!a && !ok) return;
   const msg = $('#impmsg');
-  const done = n => { refresh(); const m = $('#impmsg'); if (m) m.textContent = n ? `${n} ${n===1?'favorito importado':'favoritos importados'}.` : 'Nenhum favorito novo encontrado nesse texto.'; };
+  const done = n => {
+    if (n) { store.set('cnc26_favs_importados', true); IMPMSG = `${n} ${n===1?'favorito importado':'favoritos importados'}.`; refresh(); return; }
+    const m = $('#impmsg'); if (m) m.textContent = 'Nenhum favorito novo encontrado nesse texto.';
+  };
   if (a){
     let txt = '';
     try { if (navigator.clipboard && navigator.clipboard.readText) txt = await navigator.clipboard.readText(); } catch(e){}
