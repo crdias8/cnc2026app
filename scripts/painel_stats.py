@@ -20,7 +20,7 @@ def get(path, **params):
         elif v is not None:
             q.append((k, str(v)))
     url = SITE + path + ('?' + urllib.parse.urlencode(q) if q else '')
-    req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json'})
+    req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': 'cnc2026-painel/1.0 (+https://crdias8.github.io/cnc2026app/painel/)'})
     last = None
     for attempt in range(4):              # tenta de novo em quedas de conexão e erros temporários
         if attempt: time.sleep(3 * attempt)
