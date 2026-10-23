@@ -13,11 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Encerrar depois de 01/11/2026
+        id: prazo
+        run: |
+          if [ "$(date -u +%s)" -ge "$(date -u -d '2026-11-02T03:00:00Z' +%s)" ]; then echo "fim=1" >> "$GITHUB_OUTPUT"; echo "Painel encerrado (prazo: 01/11/2026)"; fi
       - name: Buscar estatísticas do GoatCounter
+        if: steps.prazo.outputs.fim != '1'
         env:
           GOATCOUNTER_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
         run: python3 scripts/painel_stats.py
       - name: Publicar se mudou
+        if: steps.prazo.outputs.fim != '1'
         run: |
           git config user.name "painel-cnc2026"
           git config user.email "painel-cnc2026@users.noreply.github.com"
