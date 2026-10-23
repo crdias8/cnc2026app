@@ -46,15 +46,28 @@ def main():
             tot = get('/stats/total', start=START, end=end)
             out['total'] = {'total': tot.get('total'), 'events': tot.get('total_events'),
                             'days': [{'day': s.get('day'), 'hourly': s.get('hourly') or [], 'daily': s.get('daily')} for s in tot.get('stats') or []]}
-            hits, seen = [], []
-            for _ in range(15):
-                h = get('/stats/hits', start=START, end=end, limit=100, exclude_paths=seen or None)
-                for x in h.get('hits') or []:
-                    seen.append(x.get('path_id'))
-                    hits.append({'path': x.get('path'), 'title': x.get('title'), 'event': bool(x.get('event')), 'count': x.get('count'),
-                                 'days': [{'day': s.get('day'), 'daily': s.get('daily'), 'hourly': s.get('hourly') or []} for s in x.get('stats') or []]})
-                if not h.get('more'): break
-            out['hits'] = hits
+            hits, seen, ok = [], [], False
+            for lim in (100, 25, 10):
+                try:
+                    hits, seen = [], []
+                    for _ in range(40):
+                        h = get('/stats/hits', start=START, end=end, limit=lim, exclude_paths=seen or None)
+                        for x in h.get('hits') or []:
+                            seen.append(x.get('path_id'))
+                            hits.append({'path': x.get('path'), 'title': x.get('title'), 'event': bool(x.get('event')), 'count': x.get('count'),
+                                         'days': [{'day': s.get('day'), 'daily': s.get('daily'), 'hourly': s.get('hourly') or []} for s in x.get('stats') or []]})
+                        if not h.get('more'): break
+                    ok = True; break
+                except Exception as e:
+                    print('hits falhou com limit', lim, e)
+            if ok:
+                out['hits'] = hits
+            else:
+                old = {}
+                try: old = json.load(open(OUT))
+                except Exception: pass
+                out['hits'] = old.get('hits', [])
+                out['hits_stale'] = True
             for page in ('browsers', 'systems', 'locations', 'sizes', 'toprefs'):
                 try:
                     s = get('/stats/' + page, start=START, end=end, limit=25)
