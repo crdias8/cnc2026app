@@ -1,6 +1,6 @@
 """Busca as estatísticas anônimas do GoatCounter (cnc2026) e grava painel/stats.json.
 Roda no GitHub Actions a cada 30 min. A chave fica no segredo GOATCOUNTER_TOKEN (nunca no site)."""
-import json, os, sys, time, urllib.request, urllib.error, urllib.parse, datetime as dt
+import json, os, sys, time, subprocess, urllib.request, urllib.error, urllib.parse, datetime as dt
 
 SITE = 'https://cnc2026.goatcounter.com/api/v0'
 START = '2026-10-23T00:00:00Z'          # início da contagem
@@ -20,24 +20,20 @@ def get(path, **params):
         elif v is not None:
             q.append((k, str(v)))
     url = SITE + path + ('?' + urllib.parse.urlencode(q) if q else '')
-    req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': 'cnc2026-painel/1.0 (+https://crdias8.github.io/cnc2026app/painel/)'})
-    last = None
-    for attempt in range(4):              # tenta de novo em quedas de conexão e erros temporários
-        if attempt: time.sleep(3 * attempt)
-        try:
-            time.sleep(0.3)                   # limite da API: 4 pedidos por segundo
-            with urllib.request.urlopen(req, timeout=30) as r:
-                return json.load(r)
-        except urllib.error.HTTPError as e:
-            body = e.read()[:300].decode('utf-8', 'replace')
-            DEBUG.append({'path': path, 'code': e.code, 'body': body, 'attempt': attempt})
-            print('HTTP', e.code, path, body)
-            last = e
-            if e.code in (401, 403): break
-        except Exception as e:
-            print('falha', type(e).__name__, path)
-            last = e
-    raise last
+    # usa o curl (mais tolerante a quedas de conexão) com novas tentativas automáticas
+    hdr = os.path.join(os.environ.get('RUNNER_TEMP', '/tmp'), 'gc_headers.txt')
+    with open(hdr, 'w') as f:
+        f.write('Authorization: Bearer ' + TOKEN + '\nAccept: application/json\nUser-Agent: cnc2026-painel/1.0\n')
+    time.sleep(0.3)  # limite da API: 4 pedidos por segundo
+    r = subprocess.run(['curl', '-sS', '--http1.1', '--retry', '5', '--retry-all-errors', '--retry-delay', '4', '--max-time', '40',
+                        '-H', '@' + hdr, '-w', '\n%{http_code}', url], capture_output=True, text=True)
+    body, _, code = r.stdout.rpartition('\n')
+    code = int(code) if code.isdigit() else 0
+    if r.returncode != 0 or code >= 400 or code == 0:
+        DEBUG.append({'path': path, 'code': code, 'curl': r.returncode, 'err': r.stderr[-200:], 'body': body[:200]})
+        print('falha', path, code, r.returncode, r.stderr[-200:], body[:200])
+        raise RuntimeError('http-%d' % code if code else 'conexao')
+    return json.loads(body)
 
 def main():
     out = {'fetched_at': dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), 'start': START}
@@ -76,13 +72,14 @@ def main():
             out['error'] = 'http-%d' % e.code
             out['debug'] = DEBUG
         except Exception as e:
-            out['error'] = 'falha: ' + type(e).__name__
+            out['error'] = 'falha: ' + str(e)
+            out['debug'] = DEBUG
     # mantém os últimos dados bons se esta busca falhar
     if out.get('error') and os.path.exists(OUT):
         try:
             old = json.load(open(OUT))
             if not old.get('error'):
-                old['last_error'] = out['error']; old['last_try'] = out['fetched_at']
+                old['last_error'] = out['error']; old['last_try'] = out['fetched_at']; old['last_debug'] = out.get('debug')
                 out = old
         except Exception:
             pass
