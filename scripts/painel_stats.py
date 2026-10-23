@@ -49,14 +49,16 @@ def main():
             hits, seen, ok = [], [], False
             for lim in (100, 25, 10):
                 try:
-                    hits, seen = [], []
+                    hits, seen, paths = [], [], set()
                     for _ in range(40):
-                        h = get('/stats/hits', start=START, end=end, limit=lim, exclude_paths=seen or None)
+                        h = get('/stats/hits', start=START, end=end, limit=lim, exclude_paths=(','.join(str(i) for i in seen) if seen else None))
+                        new = 0
                         for x in h.get('hits') or []:
-                            seen.append(x.get('path_id'))
+                            if x.get('path') in paths: continue
+                            paths.add(x.get('path')); seen.append(x.get('path_id')); new += 1
                             hits.append({'path': x.get('path'), 'title': x.get('title'), 'event': bool(x.get('event')), 'count': x.get('count'),
                                          'days': [{'day': s.get('day'), 'daily': s.get('daily'), 'hourly': s.get('hourly') or []} for s in x.get('stats') or []]})
-                        if not h.get('more'): break
+                        if not h.get('more') or not new: break
                     ok = True; break
                 except Exception as e:
                     print('hits falhou com limit', lim, e)
