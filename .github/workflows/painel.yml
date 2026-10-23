@@ -1,0 +1,28 @@
+name: Atualizar painel de acessos
+on:
+  schedule:
+    - cron: '7,37 * * * *'   # a cada 30 min
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: painel
+  cancel-in-progress: false
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Buscar estatísticas do GoatCounter
+        env:
+          GOATCOUNTER_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
+        run: python3 scripts/painel_stats.py
+      - name: Publicar se mudou
+        run: |
+          git config user.name "painel-cnc2026"
+          git config user.email "painel-cnc2026@users.noreply.github.com"
+          git add painel/stats.json
+          if git diff --cached --quiet; then echo "sem mudanças"; exit 0; fi
+          git commit -m "Painel: estatísticas atualizadas"
+          git pull --rebase -q || true
+          git push

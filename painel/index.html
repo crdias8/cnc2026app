@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#8B0000">
+<title>Painel de Acessos CNC</title>
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;600&family=Sora:wght@400;600;700&display=swap">
+<style>
+:root{
+  --brand:#8B0000; --brand-2:#C10000; --brand-deep:#5A0000; --gold:#F2C230;
+  --nav:#141414; --nav-fg:#F2F2F2; --nav-muted:#A9A9A9;
+  --bg:#F6F2F1; --surface:#FFFFFF; --surface-2:#F1EAE9; --fg:#1C1516; --muted:#6B5F60; --line:#E4D8D7;
+  --accent:#A30F12; --bar:#B3151A; --bar-soft:#F0D3D0; --grid:#EDE3E2;
+  --shadow:0 1px 2px rgba(60,10,10,.06),0 4px 14px rgba(60,10,10,.05);
+  --f-display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --f-body:"Sora",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#120E0E; --surface:#1C1617; --surface-2:#251E1F; --fg:#F2EBEB; --muted:#AD9FA0; --line:#352B2C;
+  --accent:#F0857A; --bar:#E8605A; --bar-soft:#3A2223; --grid:#2C2324; --shadow:none; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#120E0E; --surface:#1C1617; --surface-2:#251E1F; --fg:#F2EBEB; --muted:#AD9FA0; --line:#352B2C;
+  --accent:#F0857A; --bar:#E8605A; --bar-soft:#3A2223; --grid:#2C2324; --shadow:none; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px))}
+header{background:var(--brand);color:#fff}
+header .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+header img{height:36px;width:auto;display:block}
+header .ttl{margin-left:auto;text-align:right;font-size:13px;line-height:1.25;opacity:.92}
+nav.bar{background:var(--nav);color:var(--nav-fg)}
+nav.bar .wrap{display:flex;gap:18px;align-items:center;min-height:44px;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.08em;font-size:15px;overflow-x:auto;white-space:nowrap}
+nav.bar a{color:var(--nav-muted);text-decoration:none;padding:10px 0;border-bottom:3px solid transparent}
+nav.bar a.on{color:#fff;border-bottom-color:#EC7969}
+.hero{background:radial-gradient(120% 90% at 85% 10%,var(--brand-2) 0%,var(--brand) 45%,var(--brand-deep) 100%);color:#fff;position:relative;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
+.hero .wrap{position:relative;padding-block:26px 24px}
+.eyebrow{font-family:var(--f-display);font-weight:300;letter-spacing:.12em;text-transform:uppercase;font-size:14px;color:#FFD7CF}
+.hero h1{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,6vw,44px);line-height:1.04;margin:6px 0 8px;text-transform:uppercase;letter-spacing:.01em}
+.hero p{margin:0;max-width:60ch;opacity:.95}
+.hero .upd{margin-top:12px;font-size:13px;opacity:.9}
+main{padding-block:18px 40px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.kpi .lab{font-size:13px;color:var(--muted)}
+.kpi .num{font-family:var(--f-display);font-weight:500;font-size:38px;line-height:1.1;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.split{height:8px;border-radius:4px;background:var(--bar-soft);margin-top:8px;overflow:hidden;display:flex;gap:2px}
+.split i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-top:14px;min-width:0}
+.card h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:18px;margin:0;color:var(--accent)}
+.card .hint{font-size:12.5px;color:var(--muted);margin:2px 0 10px}
+.cardhead{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.cardhead .seg{margin-left:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:none;border:0;padding:6px 12px;font:inherit;font-size:13px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 14px}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:240px;overflow:visible}
+.chart .tip{position:absolute;pointer-events:none;background:var(--nav);color:#fff;font-size:12.5px;padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-110%);opacity:0;transition:opacity .1s}
+.chart .tip b{font-family:var(--f-display);font-weight:500;font-size:15px}
+.axis text{fill:var(--muted);font-size:11px;font-family:var(--f-body)}
+.axis line{stroke:var(--grid)}
+.rows{display:grid;gap:7px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:13.5px;align-items:baseline}
+.row .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .ct{font-variant-numeric:tabular-nums;font-weight:600}
+.row .tr{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.row .tr i{display:block;height:100%;background:var(--bar);border-radius:4px;min-width:4px}
+.empty{color:var(--muted);font-size:13.5px;font-style:italic;padding:6px 0}
+.notice{background:#FFF4D6;border:2px solid #E8A400;color:#2a1a00;border-radius:var(--r);padding:14px 16px;margin-top:14px}
+.notice h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:18px;margin:0 0 4px;color:#8B0000}
+.notice p{margin:0}
+details.tbl{margin-top:10px;font-size:13px}
+details.tbl summary{cursor:pointer;color:var(--accent);font-weight:600}
+details.tbl table{border-collapse:collapse;margin-top:6px;width:100%}
+details.tbl td,details.tbl th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+details.tbl td:last-child,details.tbl th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+footer{color:var(--muted);font-size:12.5px;margin-top:22px;line-height:1.6}
+@media (max-width:520px){ .kpi .num{font-size:32px} header img{height:30px} .chart svg{height:200px} }
+</style>
+</head>
+<body>
+<header><div class="wrap"><img src="mark.webp" alt="CNC 2026" width="306" height="116"><div class="ttl"><b>Painel de acessos</b><br>App da Programação</div></div></header>
+<nav class="bar"><div class="wrap"><a href="#" class="on">Painel</a><a href="https://crdias8.github.io/cnc2026app/" target="_blank" rel="noopener">Abrir o app</a></div></nav>
+<div class="hero"><canvas id="mesh" aria-hidden="true"></canvas><div class="wrap">
+  <div class="eyebrow">XXVIII Congresso Nacional de Criminalística · 27 a 30/10/2026 · Gramado/RS</div>
+  <h1>Painel de acessos do app</h1>
+  <p>Como os congressistas estão usando a programação oficial: quantos acessos, de onde, por qual aparelho e o que mais procuram.</p>
+  <div class="upd" id="upd">Carregando…</div>
+</div></div>
+<main class="wrap" id="main"></main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = n => (n||0).toLocaleString('pt-BR');
+const pad = n => String(n).padStart(2,'0');
+const fmtDT = iso => { const d = new Date(iso); return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' às '+pad(d.getHours())+':'+pad(d.getMinutes()); };
+
+/* nomes em português para o que vem em inglês */
+const SYS = {'iOS':'iPhone/iPad (iOS)','Android':'Android','Windows':'Windows','macOS':'Mac (macOS)','Linux':'Linux','Chrome OS':'Chromebook'};
+const COUNTRY = {'BR':'Brasil','PT':'Portugal','US':'Estados Unidos','AR':'Argentina','UY':'Uruguai','PY':'Paraguai','CL':'Chile'};
+const SIZE = {'phone':'Celular','largephone':'Celular grande','tablet':'Tablet','desktop':'Computador','desktophd':'Computador (tela grande)','unknown':'Desconhecido'};
+const REF = n => !n ? 'Acesso direto (link digitado, QR code, app instalado)' : n.replace(/^https?:\/\//,'');
+
+function drawMesh(){
+  const c = $('#mesh'); if (!c) return;
+  const r = c.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio||1);
+  c.width = r.width*dpr; c.height = r.height*dpr;
+  const x = c.getContext('2d'); x.scale(dpr,dpr);
+  let seed = 7; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
+  const W = r.width, H = r.height, pts = [], n = Math.round(Math.min(80, W/10));
+  for (let i=0;i<n;i++) pts.push([W*0.45 + rnd()*W*0.58, rnd()*H]);
+  x.strokeStyle = 'rgba(255,255,255,.35)'; x.lineWidth = .7;
+  for (let i=0;i<n;i++) for (let j=i+1;j<n;j++){ const dx=pts[i][0]-pts[j][0], dy=pts[i][1]-pts[j][1]; if (dx*dx+dy*dy < 70*70){ x.beginPath(); x.moveTo(...pts[i]); x.lineTo(...pts[j]); x.stroke(); } }
+  pts.forEach(([px,py],i) => { x.fillStyle = i%11===0 ? '#F2C230' : 'rgba(255,255,255,.8)'; x.beginPath(); x.arc(px,py,i%11===0?2.6:1.6,0,7); x.fill(); });
+}
+
+function rows(list, opts={}){
+  const l = list.filter(x => x.count > 0).slice(0, opts.max || 10);
+  if (!l.length) return '<div class="empty">Ainda sem dados.</div>';
+  const mx = Math.max(...l.map(x => x.count));
+  return '<div class="rows">' + l.map(x => `<div class="row" title="${esc(x.name)}: ${nf(x.count)}"><span class="nm">${esc(x.name)}</span><span class="ct">${nf(x.count)}</span><span class="tr"><i style="width:${(x.count/mx*100).toFixed(1)}%"></i></span></div>`).join('') + '</div>' +
+    `<details class="tbl"><summary>Ver em tabela</summary><table><thead><tr><th>${esc(opts.col||'Item')}</th><th>Acessos</th></tr></thead><tbody>${list.filter(x=>x.count>0).map(x=>`<tr><td>${esc(x.name)}</td><td>${nf(x.count)}</td></tr>`).join('')}</tbody></table></details>`;
+}
+function card(title, hint, body, extra=''){ return `<section class="card"><div class="cardhead"><div><h2>${title}</h2>${hint?`<p class="hint">${hint}</p>`:''}</div>${extra}</div>${body}</section>`; }
+
+/* série temporal a partir de stats.total.days (horário local configurado no GoatCounter) */
+function series(days, mode){
+  const pts = [];
+  (days||[]).forEach(d => {
+    if (mode === 'dia') pts.push({ label: d.day.slice(8,10)+'/'+d.day.slice(5,7), v: d.daily || (d.hourly||[]).reduce((a,b)=>a+b,0) });
+    else (d.hourly||[]).forEach((v,h) => pts.push({ label: d.day.slice(8,10)+'/'+d.day.slice(5,7)+' '+pad(h)+'h', day: d.day, h, v }));
+  });
+  if (mode !== 'dia'){ // corta horas futuras do último dia
+    const now = new Date(); const today = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+    while (pts.length && pts[pts.length-1].day === today && pts[pts.length-1].h > now.getHours()) pts.pop();
+    while (pts.length > 1 && pts[0].v === 0 && pts[1].v === 0) pts.shift();
+  }
+  return pts;
+}
+function lineChart(el, pts){
+  const W = el.clientWidth || 600, H = el.querySelector('svg') ? el.querySelector('svg').clientHeight || 240 : 240;
+  const m = {l:34, r:10, t:12, b:26}, iw = W-m.l-m.r, ih = H-m.t-m.b;
+  if (!pts.length){ el.innerHTML = '<div class="empty">Ainda sem dados.</div>'; return; }
+  const mx = Math.max(4, ...pts.map(p=>p.v)); const nice = Math.ceil(mx/4)*4;
+  const X = i => m.l + (pts.length===1 ? iw/2 : i*iw/(pts.length-1)), Y = v => m.t + ih - v/nice*ih;
+  let g = '';
+  for (let k=0;k<=4;k++){ const v = nice*k/4, y = Y(v); g += `<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}"/><text x="${m.l-6}" y="${y+4}" text-anchor="end">${nf(v)}</text>`; }
+  const step = Math.max(1, Math.ceil(pts.length / Math.max(2, Math.floor(iw/70))));
+  pts.forEach((p,i) => { if (i%step===0) g += `<text x="${X(i)}" y="${H-6}" text-anchor="middle">${esc(p.label)}</text>`; });
+  const path = pts.map((p,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(p.v).toFixed(1)).join(' ');
+  const area = path + ` L${X(pts.length-1).toFixed(1)} ${Y(0)} L${X(0).toFixed(1)} ${Y(0)} Z`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Acessos ao longo do tempo"><g class="axis">${g}</g>
+    <path d="${area}" fill="var(--bar)" opacity=".14"/><path d="${path}" fill="none" stroke="var(--bar)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line id="xh" y1="${m.t}" y2="${m.t+ih}" stroke="var(--muted)" stroke-dasharray="3 3" opacity="0"/><circle id="dot" r="4.5" fill="var(--bar)" stroke="var(--surface)" stroke-width="2" opacity="0"/>
+    <rect x="${m.l}" y="0" width="${iw}" height="${H}" fill="transparent" id="hit"/></svg><div class="tip" id="tip"></div>`;
+  const svg = el.querySelector('svg'), tip = el.querySelector('#tip'), xh = el.querySelector('#xh'), dot = el.querySelector('#dot');
+  const move = ev => {
+    const r = svg.getBoundingClientRect(); const px = ((ev.touches?ev.touches[0].clientX:ev.clientX) - r.left) * W / r.width;
+    const i = Math.max(0, Math.min(pts.length-1, Math.round((px-m.l)/(iw/Math.max(1,pts.length-1)))));
+    const x = X(i), y = Y(pts[i].v);
+    xh.setAttribute('x1',x); xh.setAttribute('x2',x); xh.setAttribute('opacity',1);
+    dot.setAttribute('cx',x); dot.setAttribute('cy',y); dot.setAttribute('opacity',1);
+    tip.innerHTML = `${esc(pts[i].label)}<br><b>${nf(pts[i].v)}</b> acessos`; tip.style.left = (x*r.width/W)+'px'; tip.style.top = (y*r.height/H)+'px'; tip.style.opacity = 1;
+  };
+  const out = () => { tip.style.opacity = 0; xh.setAttribute('opacity',0); dot.setAttribute('opacity',0); };
+  svg.addEventListener('pointermove', move); svg.addEventListener('pointerleave', out); svg.addEventListener('touchmove', move, {passive:true}); svg.addEventListener('touchend', out);
+}
+
+function render(S){
+  if (S.fetched_at) $('#upd').textContent = 'Dados atualizados em ' + fmtDT(S.fetched_at) + ' · atualização automática a cada 30 minutos';
+  if (S.error && !S.hits){
+    $('#main').innerHTML = `<div class="notice"><h2>Painel aguardando a ligação com o contador</h2><p>${S.error === 'sem-chave' ? 'Falta cadastrar a chave de leitura do GoatCounter no GitHub. Assim que ela for cadastrada, os números aparecem aqui em até 30 minutos.' : 'A última tentativa de buscar os números falhou ('+esc(S.error)+'). O painel tenta de novo a cada 30 minutos.'}</p></div>`;
+    return;
+  }
+  const H = S.hits || [];
+  const ev = H.filter(h => h.event && !/^\[teste\]/.test(h.path));
+  const sum = re => ev.filter(h => re.test(h.path)).reduce((a,h)=>a+h.count,0);
+  const opens = H.filter(h => !h.event && /^\/cnc2026app\/ · /.test(h.path));
+  const viaApp = opens.filter(h => /app instalado$/.test(h.path)).reduce((a,h)=>a+h.count,0);
+  const viaNav = opens.filter(h => /navegador$/.test(h.path)).reduce((a,h)=>a+h.count,0);
+  const total = viaApp + viaNav;
+  const teste = H.filter(h => /^\/cnc2026app\/teste\//.test(h.path) || /^\[teste\]/.test(h.path));
+  const installs = sum(/^instalou o app$/);
+  const anais = sum(/^anais: /);
+  const favs = ev.filter(h => /^favorito: /.test(h.path));
+  const favTotal = favs.reduce((a,h)=>a+h.count,0);
+  const pct = total ? Math.round(viaApp/total*100) : 0;
+
+  const tabsMap = {'inicio':'Início','filtros':'Filtros','favoritos':'Meus favoritos'};
+  const abas = ev.filter(h => /^aba: /.test(h.path)).map(h => { const k = h.path.slice(5); return {name: tabsMap[k] || (/^\d+\/10$/.test(k) ? 'Dia '+k : k), count:h.count}; }).sort((a,b)=>b.count-a.count);
+  const favList = favs.map(h => ({name: h.path.replace(/^favorito: /,''), count:h.count})).sort((a,b)=>b.count-a.count);
+  const outros = [
+    {name:'Baixou os anais (PDF 14 MB)', count: sum(/^anais: PDF/)},
+    {name:'Baixou os anais (alta resolução)', count: sum(/^anais: alta/)},
+    {name:'Tocou em "Instalar app" (Android)', count: sum(/^tocou em Instalar app$/)},
+    {name:'Instalou o app', count: installs},
+    {name:'Abriu os ingressos do evento social', count: sum(/^evento social: ingressos$/)},
+    {name:'Importou favoritos da versão de teste', count: sum(/^importou favoritos do teste$/)}
+  ].sort((a,b)=>b.count-a.count);
+  const loc = (S.regions_br && S.regions_br.length ? S.regions_br.map(x=>({name:x.name||'Não identificado', count:x.count})) : (S.locations||[]).map(x=>({name:COUNTRY[(x.id||'').toUpperCase()]||x.name||'Não identificado', count:x.count})));
+  const countries = (S.locations||[]).map(x=>({name:COUNTRY[(x.id||'').toUpperCase()]||x.name||'Não identificado', count:x.count}));
+  const sys = (S.systems||[]).map(x=>({name:SYS[x.name]||x.name||'Outro', count:x.count}));
+  const br = (S.browsers||[]).map(x=>({name:x.name||'Outro', count:x.count}));
+  const sizes = (S.sizes||[]).map(x=>({name:SIZE[x.id]||SIZE[x.name]||x.name||'Outro', count:x.count}));
+  const refs = (S.toprefs||[]).map(x=>({name:REF(x.name), count:x.count}));
+
+  $('#main').innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Aberturas do app</div><div class="num">${nf(total)}</div><div class="sub">desde 23/10, versão oficial</div></div>
+      <div class="kpi"><div class="lab">Pelo app instalado</div><div class="num">${pct}%</div><div class="split" title="App instalado: ${nf(viaApp)} · Navegador: ${nf(viaNav)}"><i style="width:${pct}%"></i></div><div class="sub">${nf(viaApp)} pelo ícone · ${nf(viaNav)} pelo navegador</div></div>
+      <div class="kpi"><div class="lab">Instalações registradas</div><div class="num">${nf(installs)}</div><div class="sub">Android/computador; no iPhone não é registrado</div></div>
+      <div class="kpi"><div class="lab">Downloads dos anais</div><div class="num">${nf(anais)}</div><div class="sub">as duas versões do PDF</div></div>
+      <div class="kpi"><div class="lab">Favoritos marcados</div><div class="num">${nf(favTotal)}</div><div class="sub">em ${nf(favList.length)} atividades diferentes</div></div>
+    </div>
+    ${card('Acessos ao longo do tempo','Tudo que foi registrado no app (aberturas e uso), por hora ou por dia. Passe o dedo ou o mouse no gráfico para ver cada ponto.','<div class="chart" id="tl"><svg></svg></div>', '<div class="seg" role="group" aria-label="Agrupar por"><button type="button" data-m="hora" aria-pressed="true">Por hora</button><button type="button" data-m="dia" aria-pressed="false">Por dia</button></div>')}
+    <div class="grid2">
+      ${card('Atividades mais favoritadas','Quantas vezes cada atividade foi marcada com a estrela.', rows(favList,{max:15,col:'Atividade'}))}
+      ${card('Abas mais visitadas','', rows(abas,{col:'Aba'}))}
+      ${card('Outras ações','', rows(outros,{col:'Ação'}))}
+      ${card('De onde acessam', S.regions_br && S.regions_br.length ? 'Estados do Brasil (aproximado, pela conexão de internet). Países: '+countries.map(c=>esc(c.name)+' '+nf(c.count)).join(' · ') : 'Aproximado, pela conexão de internet.', rows(loc,{col:'Local'}))}
+      ${card('Sistema do aparelho','', rows(sys,{col:'Sistema'}))}
+      ${card('Tipo de aparelho','', rows(sizes,{col:'Aparelho'}))}
+      ${card('Navegador','', rows(br,{col:'Navegador'}))}
+      ${card('Por onde chegaram','Sites ou apps de onde veio o clique.', rows(refs,{col:'Origem'}))}
+    </div>
+    ${teste.length ? card('Versão de teste','Acessos que ainda chegam pelo endereço de teste.', rows(teste.map(h=>({name:h.path.replace(/^\[teste\] /,''), count:h.count})).sort((a,b)=>b.count-a.count),{max:6,col:'Item'})) : ''}
+    <footer>Os números são anônimos: o app não usa cookies nem guarda dados pessoais, e ninguém é identificado. Acessos feitos sem internet e por quem usa bloqueador de anúncios podem não ser contados, então os valores mostram tendências, não uma contagem exata. Fonte: GoatCounter.${S.last_error ? ' Última tentativa de atualização falhou às '+fmtDT(S.last_try)+'; exibindo os dados anteriores.' : ''}</footer>`;
+
+  let mode = 'hora';
+  const draw = () => lineChart($('#tl'), series(S.total && S.total.days, mode));
+  draw();
+  document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); }));
+  let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { draw(); drawMesh(); }, 150); });
+}
+
+drawMesh();
+fetch('stats.json?t=' + Date.now(), {cache:'no-store'}).then(r => r.json()).then(render).catch(() => {
+  $('#upd').textContent = 'Não foi possível carregar os dados agora.';
+  $('#main').innerHTML = '<div class="notice"><h2>Sem dados no momento</h2><p>Tente recarregar a página em alguns instantes.</p></div>';
+});
+</script>
+</body>
+</html>
