@@ -173,6 +173,7 @@ section.view{padding-top:16px}
 .kw.on{background:var(--accent-soft)}
 .fav{grid-row:1/span 2;grid-column:2;align-self:start;background:none;border:0;padding:6px;margin:-6px -6px 0 0;cursor:pointer;color:var(--muted);border-radius:8px;width:40px;height:40px;display:grid;place-items:center}
 .fav svg{width:24px;height:24px}
+.impfav{margin:22px 0 4px;font-size:14px}.impfav p{margin:8px 0 6px}.impfav textarea{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:8px;border:1px solid var(--line);border-radius:8px}.ibtn2{margin-top:6px;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:9px 18px;font-weight:600;font-size:15px;cursor:pointer}.impmsg{color:var(--now);font-weight:600;margin-top:6px}
 .fav[aria-pressed="true"]{color:#E2A400}
 .fav[aria-pressed="true"] svg path{fill:currentColor}
 .conflict{margin-top:8px;font-size:13px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:3px 8px;display:inline-block}
@@ -236,6 +237,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 <div class="offbar" id="offbar" hidden>Sem conexão. Exibindo a última versão salva da programação.</div>
 <script>
 (function(){
+  const WANT_HASH = location.hash || ''; // guardado antes de a navegação trocar o endereço
   const ua = navigator.userAgent || '';
   const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   const isAndroid = /Android/.test(ua);
@@ -318,7 +320,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 
   // Link direto para a instalação: .../#instalar abre a aba Início já no bloco "App no celular"
   function goInstall(){
-    if ((location.hash||'') !== '#instalar') return;
+    if (!/^#instalar(&|$)/.test(WANT_HASH)) return;
     let tries = 0;
     (function look(){
       const b = document.getElementById('pwa-box');
@@ -328,7 +330,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
       window.scrollTo({ top: b.getBoundingClientRect().top + scrollY - (hdr ? hdr.offsetHeight : 0) - 12, behavior: 'smooth' });
     })();
   }
-  window.addEventListener('load', goInstall);
+  if (document.readyState === 'complete') goInstall(); else window.addEventListener('DOMContentLoaded', goInstall);
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {}); });
   }
@@ -352,7 +354,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 08:41';
+const BUILD_STAMP = '23/10 às 09:06';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -783,6 +785,20 @@ const F = {
   periods: new Set(saved.periods||[]), slots: new Set(saved.slots||[]), kws: new Set(saved.kws||[])
 };
 const FAV = new Set(store.get('cnc26_favs', []));
+/* Importar favoritos (vindos da versão de teste): por link #favs=... ou colando o texto copiado */
+function importFavs(str){
+  const ids = new Set(EV.map(e => e.id)); let n = 0;
+  String(str||'').replace(/^.*?:/,'').split(/[,\s]+/).map(s => s.trim()).filter(Boolean).forEach(id => { if (ids.has(id) && !FAV.has(id)) { FAV.add(id); n++; } });
+  if (n) store.set('cnc26_favs',[...FAV]);
+  return n;
+}
+let IMPORTED = 0;
+(function(){
+  const m = (location.hash||'').match(/[#&]favs=([^&]*)/); if (!m) return;
+  try { IMPORTED = importFavs(decodeURIComponent(m[1])); } catch(e){}
+  const rest = location.hash.replace(/[#&]favs=[^&]*/,'').replace(/^&/,'#');
+  try { history.replaceState(null,'',location.pathname + location.search + (rest && rest !== '#' ? rest : '')); } catch(e){}
+})();
 let view = 'inicio', curDay = 28;
 const openPosters = new Set(); // dias com pôsteres abertos (sem filtros)
 
@@ -1031,9 +1047,24 @@ function renderFavoritos(){
       return card(e,{now, conflict: c ? (c.code || c.title.replace(/\*/g,'').split(';;')[0].slice(0,40)) + ` (${c.s}–${c.e})` : ''});
     }).join('')}</div></div>`;
   });
+  if (!window.IS_TESTE) html += `<div class="impfav"><button class="linkbtn" type="button" data-impfav>Importar favoritos da versão de teste</button><div id="impbox" hidden><p>No app <b>CNC Teste</b>, toque em <b>Copiar meus favoritos</b>. Depois cole aqui:</p><textarea id="imptxt" rows="3" placeholder="CNC-FAVORITOS: ..."></textarea><button class="ibtn2" type="button" data-impok>Importar</button></div><div class="impmsg" id="impmsg"></div></div>`;
   if (favs.length) html += `<footer>Os favoritos ficam guardados no navegador deste aparelho. Se trocar de celular ou limpar os dados do navegador, será preciso marcar de novo.</footer>`;
   $('#v-favoritos').innerHTML = html;
 }
+
+document.addEventListener('click', async ev => {
+  const a = ev.target.closest('[data-impfav]'), ok = ev.target.closest('[data-impok]');
+  if (!a && !ok) return;
+  const msg = $('#impmsg');
+  const done = n => { refresh(); const m = $('#impmsg'); if (m) m.textContent = n ? `${n} ${n===1?'favorito importado':'favoritos importados'}.` : 'Nenhum favorito novo encontrado nesse texto.'; };
+  if (a){
+    let txt = '';
+    try { if (navigator.clipboard && navigator.clipboard.readText) txt = await navigator.clipboard.readText(); } catch(e){}
+    if (/CNC-FAVORITOS/i.test(txt)) { done(importFavs(txt)); return; }
+    $('#impbox').hidden = false; $('#imptxt').focus(); return;
+  }
+  done(importFavs($('#imptxt').value));
+});
 
 /* ---------- navegação ---------- */
 function go(k, opts = {}){
