@@ -268,7 +268,7 @@ function render(S){
   ].sort((a,b)=>b.count-a.count);
   const regs = (S.regions_br||[]).map(x => ({uf: ufOf(x), count: x.count, raw: x.name}));
   const byUF = {}; regs.forEach(r => { const k = r.uf || '?'; byUF[k] = (byUF[k]||0) + r.count; });
-  const loc = Object.entries(byUF).map(([k,c]) => ({name: k === '?' ? 'Estado não identificado' : UF_NAME[k] + ' (' + k + ')', count: c})).sort((a,b)=>b.count-a.count);
+  const loc = Object.entries(byUF).map(([k,c]) => ({name: k === '?' ? 'Sem estado (antes do registro de estado ou não identificado)' : UF_NAME[k] + ' (' + k + ')', count: c})).sort((a,b)=>b.count-a.count);
   const countries = (S.locations||[]).map(x=>({name:COUNTRY[(x.id||'').toUpperCase()]||x.name||'Não identificado', count:x.count}));
   const sys = (S.systems||[]).map(x=>({name:SYS[x.name]||x.name||'Outro', count:x.count}));
   const br = (S.browsers||[]).map(x=>({name:x.name||'Outro', count:x.count}));
