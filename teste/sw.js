@@ -2,7 +2,7 @@
    Estratégia: a página sempre busca primeiro a versão mais nova na internet;
    só usa a cópia salva quando não há conexão (ou a rede demora demais).
    VERSION é trocada a cada publicação (preenchida pelo build). */
-const VERSION = '9b4849fa7b';
+const VERSION = 'eba1d09ef2';
 const KILL = false; // true = remove o modo offline dos aparelhos na próxima abertura com internet
 const CACHE = 'cnc2026-' + VERSION;
 const CORE = ['./', './index.html', './manifest.webmanifest',
@@ -30,9 +30,12 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  const base = new URL(self.registration.scope);
+  // Só a página do app (raiz do escopo) — nunca PDFs, a pasta /teste/ ou outros endereços
+  const isAppPage = url.origin === base.origin && (url.pathname === base.pathname || url.pathname === base.pathname + 'index.html');
 
   // Página do app: rede primeiro (até 6 s), depois cópia salva
-  if (req.mode === 'navigate' || (url.origin === location.origin && url.pathname.endsWith('/index.html'))) {
+  if (isAppPage) {
     e.respondWith((async () => {
       try {
         const fresh = await Promise.race([fetch(req, { cache: 'no-store' }), timeout(6000)]);
@@ -52,7 +55,8 @@ self.addEventListener('fetch', e => {
   }
 
   // Ícones e arquivos do próprio app, e fontes do Google: usa a cópia e atualiza em segundo plano
-  const sameOrigin = url.origin === location.origin;
+  if (req.mode === 'navigate') return; // outras páginas/arquivos abrem normalmente, sem passar pelo modo offline
+  const sameOrigin = url.origin === base.origin && (url.pathname.startsWith(base.pathname + 'assets/') || url.pathname === base.pathname + 'manifest.webmanifest');
   const fonts = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if (sameOrigin || fonts) {
     e.respondWith((async () => {
