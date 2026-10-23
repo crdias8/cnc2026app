@@ -164,6 +164,7 @@ section.view{padding-top:16px}
 .ev h3.books em{font-style:italic}
 .ev .ppl{font-size:14.5px;color:var(--fg);margin:0 0 4px;overflow-wrap:anywhere}
 .ev .ppl span{display:block}
+.ev .ppl a,.info a{color:var(--accent);font-weight:600}
 .ev .room{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);margin-top:2px}
 .ev .room svg{width:14px;height:14px;flex:0 0 auto}
 .ev .staff{font-size:12px;color:var(--muted);opacity:.85;margin-top:6px}
@@ -422,7 +423,7 @@ window.IS_TESTE = true;
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 10:49';
+const BUILD_STAMP = '23/10 às 11:08';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -516,6 +517,7 @@ const EVENTS = [
 [28,'17:10','18:05','JGU','PA.P.10','P','Primeiras aplicações utilizando ferramentas e datasets do Google Earth Engine na perícia criminal ambiental do RS','Daniel Cristiano Paim - IGP/RS','',''],
 [28,'16:10','17:05','AMA','EF.P.8','P','Desenvolvendo um POP para a Identificação Veicular','Josué Tadeu Borba - PCI/PR','Identificação veicular',''],
 [28,'17:10','18:05','AMA','EF.C.1','C','Reunião de coordenadores em Engenharia Forense','','',''],
+[28,'19:30','23:59','BAR','', 'E','Evento social do XXVIII CNC','R. Ernâni Kroeff Fleck, 578, Vila Suíça, Canela/RS;;[[Informações e ingressos|https://tri.rs/event/baruma-congresso-nacional-de-criminalistica-61b6b0]]','Evento social','o'],
 
 /* ===== 29/10 ===== */
 [29,'09:00','10:00','EXP','', 'A','*Reprodução Simulada dos Fatos: Fundamentos da Reconstrução Criminal*','Autor: Andrei Röehrs Portinho (responsável pela sessão)','Livros',''],
@@ -746,7 +748,7 @@ const ROOMS = {
   AUD:{n:'Auditório Augusto Meyer'}, TEA:{n:'Teatro Lupicínio Rodrigues'}, ARE:{n:'Arena Elis Regina'},
   JSL:{n:'Sala João Simões Lopes Neto',x:'Sala A'}, IBE:{n:'Sala Iberê Camargo',x:'Sala B'}, MQU:{n:'Sala Mário Quintana',x:'Sala C'},
   MSC:{n:'Sala Moacyr Scliar'}, EVE:{n:'Sala Érico Veríssimo'}, DMA:{n:'Sala Dyonélio Machado'}, JGU:{n:'Sala Josué Guimarães'},
-  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores (térreo)'}, TAU:{n:'Fábrica da Taurus (visita externa)'}, GER:{n:'Andar superior'}
+  AMA:{n:'Sala Alcides Maya',x:'Sala H'}, EXP:{n:'Saguão de expositores (térreo)'}, BAR:{n:'Baruma Dinner Club (Canela/RS)'}, TAU:{n:'Fábrica da Taurus (visita externa)'}, GER:{n:'Andar superior'}
 };
 const ROOM_ORDER = Object.keys(ROOMS);
 const AREAS = {
@@ -765,8 +767,8 @@ const AREAS = {
 };
 const SINAB_TAG = '<span class="tag sinab" aria-label="SINAB">S<svg viewBox="0 0 10 32" aria-hidden="true"><path d="M5 0C7.4 4 8.2 8 8.2 12V27H1.8V12C1.8 8 2.6 4 5 0Z" fill="#E8541C"/><rect x="1" y="27.6" width="8" height="1.6" rx=".4" fill="#E8541C"/><rect x="1.6" y="29.8" width="6.8" height="2.2" rx=".4" fill="#E8541C"/></svg>NAB</span>';
 const EXTRA_AREAS = (typeof AREAS_REL !== 'undefined') ? AREAS_REL : { 'OE.O.2':['GI','CP'] }; // áreas adicionais exibidas ao lado do código
-const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo',A:'Sessão de autógrafos e de lançamento'};
-const TYPE_FILTER = ['P','R','O','M','C','X','S','A','V','I'];
+const TYPES = {P:'Palestra',R:'Mesa-redonda',O:'Apresentação oral',M:'Minicurso',C:'Reunião de coordenadores',X:'Expositor',S:'Atividade SINAB',V:'Pôsteres',I:'Institucional',T:'A confirmar',B:'Intervalo',A:'Sessão de autógrafos e de lançamento',E:'Evento social'};
+const TYPE_FILTER = ['P','R','O','M','C','X','S','A','E','V','I'];
 const DAYS = [{d:27,w:'Terça',sub:'Minicursos e abertura'},{d:28,w:'Quarta',sub:''},{d:29,w:'Quinta',sub:''},{d:30,w:'Sexta',sub:'Premiação e encerramento às 18:30'}];
 const FLAGS = {
   l:{t:'Tradução por legendas',i:'<path d="M3 5h18v12H8l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 10h6M7 13h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
@@ -844,7 +846,7 @@ EVENTS.forEach((r, i) => {
   EV.push(ev);
 });
 const ALL_KW = (() => { const m = new Map(); EV.forEach(e => e.kws.forEach(k => m.set(k, (m.get(k)||0)+1))); return [...m].sort((a,b) => a[0].localeCompare(b[0],'pt')); })();
-const SLOTS = ['08:00','08:30','09:00','09:15','09:30','09:45','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','15:30','16:10','16:40','17:10','17:40','18:30'];
+const SLOTS = ['08:00','08:30','09:00','09:15','09:30','09:45','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:15','15:30','16:10','16:40','17:10','17:40','18:30','19:30'];
 const PERIODS = {manha:['Manhã',0,mins('12:30')], tarde:['Tarde',mins('12:30'),mins('18:25')], noite:['Noite',mins('18:25'),24*60]};
 
 /* ---------- estado ---------- */
@@ -945,14 +947,15 @@ function card(e, opts = {}){
   const dim = ['I','T','V'].includes(e.type) && !e.pid;
   const room = ROOMS[e.room];
   const fav = FAV.has(e.id);
-  const people = e.people.map(p => `<span>${e.type === 'O' ? esc(p).replace(/ - (apresentadora?)\b/g,' - <em>$1</em>') : esc(p)}</span>`).join('');
+  const linkify = s => s.replace(/\[\[([^|\]]+)\|(https:\/\/[^\]\s]+)\]\]/g, (m, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`);
+  const people = e.people.map(p => `<span>${e.type === 'O' ? esc(p).replace(/ - (apresentadora?)\b/g,' - <em>$1</em>') : linkify(esc(p))}</span>`).join('');
   const flags = [...e.flags].filter(f => FLAGS[f]).map(f => `<span class="flag"><svg viewBox="0 0 24 24" aria-hidden="true">${FLAGS[f].i}</svg>${FLAGS[f].t}</span>`).join('');
   const sinab = '';
   const kws = e.kws.filter(k => k !== 'Pôsteres').map(k => `<button class="kw${F.kws.has(k)?' on':''}" data-kw="${esc(k)}">${esc(k)}</button>`).join('');
   const minicurso = e.type === 'M' && e.sm === mins('13:00') ? ' · intervalo 15:00–15:15' : '';
   return `<article class="ev${dim?' dim':''}${isNow?' is-now':''}" data-id="${esc(e.id)}">
     <div class="ev-main">
-      <div class="ev-top">${tagHTML(e)}<span class="type">${e.pid ? 'Pôster' : TYPES[e.type]}</span><span class="time">${opts.showDay?`${e.d}/10 · `:''}${e.s}–${e.e}${minicurso}</span>${isNow?'<span class="nowpill">Agora</span>':''}</div>
+      <div class="ev-top">${tagHTML(e)}<span class="type">${e.pid ? 'Pôster' : TYPES[e.type]}</span><span class="time">${opts.showDay?`${e.d}/10 · `:''}${e.flags.includes('o') ? `a partir das ${e.s}` : `${e.s}–${e.e}`}${minicurso}</span>${isNow?'<span class="nowpill">Agora</span>':''}</div>
       <h3${e.type==='A'?' class="books"':e.pid?' class="ptitle"':''}>${e.type==='A' ? e.title.split(';;').map(b => `<span class="book">${esc(b).replace(/\*([^*]+)\*/g,'<em>$1</em>')}</span>`).join('') : e.pid ? esc(e.title).replace(/\*([^*]+)\*/g,'<em>$1</em>') : esc(e.title)}</h3>
       ${people?`<p class="ppl">${people}</p>`:''}
       ${room?`<div class="room">${ICON_PIN}<span>${esc(room.n)}${room.x?` (${room.x})`:''}</span></div>`:''}
@@ -996,6 +999,7 @@ function renderInicio(){
         <li><b>27/10 · 18:30</b><span>Cerimônia de abertura na Sala Érico Veríssimo.</span></li>
         <li><b>28 a 30/10 · 8:30–10:00</b><span>Apresentação dos pôsteres com a presença dos autores, no saguão de expositores.</span></li>
         <li><b>28 a 30/10 · 8:30–18:30</b><span>Espaço de exposições aberto ao público.</span></li>
+        <li><b>28/10 · a partir das 19:30</b><span>Evento social no Baruma Dinner Club, em Canela/RS. <a href="https://tri.rs/event/baruma-congresso-nacional-de-criminalistica-61b6b0" target="_blank" rel="noopener">Informações e ingressos</a>.</span></li>
         <li><b>30/10 · 18:30</b><span>Cerimônia de premiação e encerramento no Teatro Lupicínio Rodrigues.</span></li>
       </ul>
       <div class="anais">
