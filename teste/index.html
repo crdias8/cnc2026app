@@ -231,6 +231,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 .install.focus{border-color:#E8A400;box-shadow:0 0 0 4px rgba(232,164,0,.35)}
 .install .ibtn{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font-weight:600;font-size:15px;cursor:pointer;margin-top:4px}
 .install .ok{color:var(--now);font-weight:600}
+.install .warn{background:#FFF4D6;border-left:4px solid #E8A400;border-radius:8px;padding:8px 10px;font-size:13.5px;margin:8px 0 0;color:#2a1a00}
 .install .hint{font-size:13px;color:var(--muted);margin-top:8px}
 .install svg{width:16px;height:16px;vertical-align:-3px}
 .stamp{margin:10px 0 0;font-size:13px;opacity:.9}
@@ -243,6 +244,7 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
   const ua = navigator.userAgent || '';
   const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   const isAndroid = /Android/.test(ua);
+  const isSamsung = /SamsungBrowser/.test(ua);
   const inApp = /FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter|TikTok|LinkedInApp|; wv\)/.test(ua);
   const iosOther = isIOS && /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
   const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
@@ -273,7 +275,8 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
     } else if (isAndroid) {
       body = deferred
         ? '<p>Instale o app com um toque, sem passar pela Play Store.</p><button class="ibtn" id="pwa-install" type="button">Instalar app</button>'
-        : '<p>Instale sem passar pela Play Store:</p><ol><li>Toque no menu <b>⋮</b> do navegador.</li><li>Escolha <b>Instalar e criar atalho</b>. Dependendo do celular, a opção pode aparecer como <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>';
+        : '<p>Instale sem passar pela Play Store:</p><ol><li>Toque no menu ' + (isSamsung ? '<b>≡</b> (embaixo, à direita)' : '<b>⋮</b> do navegador') + '.</li><li>Escolha <b>Instalar e criar atalho</b>. Dependendo do celular, a opção pode aparecer como <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>';
+      if (isSamsung) body += '<p class="warn">Se aparecer <b>“Não foi possível instalar o aplicativo web”</b>, abra este link no <b>Chrome</b> e instale por lá. Ou, aqui mesmo, toque no menu <b>≡</b> → <b>Adicionar página a</b> → <b>Tela inicial</b>.</p>';
     } else {
       body = '<p>Abra este link no celular para instalar o app na tela inicial.</p>';
     }
@@ -456,7 +459,7 @@ window.IS_TESTE = true;
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 13:50';
+const BUILD_STAMP = '23/10 às 15:09';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
