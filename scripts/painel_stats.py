@@ -1,5 +1,5 @@
 """Busca as estatísticas anônimas do GoatCounter (cnc2026) e grava painel/stats.json.
-Roda no GitHub Actions a cada 30 min. A chave fica no segredo GOATCOUNTER_TOKEN (nunca no site)."""
+Roda no GitHub Actions a cada 10 min (disparado pelo cron-job.org). A chave fica no segredo GOATCOUNTER_TOKEN (nunca no site)."""
 import json, os, sys, time, subprocess, urllib.request, urllib.error, urllib.parse, datetime as dt
 
 SITE = 'https://cnc2026.goatcounter.com/api/v0'

@@ -236,9 +236,9 @@ function lineChart(el, pts){
 }
 
 function render(S){
-  if (S.fetched_at) $('#upd').textContent = 'Dados atualizados em ' + fmtDT(S.fetched_at) + ' · atualização automática a cada 30 minutos';
+  if (S.fetched_at) $('#upd').textContent = 'Dados atualizados em ' + fmtDT(S.fetched_at) + ' · atualização automática a cada 10 minutos';
   if (S.error && !S.hits){
-    $('#main').innerHTML = `<div class="notice"><h2>Painel aguardando a ligação com o contador</h2><p>${S.error === 'sem-chave' ? 'Falta cadastrar a chave de leitura do GoatCounter no GitHub. Assim que ela for cadastrada, os números aparecem aqui em até 30 minutos.' : 'A última tentativa de buscar os números falhou ('+esc(S.error)+'). O painel tenta de novo a cada 30 minutos.'}</p></div>`;
+    $('#main').innerHTML = `<div class="notice"><h2>Painel aguardando a ligação com o contador</h2><p>${S.error === 'sem-chave' ? 'Falta cadastrar a chave de leitura do GoatCounter no GitHub. Assim que ela for cadastrada, os números aparecem aqui em até 10 minutos.' : 'A última tentativa de buscar os números falhou ('+esc(S.error)+'). O painel tenta de novo a cada 10 minutos.'}</p></div>`;
     return;
   }
   const H = S.hits || [];
