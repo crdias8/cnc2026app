@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 23/10/2026 13:29 | 8c7a91c | 28/10, 10:00–10:55, Sala Moacyr Scliar: "Palestra a confirmar" substituída pela palestra CP.P.10 "Além da Aquisição Forense: Como Acelerar Investigações com ferramentas de triagem sem comprometer a integridade dos dados", com Kelly Ribeiro (Detego, participação remota) e Robson Villa (Sixth See Technology); tópico Dispositivos móveis; apoio de sala mantido: Fábio Rodrigues Cieslak (oficial e teste) |
 | 23/10/2026 13:05 | faccf8b | Painel: mapa do Brasil com acessos por estado (cores mais fortes = mais acessos) e lista por estado |
 | 23/10/2026 12:05 | dddf2f1 | Painel público de acessos em /cnc2026app/painel/ (estética do CNC 2026), alimentado a cada 30 min por uma tarefa automática do GitHub que lê o GoatCounter; chave guardada como segredo do repositório |
 | 23/10/2026 11:56 | 1ab477a | Sessão de autógrafos e de lançamento de 28/10 (*Reconstrução de Colisões Veiculares* e *Fundamentos de Estatística Aplicados na Reconstrução de Acidentes de Trânsito*, Wilson Toresan Jr. e Nortthon Didyk) passa de 09:00–10:00 para 10:00–11:00; favoritos já marcados preservados (oficial e teste). **Origem:** pedido de Wilson Toresan Jr. à Deisi, por WhatsApp, às 11h42 de 23/10/2026. |
