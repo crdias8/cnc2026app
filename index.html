@@ -391,7 +391,7 @@ window.goatcounter = { no_onload: true };
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 15:25';
+const BUILD_STAMP = '23/10 às 16:04';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -400,7 +400,7 @@ const BUILD_STAMP = '23/10 às 15:25';
 const EVENTS = [
 /* ===== 27/10 — Minicursos ===== */
 [27,'08:00','12:10','AUD','', 'I','Reunião CONDPCi','','',''],
-[27,'08:00','15:00','TAU','', 'S','Visita técnica à fábrica da Taurus','','SINAB',''],
+[27,'08:00','15:00','TAU','', 'S','Visita técnica à fábrica da Taurus','','SINAB','p'],
 [27,'08:00','12:10','AMA','PA.N.1','M','Curso de Geotecnologias aplicadas à Perícia Criminalística (módulo remoto)','Christhian Cunha - Empresa/Ambgeo','Geoprocessamento','rn'],
 [27,'12:10','13:00','', '', 'B','Intervalo de almoço','','',''],
 [27,'13:00','17:15','AUD','', 'I','Reunião CONDPCi','','',''],
@@ -741,6 +741,7 @@ const DAYS = [{d:27,w:'Terça',sub:'Minicursos e abertura'},{d:28,w:'Quarta',sub
 const FLAGS = {
   l:{t:'Tradução por legendas',i:'<path d="M3 5h18v12H8l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 10h6M7 13h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
   r:{t:'Participação remota',i:'<rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
+  p:{t:'Atividade restrita aos participantes da 2ª Conferência do Sistema Nacional de Análise Balística - SINAB',i:'<rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
   n:{t:'Levar notebook',i:'<rect x="5" y="5" width="14" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 19h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}
 };
 const ORG = [
@@ -796,7 +797,7 @@ EVENTS.forEach((r, i) => {
   const areas = [];
   if (AREAS[pre]) areas.push(pre);
   (EXTRA_AREAS[code]||[]).forEach(a => { if (!areas.includes(a)) areas.push(a); });
-  if (type === 'S') areas.push('BA');
+  if (type === 'S' && !flags.includes('p')) areas.push('BA'); // 'p' = atividade restrita ao SINAB, sem a etiqueta BA
   if (type === 'S' || flags.includes('s')) areas.push('SN');
   // atividades sem código que mudaram de horário mantêm o identificador antigo (favoritos já marcados continuam valendo)
   const ID_KEEP = {'28-EXP-10:00':'28-EXP-09:00'}; // sessão de autógrafos Wilson Toresan Jr.: 09:00 -> 10:00 em 23/10
@@ -910,7 +911,7 @@ function tagHTML(e){
   if (e.pid){ const a = AREAS[e.areas[0]]; return `<span class="tag" style="--c:${a.c};--t:${a.t}">${e.areas[0]}</span><span class="tag pnum">Nº ${esc(e.pid)}</span>`; }
   const sn = e.areas.includes('SN') ? SINAB_TAG : '';
   if (e.code){ const a = AREAS[e.areas[0]] || AREAS.OE; const extra = (EXTRA_AREAS[e.code]||[]).map(k => `<span class="tag" style="--c:${AREAS[k].c};--t:${AREAS[k].t}">${k}</span>`).join(''); return `<span class="tag" style="--c:${a.c};--t:${a.t}">${esc(e.code)}</span>${extra}${sn}`; }
-  if (e.type === 'S') return `<span class="tag" style="--c:${AREAS.BA.c};--t:${AREAS.BA.t}">BA</span>${sn}`;
+  if (e.type === 'S') return (e.areas.includes('BA') ? `<span class="tag" style="--c:${AREAS.BA.c};--t:${AREAS.BA.t}">BA</span>` : '') + sn;
   return '';
 }
 function card(e, opts = {}){
