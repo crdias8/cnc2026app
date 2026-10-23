@@ -60,7 +60,7 @@ def main():
             if br:
                 try:
                     s = get('/stats/locations/BR', start=START, end=end, limit=30)
-                    out['regions_br'] = [{'name': x.get('name'), 'count': x.get('count')} for x in s.get('stats') or []]
+                    out['regions_br'] = [{'id': x.get('id'), 'name': x.get('name'), 'count': x.get('count')} for x in s.get('stats') or []]
                 except Exception:
                     out['regions_br'] = []
         except urllib.error.HTTPError as e:

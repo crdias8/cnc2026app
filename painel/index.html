@@ -84,6 +84,18 @@ details.tbl summary{cursor:pointer;color:var(--accent);font-weight:600}
 details.tbl table{border-collapse:collapse;margin-top:6px;width:100%}
 details.tbl td,details.tbl th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 details.tbl td:last-child,details.tbl th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.mapwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:760px){.mapwrap{grid-template-columns:1fr}}
+.map{position:relative}
+.map svg{display:block;width:100%;height:auto;max-height:520px}
+.map path{stroke:var(--surface);stroke-width:1.6;stroke-linejoin:round;transition:opacity .1s}
+.map path.on{stroke:var(--fg);stroke-width:2.4}
+.map text{font-size:15px;font-family:var(--f-body);font-weight:600;pointer-events:none}
+.map .tip{position:absolute;pointer-events:none;background:var(--nav);color:#fff;font-size:12.5px;padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-115%);opacity:0}
+.map .tip b{font-family:var(--f-display);font-weight:500;font-size:15px}
+.legend{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-top:8px;flex-wrap:wrap}
+.legend .sw{display:flex;gap:2px}.legend .sw i{width:26px;height:12px;border-radius:3px;display:block}
+.legend .zero{width:14px;height:12px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line);display:inline-block;vertical-align:-2px;margin-right:4px}
 footer{color:var(--muted);font-size:12.5px;margin-top:22px;line-height:1.6}
 @media (max-width:520px){ .kpi .num{font-size:32px} header img{height:30px} .chart svg{height:200px} }
 </style>
@@ -109,6 +121,53 @@ const fmtDT = iso => { const d = new Date(iso); return pad(d.getDate())+'/'+pad(
 const SYS = {'iOS':'iPhone/iPad (iOS)','Android':'Android','Windows':'Windows','macOS':'Mac (macOS)','Linux':'Linux','Chrome OS':'Chromebook'};
 const COUNTRY = {'BR':'Brasil','PT':'Portugal','US':'Estados Unidos','AR':'Argentina','UY':'Uruguai','PY':'Paraguai','CL':'Chile'};
 const SIZE = {'phone':'Celular','largephone':'Celular grande','tablet':'Tablet','desktop':'Computador','desktophd':'Computador (tela grande)','unknown':'Desconhecido'};
+const UF_NAME = {AC:'Acre',AL:'Alagoas',AP:'Amapá',AM:'Amazonas',BA:'Bahia',CE:'Ceará',DF:'Distrito Federal',ES:'Espírito Santo',GO:'Goiás',MA:'Maranhão',MT:'Mato Grosso',MS:'Mato Grosso do Sul',MG:'Minas Gerais',PA:'Pará',PB:'Paraíba',PR:'Paraná',PE:'Pernambuco',PI:'Piauí',RJ:'Rio de Janeiro',RN:'Rio Grande do Norte',RS:'Rio Grande do Sul',RO:'Rondônia',RR:'Roraima',SC:'Santa Catarina',SP:'São Paulo',SE:'Sergipe',TO:'Tocantins'};
+const normTxt = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const UF_BY_NAME = Object.fromEntries(Object.entries(UF_NAME).map(([k,v]) => [normTxt(v), k]));
+UF_BY_NAME['federal district'] = 'DF'; UF_BY_NAME['sao paulo'] = 'SP';
+function ufOf(x){ const id = String(x.id||'').toUpperCase(); const m = id.match(/^BR-?([A-Z]{2})$/); if (m && UF_NAME[m[1]]) return m[1]; if (UF_NAME[id]) return id; return UF_BY_NAME[normTxt(x.name)] || ''; }
+/* rampa sequencial (um só tom, do claro ao escuro) */
+const RAMP_L = ['#F6D9D5','#EBA79F','#D86A61','#B3151A','#6E0000'], RAMP_D = ['#4A2425','#7A2E2E','#B0413D','#E0605A','#FF9C93'];
+const dark = () => matchMedia('(prefers-color-scheme: dark)').matches;
+let GEO = null;
+async function loadGeo(){
+  if (GEO) return GEO;
+  await new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  const topo = await fetch('https://cdn.jsdelivr.net/npm/@highcharts/map-collection@2.3.0/countries/br/br-all.topo.json').then(r => r.json());
+  const fc = topojson.feature(topo, topo.objects.default);
+  const k = Math.cos(-15*Math.PI/180), P = ([lon,lat]) => [lon*k, -lat];
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+  const each = (g, fn) => (g.type === 'Polygon' ? [g.coordinates] : g.coordinates).forEach(p => p.forEach(r => fn(r)));
+  fc.features.forEach(f => each(f.geometry, r => r.forEach(c => { const [x,y] = P(c); x0=Math.min(x0,x); x1=Math.max(x1,x); y0=Math.min(y0,y); y1=Math.max(y1,y); })));
+  const W = 1000, s = W/(x1-x0), H = Math.round((y1-y0)*s);
+  const ufs = {};
+  fc.features.forEach(f => { let d = ''; each(f.geometry, r => { d += 'M' + r.map(c => { const [x,y] = P(c); return ((x-x0)*s).toFixed(1)+','+((y-y0)*s).toFixed(1); }).join('L') + 'Z'; });
+    const uf = f.properties['postal-code']; const [cx,cy] = P([f.properties['hc-middle-lon'], f.properties['hc-middle-lat']]); ufs[uf] = {d, c:[(cx-x0)*s, (cy-y0)*s]}; });
+  return GEO = {W, H, ufs};
+}
+async function drawMap(byUF){
+  const el = $('#map'), leg = $('#mapleg'); if (!el) return;
+  let g; try { g = await loadGeo(); } catch(e){ el.innerHTML = '<div class="empty">Não foi possível carregar o mapa agora.</div>'; return; }
+  const ramp = dark() ? RAMP_D : RAMP_L;
+  const vals = Object.entries(byUF).filter(([k]) => UF_NAME[k]).map(([,v]) => v); const mx = Math.max(1, ...vals);
+  const step = v => v <= 0 ? -1 : mx <= 1 ? 4 : Math.min(4, Math.floor(Math.log(v)/Math.log(mx+0.0001)*4.999)); // escala logarítmica: diferenças pequenas também aparecem
+  const small = new Set(['DF','SE','AL','PB','RN','ES','RJ','SC']);
+  let paths = '', labels = '';
+  Object.entries(g.ufs).forEach(([uf, o]) => {
+    const v = byUF[uf] || 0, st = step(v), fill = st < 0 ? 'var(--surface-2)' : ramp[st];
+    paths += `<path d="${o.d}" fill="${fill}" data-uf="${uf}" data-v="${v}"/>`;
+    if (!small.has(uf) || v > 0) labels += `<text x="${o.c[0].toFixed(0)}" y="${(o.c[1]+5).toFixed(0)}" text-anchor="middle" fill="${st >= 3 ? '#fff' : 'var(--muted)'}">${uf}</text>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${g.W} ${g.H}" role="img" aria-label="Mapa do Brasil com acessos por estado">${paths}${labels}</svg><div class="tip"></div>`;
+  const tip = el.querySelector('.tip'), svg = el.querySelector('svg');
+  const show = ev => { const p = ev.target.closest('path'); svg.querySelectorAll('path.on').forEach(x => x.classList.remove('on')); if (!p){ tip.style.opacity = 0; return; }
+    p.classList.add('on'); p.parentNode.insertBefore(p, p.parentNode.querySelector('text'));
+    const r = el.getBoundingClientRect(); const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left, cy = (ev.touches ? ev.touches[0].clientY : ev.clientY) - r.top;
+    tip.innerHTML = `${esc(UF_NAME[p.dataset.uf])}<br><b>${nf(+p.dataset.v)}</b> acessos`; tip.style.left = cx+'px'; tip.style.top = cy+'px'; tip.style.opacity = 1; };
+  svg.addEventListener('pointermove', show); svg.addEventListener('pointerleave', () => { tip.style.opacity = 0; svg.querySelectorAll('path.on').forEach(x => x.classList.remove('on')); });
+  svg.addEventListener('touchstart', show, {passive:true});
+  leg.innerHTML = `<span><i class="zero"></i>sem acessos</span><span>menos</span><span class="sw">${ramp.map(c => `<i style="background:${c}"></i>`).join('')}</span><span>mais (máx. ${nf(mx)})</span>`;
+}
 const REF = n => !n ? 'Acesso direto (link digitado, QR code, app instalado)' : n.replace(/^https?:\/\//,'');
 
 function drawMesh(){
@@ -207,7 +266,9 @@ function render(S){
     {name:'Abriu os ingressos do evento social', count: sum(/^evento social: ingressos$/)},
     {name:'Importou favoritos da versão de teste', count: sum(/^importou favoritos do teste$/)}
   ].sort((a,b)=>b.count-a.count);
-  const loc = (S.regions_br && S.regions_br.length ? S.regions_br.map(x=>({name:x.name||'Não identificado', count:x.count})) : (S.locations||[]).map(x=>({name:COUNTRY[(x.id||'').toUpperCase()]||x.name||'Não identificado', count:x.count})));
+  const regs = (S.regions_br||[]).map(x => ({uf: ufOf(x), count: x.count, raw: x.name}));
+  const byUF = {}; regs.forEach(r => { const k = r.uf || '?'; byUF[k] = (byUF[k]||0) + r.count; });
+  const loc = Object.entries(byUF).map(([k,c]) => ({name: k === '?' ? 'Estado não identificado' : UF_NAME[k] + ' (' + k + ')', count: c})).sort((a,b)=>b.count-a.count);
   const countries = (S.locations||[]).map(x=>({name:COUNTRY[(x.id||'').toUpperCase()]||x.name||'Não identificado', count:x.count}));
   const sys = (S.systems||[]).map(x=>({name:SYS[x.name]||x.name||'Outro', count:x.count}));
   const br = (S.browsers||[]).map(x=>({name:x.name||'Outro', count:x.count}));
@@ -223,11 +284,11 @@ function render(S){
       <div class="kpi"><div class="lab">Favoritos marcados</div><div class="num">${nf(favTotal)}</div><div class="sub">em ${nf(favList.length)} atividades diferentes</div></div>
     </div>
     ${card('Acessos ao longo do tempo','Tudo que foi registrado no app (aberturas e uso), por hora ou por dia. Passe o dedo ou o mouse no gráfico para ver cada ponto.','<div class="chart" id="tl"><svg></svg></div>', '<div class="seg" role="group" aria-label="Agrupar por"><button type="button" data-m="hora" aria-pressed="true">Por hora</button><button type="button" data-m="dia" aria-pressed="false">Por dia</button></div>')}
+    ${card('De onde acessam','Acessos por estado, identificados de forma aproximada pela conexão de internet (o contador não registra cidade). Cores mais fortes indicam mais acessos. Países: '+(countries.length?countries.map(c=>esc(c.name)+' '+nf(c.count)).join(' · '):'—'), `<div class="mapwrap"><div><div class="map" id="map"><div class="empty">Carregando mapa…</div></div><div class="legend" id="mapleg"></div></div><div>${rows(loc,{col:'Estado'})}</div></div>`)}
     <div class="grid2">
       ${card('Atividades mais favoritadas','Quantas vezes cada atividade foi marcada com a estrela.', rows(favList,{max:15,col:'Atividade'}))}
       ${card('Abas mais visitadas','', rows(abas,{col:'Aba'}))}
       ${card('Outras ações','', rows(outros,{col:'Ação'}))}
-      ${card('De onde acessam', S.regions_br && S.regions_br.length ? 'Estados do Brasil (aproximado, pela conexão de internet). Países: '+countries.map(c=>esc(c.name)+' '+nf(c.count)).join(' · ') : 'Aproximado, pela conexão de internet.', rows(loc,{col:'Local'}))}
       ${card('Sistema do aparelho','', rows(sys,{col:'Sistema'}))}
       ${card('Tipo de aparelho','', rows(sizes,{col:'Aparelho'}))}
       ${card('Navegador','', rows(br,{col:'Navegador'}))}
@@ -236,6 +297,7 @@ function render(S){
     ${teste.length ? card('Versão de teste','Acessos que ainda chegam pelo endereço de teste.', rows(teste.map(h=>({name:h.path.replace(/^\[teste\] /,''), count:h.count})).sort((a,b)=>b.count-a.count),{max:6,col:'Item'})) : ''}
     <footer>Os números são anônimos: o app não usa cookies nem guarda dados pessoais, e ninguém é identificado. Acessos feitos sem internet e por quem usa bloqueador de anúncios podem não ser contados, então os valores mostram tendências, não uma contagem exata. Fonte: GoatCounter.${S.last_error ? ' Última tentativa de atualização falhou às '+fmtDT(S.last_try)+'; exibindo os dados anteriores.' : ''}</footer>`;
 
+  drawMap(byUF);
   let mode = 'hora';
   const draw = () => lineChart($('#tl'), series(S.total && S.total.days, mode));
   draw();
