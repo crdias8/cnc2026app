@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 23/10/2026 11:49 | 5bb9c78 | Aba Filtros: "Fábrica da Taurus (visita externa)" removida da lista de Salas; a visita continua na programação de 27/10 (oficial e teste) |
 | 23/10/2026 11:47 | 05ad123 | Estatística anônima de acessos (GoatCounter, sem cookies; painel cnc2026.goatcounter.com): aberturas pelo app ou navegador, abas, favoritos marcados, downloads dos anais, instalações e cliques nos ingressos do evento social; aviso no rodapé do Início (oficial e teste) |
 | 23/10/2026 11:07 | 3ac32b5 | Evento social em 28/10, a partir das 19:30, no Baruma Dinner Club (Canela/RS), com link de informações e ingressos; novo tipo "Evento social" nos filtros; item nas Informações gerais (oficial e teste) |
 | 23/10/2026 10:49 | 406dcd2 | Nova sessão de autógrafos e de lançamento em 29/10, 09:00–10:00 (Saguão de expositores): *Balística Forense: Aspectos Técnicos e Jurídicos* e *Armas Taurus*, de Domingos Tocchetto (oficial e teste) |
