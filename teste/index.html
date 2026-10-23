@@ -339,6 +339,39 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 })();
 </script>
 
+<script>
+/* Estatística de acesso anônima (GoatCounter: sem cookies, sem dados pessoais) — painel: https://cnc2026.goatcounter.com */
+window.goatcounter = { no_onload: true };
+(function(){
+  const base = location.pathname.replace(/index\.html$/, '');
+  const app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const queue = [];
+  const send = o => { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count(o); else queue.push(o); };
+  const pre = /\/teste\/$/.test(base) ? '[teste] ' : '';
+  window.CNC_TRACK = function(name){ send({ path: pre + name, title: pre + name, event: true }); };
+  // visita: separa quem abre pelo app instalado de quem abre pelo navegador
+  send({ path: base + (app ? ' · app instalado' : ' · navegador'), title: app ? 'Abertura pelo app instalado' : 'Abertura pelo navegador' });
+  const s = document.createElement('script'); s.async = true; s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = 'https://cnc2026.goatcounter.com/count';
+  s.onload = () => { while (queue.length) window.goatcounter.count(queue.shift()); };
+  document.head.appendChild(s);
+  window.addEventListener('appinstalled', () => window.CNC_TRACK('instalou o app'));
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest('a[href*="/anais/"]');
+    if (a) window.CNC_TRACK(/alta_resolucao/.test(a.href) ? 'anais: alta resolução' : 'anais: PDF 14 MB');
+    if (ev.target.closest('#pwa-install')) window.CNC_TRACK('tocou em Instalar app');
+    const f = ev.target.closest('[data-fav]');
+    if (f && f.getAttribute('aria-pressed') !== 'true') {
+      let label = f.dataset.fav;
+      try { const e = EV.find(x => x.id === label); if (e) { const tt = e.title.replace(/\*/g,'').split(';;')[0]; label = (e.code ? e.code + ' – ' : (e.pid ? 'Pôster ' + e.pid + ' – ' : e.d + '/10 ' + e.s + ' – ')) + tt.slice(0, 60); } } catch(_){}
+      window.CNC_TRACK('favorito: ' + label);
+    }
+    if (ev.target.closest('[data-impok],[data-impfav]')) setTimeout(() => { const m = document.getElementById('impmsg') || document.querySelector('.impmsg'); if (m && /importad/.test(m.textContent)) window.CNC_TRACK('importou favoritos do teste'); }, 300);
+    if (ev.target.closest('a[href*="tri.rs"]')) window.CNC_TRACK('evento social: ingressos');
+  }, true);
+})();
+</script>
+
 <style>
 .encerra{margin-top:0;background:#FFF4D6;border:2px solid #E8A400;border-radius:var(--r);padding:14px 14px 16px;color:#2a1a00}
 .encerra h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:19px;margin:0 0 6px;color:#8B0000}
@@ -423,7 +456,7 @@ window.IS_TESTE = true;
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 11:08';
+const BUILD_STAMP = '23/10 às 11:46';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1022,7 +1055,7 @@ function renderInicio(){
         ${SCI.map(([k,list]) => `<div class="grp"><h3><span class="dot" style="--c:${AREAS[k].c}"></span>${AREAS[k].n}</h3><ul>${list.map(([n,o,c]) => `<li><strong>${esc(n)}</strong> (${esc(o)})${c===1?' · Coordenador':c===2?' · Coordenadora':''}</li>`).join('')}</ul></div>`).join('')}
       </div>
     </div>
-    <footer>Programação sujeita a alterações. Realização: ACRIGS · Gerenciamento: Acontece Eventos.</footer>
+    <footer>Programação sujeita a alterações. Realização: ACRIGS · Gerenciamento: Acontece Eventos.${typeof window.CNC_TRACK === 'function' ? '<br>Este app conta acessos de forma anônima, sem cookies e sem dados pessoais.' : ''}</footer>
   </div>`;
   drawMesh();
 }
@@ -1160,6 +1193,7 @@ function go(k, opts = {}){
   renderAF(); measureHeader();
   const sel = $('#tabs [aria-selected="true"]'); if (sel) sel.scrollIntoView({block:'nearest',inline:'center'});
   try{ history.replaceState(null,'','#'+(view==='dia'?'dia'+curDay:view)); }catch(e){}
+  if (!opts.keepScroll && typeof window.CNC_TRACK === 'function') window.CNC_TRACK('aba: ' + (view==='dia' ? curDay+'/10' : view));
   if (opts.toNow && anchor){ const el = document.getElementById('t'+anchor.replace(':','')); if (el){ window.scrollTo(0, el.getBoundingClientRect().top + scrollY - $('#hdr').offsetHeight - 4); return; } }
   if (!opts.keepScroll) window.scrollTo(0,0);
 }
