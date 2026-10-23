@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 23/10/2026 16:04 | fbbae94 | Visita técnica à fábrica da Taurus (27/10): removida a etiqueta BA (deixa de aparecer no filtro da área BA) e incluído o aviso "Atividade restrita aos participantes da 2ª Conferência do Sistema Nacional de Análise Balística - SINAB" (oficial e teste) |
 | 23/10/2026 15:25 | 24b2944 | OE.R.2 (30/10, 10:00–11:55, Sala Mário Quintana): removidos dos debatedores o "Representante da Polícia Civil RS" e o "Representante ABACRIM" (oficial e teste) |
 | 23/10/2026 15:10 | 85214e0 | Quadro "App no celular" no Samsung Internet: passo 1 indica o menu ≡ (embaixo, à direita) e aviso para o erro "Não foi possível instalar o aplicativo web" (abrir no Chrome ou Adicionar página a → Tela inicial). Demais navegadores sem mudança (oficial e teste) |
 | 23/10/2026 13:50 | 929fb65 | Dias e horários de EX.1 e EX.2 invertidos (Arena Elis Regina): EX.2 (VMD, Equipatec) passa para 28/10 14:30–15:25; EX.1 (Tablet Multiespectral Forenscope, Equipatec) passa para 29/10 10:00–10:55 (oficial e teste) |
