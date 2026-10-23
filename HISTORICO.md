@@ -4,7 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
-| 23/10/2026 09:25 | (esta) | Pôsteres: nº 383 e 537 passam de 30/10 para 29/10; nº 392 e 590 passam de 29/10 para 30/10 (oficial e teste) |
+| 23/10/2026 09:25 | 71e13cc | Pôsteres: nº 383 e 537 passam de 30/10 para 29/10; nº 392 e 590 passam de 29/10 para 30/10 (oficial e teste) |
 | 23/10/2026 09:16 | 875a456 | Teste: faixa amarela com aviso de desativação e link para as instruções |
 | 23/10/2026 09:10 | a89cf08 | Importar favoritos só no iPhone e some após importar |
 | 23/10/2026 09:06 | 911c4f2 | Favoritos: levar da versão de teste para a oficial (link e copiar/colar); corrige link #instalar |
