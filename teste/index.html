@@ -422,7 +422,7 @@ window.IS_TESTE = true;
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 09:56';
+const BUILD_STAMP = '23/10 às 10:49';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -519,6 +519,7 @@ const EVENTS = [
 
 /* ===== 29/10 ===== */
 [29,'09:00','10:00','EXP','', 'A','*Reprodução Simulada dos Fatos: Fundamentos da Reconstrução Criminal*','Autor: Andrei Röehrs Portinho (responsável pela sessão)','Livros',''],
+[29,'09:00','10:00','EXP','', 'A','*Balística Forense: Aspectos Técnicos e Jurídicos*;;*Armas Taurus*','Autor: Domingos Tocchetto (responsável pela sessão)','Livros|Balística forense',''],
 [29,'15:30','18:00','EXP','', 'A','*Criminalística: procedimentos e metodologias* (6ª edição)','Vários autores;;Responsáveis pela sessão: Gabrielle Virgínia Ferreira Cardoso e Celso Felipe Bandeira de Sá','Livros',''],
 [29,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [29,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
@@ -829,6 +830,7 @@ EVENTS.forEach((r, i) => {
   if (type === 'S' || flags.includes('s')) areas.push('SN');
   let id = code ? code : `${d}-${room||'x'}-${s}`;
   if (code && EVENTS.filter(x => x[4] === code).length > 1) id = `${code}@${d}-${s}`;
+  if (!code){ const dup = EVENTS.slice(0, i).filter(x => !x[4] && x[0] === d && x[3] === room && x[1] === s).length; if (dup) id += '-' + (dup + 1); } // sessões simultâneas no mesmo local
   const kws = kw ? kw.split('|') : [];
   const ev = { i, id, d, s, e, sm:mins(s), em:mins(e), room, code, type, title, people: people ? people.split(';;') : [], kws, flags, areas };
   ev.staff = staffFor(d, room, ev.sm, ev.em, type, code);
