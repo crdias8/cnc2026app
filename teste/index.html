@@ -456,7 +456,7 @@ window.IS_TESTE = true;
 </main>
 
 <script>
-const BUILD_STAMP = '23/10 às 11:49';
+const BUILD_STAMP = '23/10 às 11:53';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1081,7 +1081,7 @@ function renderFiltros(){
   const cnt = (fn) => EV.filter(e => e.type !== 'B' && fn(e)).length;
   const typeChecks = TYPE_FILTER.map(t => `<label class="chk"><input type="checkbox" data-f="types" value="${t}" ${F.types.has(t)?'checked':''}><span class="lab">${TYPES[t]}</span><span class="c">${cnt(e=>e.type===t)}</span></label>`).join('');
   const areaChecks = Object.entries(AREAS).map(([k,a]) => `<label class="chk"><input type="checkbox" data-f="areas" value="${k}" ${F.areas.has(k)?'checked':''}>${k==='SN'?SINAB_TAG:`<span class="tag" style="--c:${a.c};--t:${a.t}">${k}</span>`}<span class="lab">${a.n}</span><span class="c">${cnt(e=>e.areas.includes(k))}</span></label>`).join('');
-  const roomChecks = ROOM_ORDER.filter(r => r!=='GER' && r!=='TAU').map(r => `<label class="chk"><input type="checkbox" data-f="rooms" value="${r}" ${F.rooms.has(r)?'checked':''}><span class="lab">${ROOMS[r].n}${ROOMS[r].x?` <span class="c">(${ROOMS[r].x})</span>`:''}</span></label>`).join('');
+  const roomChecks = ROOM_ORDER.filter(r => !['GER','TAU','BAR'].includes(r)).map(r => `<label class="chk"><input type="checkbox" data-f="rooms" value="${r}" ${F.rooms.has(r)?'checked':''}><span class="lab">${ROOMS[r].n}${ROOMS[r].x?` <span class="c">(${ROOMS[r].x})</span>`:''}</span></label>`).join('');
   const periodPills = Object.entries(PERIODS).map(([k,[l]]) => `<label class="pill"><input type="checkbox" data-f="periods" value="${k}" ${F.periods.has(k)?'checked':''}>${l}</label>`).join('');
   const slotPills = SLOTS.map(s => `<label class="pill"><input type="checkbox" data-f="slots" value="${s}" ${F.slots.has(s)?'checked':''}>${s}</label>`).join('');
   $('#v-filtros').innerHTML = `
