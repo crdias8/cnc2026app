@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 23/10/2026 11:56 | 1ab477a | Sessão de autógrafos e de lançamento de 28/10 (*Reconstrução de Colisões Veiculares* e *Fundamentos de Estatística Aplicados na Reconstrução de Acidentes de Trânsito*, Wilson Toresan Jr. e Nortthon Didyk) passa de 09:00–10:00 para 10:00–11:00; favoritos já marcados preservados (oficial e teste). **Origem:** pedido de Wilson Toresan Jr. à Deisi, por WhatsApp, às 11h42 de 23/10/2026. |
 | 23/10/2026 11:52 | 6db6d86 | Aba Filtros: "Baruma Dinner Club (Canela/RS)" removido da lista de Salas; o evento social continua na programação de 28/10 (oficial e teste) |
 | 23/10/2026 11:49 | 5bb9c78 | Aba Filtros: "Fábrica da Taurus (visita externa)" removida da lista de Salas; a visita continua na programação de 27/10 (oficial e teste) |
 | 23/10/2026 11:47 | 05ad123 | Estatística anônima de acessos (GoatCounter, sem cookies; painel cnc2026.goatcounter.com): aberturas pelo app ou navegador, abas, favoritos marcados, downloads dos anais, instalações e cliques nos ingressos do evento social; aviso no rodapé do Início (oficial e teste) |
