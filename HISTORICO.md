@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 24/10/2026 21:05 | 1b7c1b8 | Versão de TESTE: botão "Resumo estendido em PDF" (pôsteres) e "Ementa em PDF" (orais) nos cards, com estados com conexão / sem conexão / disponível offline. 147 PDFs individuais extraídos dos anais em alta resolução, na pasta /trabalhos (94 pôsteres e 53 orais); 36 pôsteres e 22 orais sem PDF ficam sem botão. Registro completo em trabalhos/INDICE.csv. Versão oficial ainda sem o botão |
 | 23/10/2026 17:20 | e549644 | BA.P.8 (28/10, 17:10–18:05, Teatro Lupicínio Rodrigues): apoio de sala passa de Claudemir Rodrigues Dias Filho para Keila Aparecida de Almeida (oficial e teste) |
 | 23/10/2026 16:04 | fbbae94 | Visita técnica à fábrica da Taurus (27/10): removida a etiqueta BA (deixa de aparecer no filtro da área BA) e incluído o aviso "Atividade restrita aos participantes da 2ª Conferência do Sistema Nacional de Análise Balística - SINAB" (oficial e teste) |
 | 23/10/2026 15:25 | 24b2944 | OE.R.2 (30/10, 10:00–11:55, Sala Mário Quintana): removidos dos debatedores o "Representante da Polícia Civil RS" e o "Representante ABACRIM" (oficial e teste) |
