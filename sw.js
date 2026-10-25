@@ -2,7 +2,7 @@
    Estratégia: a página sempre busca primeiro a versão mais nova na internet;
    só usa a cópia salva quando não há conexão (ou a rede demora demais).
    VERSION é trocada a cada publicação (preenchida pelo build). */
-const VERSION = 'bf5692853d';
+const VERSION = 'c5f59533f5';
 const KILL = false; // true = remove o modo offline dos aparelhos na próxima abertura com internet
 const CACHE = 'cnc2026-' + VERSION;
 const CORE = ['./', './index.html', './manifest.webmanifest',
