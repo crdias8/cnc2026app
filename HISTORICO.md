@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 25/10/2026 18:50 | 103d5f7 | Nova sessão de autógrafos e de lançamento em 30/10, 09:00–10:00 (Saguão de expositores): *Criminalística* (9ª edição), vários autores, responsável Cássio Thyone Almeida de Rosa (oficial e teste) |
 | 24/10/2026 22:05 | d357271 | Painel: novo indicador "PDFs de trabalhos abertos" e listas "Resumos estendidos mais abertos" e "Ementas mais abertas", com número/código e título; títulos de pôsteres no INDICE.csv passam a usar a grafia da programação |
 | 24/10/2026 21:18 | 19faddf | Versão OFICIAL: botões "Resumo estendido em PDF" (94 pôsteres) e "Ementa em PDF" (53 orais) nos cards, com leitura offline do PDF já aberto; estado (sem conexão / disponível offline) abaixo do botão. Cards sem PDF nos anais ficam sem botão (ver trabalhos/INDICE.csv) |
 | 24/10/2026 21:05 | 1b7c1b8 | Versão de TESTE: botão "Resumo estendido em PDF" (pôsteres) e "Ementa em PDF" (orais) nos cards, com estados com conexão / sem conexão / disponível offline. 147 PDFs individuais extraídos dos anais em alta resolução, na pasta /trabalhos (94 pôsteres e 53 orais); 36 pôsteres e 22 orais sem PDF ficam sem botão. Registro completo em trabalhos/INDICE.csv. Versão oficial ainda sem o botão |
