@@ -250,6 +250,9 @@ function render(S){
   const total = viaApp + viaNav;
   const teste = H.filter(h => /^\/cnc2026app\/teste\//.test(h.path) || /^\[teste\]/.test(h.path));
   const installs = sum(/^instalou o app$/);
+  const pdfs = ev.filter(h => /^pdf: /.test(h.path)).map(h => { const id = h.path.slice(5); const t = TRAB[id];
+    return {name: (t ? t.rot + ' – ' + t.tit : id), count: h.count, poster: /^POS-/.test(id)}; }).sort((a,b)=>b.count-a.count);
+  const pdfTotal = pdfs.reduce((a,x)=>a+x.count,0), pdfP = pdfs.filter(x=>x.poster), pdfO = pdfs.filter(x=>!x.poster);
   const anais = sum(/^anais: /);
   const favs = ev.filter(h => /^favorito: /.test(h.path));
   const favTotal = favs.reduce((a,h)=>a+h.count,0);
@@ -280,12 +283,15 @@ function render(S){
       <div class="kpi"><div class="lab">Aberturas do app</div><div class="num">${nf(total)}</div><div class="sub">desde 23/10, versão oficial</div></div>
       <div class="kpi"><div class="lab">Pelo app instalado</div><div class="num">${pct}%</div><div class="split" title="App instalado: ${nf(viaApp)} · Navegador: ${nf(viaNav)}"><i style="width:${pct}%"></i></div><div class="sub">${nf(viaApp)} pelo ícone · ${nf(viaNav)} pelo navegador</div></div>
       <div class="kpi"><div class="lab">Instalações registradas</div><div class="num">${nf(installs)}</div><div class="sub">Android/computador; no iPhone não é registrado</div></div>
+      <div class="kpi"><div class="lab">PDFs de trabalhos abertos</div><div class="num">${nf(pdfTotal)}</div><div class="sub">${nf(pdfP.reduce((a,x)=>a+x.count,0))} resumos estendidos · ${nf(pdfO.reduce((a,x)=>a+x.count,0))} ementas</div></div>
       <div class="kpi"><div class="lab">Downloads dos anais</div><div class="num">${nf(anais)}</div><div class="sub">as duas versões do PDF</div></div>
       <div class="kpi"><div class="lab">Favoritos marcados</div><div class="num">${nf(favTotal)}</div><div class="sub">em ${nf(favList.length)} atividades diferentes</div></div>
     </div>
     ${card('Acessos ao longo do tempo','Tudo que foi registrado no app (aberturas e uso), por hora ou por dia. Passe o dedo ou o mouse no gráfico para ver cada ponto.','<div class="chart" id="tl"><svg></svg></div>', '<div class="seg" role="group" aria-label="Agrupar por"><button type="button" data-m="hora" aria-pressed="true">Por hora</button><button type="button" data-m="dia" aria-pressed="false">Por dia</button></div>')}
     ${card('De onde acessam','Acessos por estado, identificados de forma aproximada pela conexão de internet (o contador não registra cidade). Cores mais fortes indicam mais acessos. Países: '+(countries.length?countries.map(c=>esc(c.name)+' '+nf(c.count)).join(' · '):'—'), `<div class="mapwrap"><div><div class="map" id="map"><div class="empty">Carregando mapa…</div></div><div class="legend" id="mapleg"></div></div><div>${rows(loc,{col:'Estado'})}</div></div>`)}
     <div class="grid2">
+      ${card('Resumos estendidos mais abertos','PDFs de pôsteres abertos pelo botão do card.', rows(pdfP,{max:15,col:'Pôster'}))}
+      ${card('Ementas mais abertas','PDFs de apresentações orais abertos pelo botão do card.', rows(pdfO,{max:15,col:'Apresentação oral'}))}
       ${card('Atividades mais favoritadas','Quantas vezes cada atividade foi marcada com a estrela.', rows(favList,{max:15,col:'Atividade'}))}
       ${card('Abas mais visitadas','', rows(abas,{col:'Aba'}))}
       ${card('Outras ações','', rows(outros,{col:'Ação'}))}
@@ -306,7 +312,19 @@ function render(S){
 }
 
 drawMesh();
-fetch('stats.json?t=' + Date.now(), {cache:'no-store'}).then(r => r.json()).then(render).catch(() => {
+/* títulos dos trabalhos (índice dos PDFs) para dar nome aos PDFs abertos */
+const TRAB = {};
+const loadTrab = fetch('../trabalhos/INDICE.csv?t=' + Date.now(), {cache:'no-store'}).then(r => r.text()).then(txt => {
+  const rowsCsv = []; let row = [], f = '', q = false;
+  for (let i = 0; i < txt.length; i++){ const c = txt[i];
+    if (q){ if (c === '"' && txt[i+1] === '"'){ f += '"'; i++; } else if (c === '"') q = false; else f += c; }
+    else if (c === '"') q = true; else if (c === ','){ row.push(f); f = ''; } else if (c === '\n' || c === '\r'){ if (c === '\r' && txt[i+1] === '\n') i++; row.push(f); rowsCsv.push(row); row = []; f = ''; } else f += c; }
+  if (f || row.length){ row.push(f); rowsCsv.push(row); }
+  rowsCsv.slice(1).forEach(r => { if (r.length < 3) return; const poster = /p[oô]ster/i.test(r[0]); const id = poster ? 'POS-' + r[1] : r[1];
+    let tit = r[2]; if (poster && tit === tit.toUpperCase()) tit = tit.charAt(0) + tit.slice(1).toLowerCase();
+    TRAB[id] = {rot: poster ? 'Pôster ' + r[1] : r[1], tit: tit.length > 80 ? tit.slice(0, 78) + '…' : tit}; });
+}).catch(() => {});
+Promise.all([fetch('stats.json?t=' + Date.now(), {cache:'no-store'}).then(r => r.json()), loadTrab]).then(([S]) => S).then(render).catch(() => {
   $('#upd').textContent = 'Não foi possível carregar os dados agora.';
   $('#main').innerHTML = '<div class="notice"><h2>Sem dados no momento</h2><p>Tente recarregar a página em alguns instantes.</p></div>';
 });
