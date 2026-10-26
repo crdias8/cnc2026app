@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 26/10/2026 09:13 | 4fd1306 | LC.O.4 (29/10, 14:00–14:25): Érika Lorena Chrominski incluída como apresentadora, junto com Maria Carolina Vieira da Rocha (oficial e teste) |
 | 25/10/2026 18:50 | 103d5f7 | Nova sessão de autógrafos e de lançamento em 30/10, 09:00–10:00 (Saguão de expositores): *Criminalística* (9ª edição), vários autores, responsável Cássio Thyone Almeida de Rosa (oficial e teste) |
 | 24/10/2026 22:05 | d357271 | Painel: novo indicador "PDFs de trabalhos abertos" e listas "Resumos estendidos mais abertos" e "Ementas mais abertas", com número/código e título; títulos de pôsteres no INDICE.csv passam a usar a grafia da programação |
 | 24/10/2026 21:18 | 19faddf | Versão OFICIAL: botões "Resumo estendido em PDF" (94 pôsteres) e "Ementa em PDF" (53 orais) nos cards, com leitura offline do PDF já aberto; estado (sem conexão / disponível offline) abaixo do botão. Cards sem PDF nos anais ficam sem botão (ver trabalhos/INDICE.csv) |
