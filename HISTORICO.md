@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 26/10/2026 09:37 | 9aad2ae | Pôster 647: botão "Resumo estendido em PDF" volta ao card com a versão revisada (Word enviado pela comissão em 26/10), diagramada no padrão dos anais para o COMPLEMENTO — arquivo trabalhos/poster_647_complemento.pdf, 5 páginas, numeração provisória 592–596 (primeiro pôster de LC no complemento) (oficial e teste) |
 | 26/10/2026 09:32 | 2b5ea71 | 27/10, 18:30: "Cerimônia de abertura" passa a "Cerimônia de abertura e coquetel de boas-vindas" no card e nas Informações gerais (oficial e teste) |
 | 26/10/2026 09:22 | 10f9530 | Pôster 647: PDF do resumo estendido removido a pedido da comissão (erro no arquivo); card volta a ficar sem botão e o arquivo trabalhos/poster_647.pdf foi apagado; INDICE.csv atualizado (oficial e teste) |
 | 26/10/2026 09:13 | 4fd1306 | LC.O.4 (29/10, 14:00–14:25): Érika Lorena Chrominski incluída como apresentadora, junto com Maria Carolina Vieira da Rocha (oficial e teste) |
