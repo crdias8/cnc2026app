@@ -186,9 +186,10 @@ section.view{padding-top:16px}
 .pdfst.saved{color:var(--now);font-weight:600}
 .ev > .noterow{grid-column:1/-1}
 .noterow{margin-top:10px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:0}
-.notebtn{max-width:100%;box-sizing:border-box;display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--brand);color:var(--brand);background:var(--surface);border-radius:999px;padding:7px 14px 7px 11px;font:600 13.5px/1.25 var(--f-body);cursor:pointer;text-align:left}
+.notebtn{max-width:100%;box-sizing:border-box;display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--brand);color:#fff;background:var(--brand);border-radius:999px;padding:7px 14px 7px 11px;font:600 13.5px/1.25 var(--f-body);cursor:pointer;text-align:left;-webkit-appearance:none;appearance:none}
 .notebtn svg{width:17px;height:17px;flex:none;transition:transform .2s}
-.notebtn[aria-expanded="true"]{background:var(--brand);color:#fff}
+.notebtn,.notebtn:hover,.notebtn:active,.notebtn:focus{background:var(--brand);color:#fff}
+.notebtn[aria-expanded="true"]{filter:brightness(.85)}
 .notebox{align-self:stretch;background:var(--surface-2);border-left:3px solid var(--brand);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.45}
 .notebox p{margin:0 0 6px}.notebox ul{margin:0;padding-left:18px;display:grid;gap:5px}
 .impfav{margin:22px 0 4px;font-size:14px}.impfav p{margin:8px 0 6px}.impfav textarea{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:8px;border:1px solid var(--line);border-radius:8px}.ibtn2{margin-top:6px;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:9px 18px;font-weight:600;font-size:15px;cursor:pointer}.impmsg{color:var(--now);font-weight:600;margin-top:6px}
@@ -478,7 +479,7 @@ window.NOTES_ON = true; // botão de lembrete nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '26/10 às 11:41';
+const BUILD_STAMP = '26/10 às 11:46';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
