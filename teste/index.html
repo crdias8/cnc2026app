@@ -191,7 +191,7 @@ section.view{padding-top:16px}
 .notebtn,.notebtn:hover,.notebtn:active,.notebtn:focus{background:var(--brand);color:#fff}
 .notebtn[aria-expanded="true"]{filter:brightness(.85)}
 .notebox{align-self:stretch;background:var(--surface-2);border-left:3px solid var(--brand);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.45}
-.notebox p{margin:0 0 6px}.notebox ul{margin:0;padding-left:18px;display:grid;gap:5px}
+.notebox p{margin:0 0 6px}.notelink{display:flex;align-items:center;gap:7px;margin-top:10px;color:var(--brand);font-weight:600;text-decoration:underline;text-underline-offset:2px}.notelink svg{width:18px;height:18px;flex:none}.notebox ul{margin:0;padding-left:18px;display:grid;gap:5px}
 .impfav{margin:22px 0 4px;font-size:14px}.impfav p{margin:8px 0 6px}.impfav textarea{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:8px;border:1px solid var(--line);border-radius:8px}.ibtn2{margin-top:6px;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:9px 18px;font-weight:600;font-size:15px;cursor:pointer}.impmsg{color:var(--now);font-weight:600;margin-top:6px}
 .fav[aria-pressed="true"]{color:#E2A400}
 .fav[aria-pressed="true"] svg path{fill:currentColor}
@@ -479,7 +479,7 @@ window.NOTES_ON = true; // botão de lembrete nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '26/10 às 14:52';
+const BUILD_STAMP = '26/10 às 15:59';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1016,7 +1016,7 @@ const ICON_PDF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l5 
 const ICON_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19" r="1.3" fill="currentColor"/><path d="M3 3l18 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
 const ICON_OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const NOTES = {
-  'PA.N.1': { label: 'Lembrete aos inscritos', html: '<p>Para o acompanhamento adequado das demonstrações e exercícios propostos, é obrigatório que o aluno possua:</p><ul><li>Computador/Notebook com acesso estável à internet e um mouse com scroll (fundamental para navegação em mapas).</li><li>Software QGIS instalado (recomenda-se a versão LTR - Long Term Release mais recente).</li><li>Conta ativa no Google Earth Engine (recomenda-se criar com antecedência, pois a aprovação pode levar alguns dias).</li></ul>' }
+  'PA.N.1': { label: 'Lembrete aos inscritos', html: '<p>Para o acompanhamento adequado das demonstrações e exercícios propostos, é obrigatório que o aluno possua:</p><ul><li>Computador/Notebook com acesso estável à internet e um mouse com scroll (fundamental para navegação em mapas).</li><li>Software QGIS instalado (recomenda-se a versão LTR - Long Term Release mais recente).</li><li>Conta ativa no Google Earth Engine (recomenda-se criar com antecedência, pois a aprovação pode levar alguns dias).</li></ul><a class="notelink" href="/cnc2026app/materiais/PA.N.1_Apostila_Cadastro_Google_Earth_Engine.pdf" target="_blank" rel="noopener" data-material="PA.N.1 apostila GEE">' + ICON_PDF + '<span>Passo a passo: cadastro gratuito no Google Earth Engine (apostila em PDF)</span></a>' }
 };
 const ICON_INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.3" r="1.3" fill="currentColor"/></svg>';
 function noteHTML(e){
@@ -1030,6 +1030,7 @@ document.addEventListener('click', ev => {
   b.setAttribute('aria-expanded', open); box.hidden = !open;
   if (open && typeof window.CNC_TRACK === 'function') window.CNC_TRACK('lembrete: ' + b.dataset.note);
 });
+document.addEventListener('click', ev => { const a = ev.target.closest('a[data-material]'); if (a && typeof window.CNC_TRACK === 'function') window.CNC_TRACK('material: ' + a.dataset.material); });
 function pdfOn(){ return typeof PDFS !== 'undefined' && window.PDF_ON === true; }
 function pdfInner(id){
   const e = EV.find(x => x.id === id); const label = e && e.pid ? 'Resumo estendido em PDF' : 'Ementa em PDF';
