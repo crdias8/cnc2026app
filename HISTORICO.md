@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 26/10/2026 18:35 | f96dac9 | Aba 27/10: novo card "Credenciamento" (Institucional, a partir das 07:30, sem sala indicada), a pedido da coordenação (oficial e teste). |
 | 26/10/2026 18:29 | 8a14c05 | Início › Informações gerais: novo primeiro item "27/10 · a partir das 7:30 — Credenciamento.", a pedido da coordenação (oficial e teste). |
 | 26/10/2026 16:41 | 6e8de04 | Início › Informações gerais: novo item "Apresentações orais — Modelo de slides do congresso para as apresentações orais. Baixe aqui o modelo (PowerPoint · 2,4 MB)", com download de materiais/Modelo_slides_apresentacoes_orais_CNC2026.pptx (template de 2 slides enviado pela coordenação em 26/10). Downloads contados no painel como "material: modelo de slides". Aprovado pela coordenação a partir do print (oficial e teste). |
 | 26/10/2026 16:30 | f7dc072 | Cerimônia de premiação e encerramento (30/10, Teatro Lupicínio Rodrigues): o card passa a mostrar "a partir das 18:30", sem horário de término (antes 18:30–20:30), a pedido da coordenação (oficial e teste). |
