@@ -479,7 +479,7 @@ window.NOTES_ON = true; // botão de lembrete nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '26/10 às 19:24';
+const BUILD_STAMP = '26/10 às 19:41';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -744,6 +744,7 @@ const POSTERS = [[28, "08:30", "10:00", "393", "BA", "Análise forense da compos
    Faixas (linhas da tabela): 0 09:45–10:25 · 1 10:30–10:55 · 2 11:00–11:25 · 3 11:30–12:10 ·
    4 13:15–13:55 · 5 14:00–14:25 · 6 14:30–14:55 · 7 15:00–15:25 · 8 15:55–17:05 · 9 17:10–18:15
    29/10: Luciano Beux substituído por Márcio Gil Faccin (Teatro Lupicínio, 11:00–12:10) e por Laércio Silva de Campos Júnior (Sala Alcides Maya, orais 13:15–15:25), a pedido da coordenação em 26/10.
+   26/10: com a troca PA.P.2 ⇄ PA.P.10, os apoios acompanham as palestras — Dienifer Cunha dos Santos em 28/10 JGU 17:10–18:15 (PA.P.2) e Pedro Augusto Loguercio Bittencourt em 29/10 IBE 13:15–14:25 (PA.P.10).
    Formato: dia: { sala: [[linhaInicial, linhaFinal, 'Nome'], ...] } */
 const STAFF_ROWS = [['09:45','10:25'],['10:30','10:55'],['11:00','11:25'],['11:30','12:10'],['13:15','13:55'],['14:00','14:25'],['14:30','14:55'],['15:00','15:25'],['15:55','17:05'],['17:10','18:15']];
 const STAFF = {
@@ -756,14 +757,14 @@ const STAFF = {
   MSC: [[0,3,'Fábio Rodrigues Cieslak'],[4,7,'Eduardo Lima Silva'],[8,8,'Alex Flores Mendes'],[9,9,'Fábio Rodrigues Cieslak']],
   EVE: [[0,3,'Cristiane Marzotto'],[4,9,'Monica Midori Marcon Uchida Sguazzardi']],
   DMA: [[0,3,'Jonathan Tobias Ramos'],[4,7,'Laércio Silva de Campos Júnior'],[8,9,'Renata Cortez']],
-  JGU: [[0,3,'Renata Cortez'],[4,5,'Jonathan Tobias Ramos'],[6,7,'Sheila Cristina Wendt'],[8,9,'Pedro Augusto Loguercio Bittencourt']],
+  JGU: [[0,3,'Renata Cortez'],[4,5,'Jonathan Tobias Ramos'],[6,7,'Sheila Cristina Wendt'],[8,8,'Pedro Augusto Loguercio Bittencourt'],[9,9,'Dienifer Cunha dos Santos']],
   AMA: [[0,1,'Acontece / Santiago e Cintra'],[2,3,'Monica Midori Marcon Uchida Sguazzardi'],[4,7,'Themis Collares Antunes'],[8,9,'Jair de Almeida']]
 },
 29: {
   TEA: [[0,1,'Lehi Sudy dos Santos'],[2,3,'Márcio Gil Faccin'],[4,7,'Renata Cortez'],[8,9,'Fábio Rodrigues Cieslak']],
   ARE: [[0,1,'Acontece / Equipatec'],[2,3,'Anderson Fraga Morales'],[4,7,'Milena Pellin Morsoletto'],[8,9,'Eduardo Lima Silva']],
   JSL: [[0,1,'Acontece / Griaule'],[2,3,'Acontece / Regula'],[4,7,'Raimundo Humberto Sena de Oliveira'],[8,9,'Michelle Larissa Zini Lise']],
-  IBE: [[0,1,'Laércio Silva de Campos Júnior'],[2,3,'Jonathan Tobias Ramos'],[4,5,'Dienifer Cunha dos Santos'],[6,7,'Eduardo Lima Silva'],[8,9,'Milena Pellin Morsoletto']],
+  IBE: [[0,1,'Laércio Silva de Campos Júnior'],[2,3,'Jonathan Tobias Ramos'],[4,5,'Pedro Augusto Loguercio Bittencourt'],[6,7,'Eduardo Lima Silva'],[8,9,'Milena Pellin Morsoletto']],
   MQU: [[0,3,'Cristiane Marzotto'],[4,7,'Jonathan Tobias Ramos'],[8,9,'Juliana Dora Walenciuk Ferreira']],
   MSC: [[0,3,'Renata Cortez'],[4,7,'Tatiana Pereira Gonzalez'],[8,8,'Michelle Larissa Zini Lise'],[9,9,'Barbara Zaffari Cavedon']],
   EVE: [[0,3,'Fábio Rodrigues Cieslak'],[4,7,'Sheila Cristina Wendt'],[8,9,'Marcos Antônio Contel Secco']],
