@@ -232,6 +232,12 @@ legend .linkbtn{font-family:var(--f-body);text-transform:none;letter-spacing:0;f
 
 footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.wifi{display:flex;gap:12px;align-items:flex-start;background:var(--brand);color:#fff;border-radius:var(--r);padding:14px 16px;margin:0 0 12px}
+.wifi svg{width:30px;height:30px;flex:none;margin-top:2px}
+.wifi .wt{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em;font-size:17px;margin-bottom:2px}
+.wifi .wl{font-size:16px;line-height:1.6}.wifi b{font-weight:700;letter-spacing:.02em}
+.wcopy{margin-left:8px;background:#fff;color:var(--brand);border:0;border-radius:999px;padding:3px 12px;font:600 13px/1.4 var(--f-body);cursor:pointer;vertical-align:1px}
+.wmsg{font-size:12.5px;opacity:.9;min-height:0}
 </style>
 
 </head>
@@ -409,7 +415,7 @@ window.goatcounter = { no_onload: true };
 </main>
 
 <script>
-const BUILD_STAMP = '26/10 às 19:41';
+const BUILD_STAMP = '27/10 às 08:41';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -963,6 +969,9 @@ document.addEventListener('click', ev => {
   if (open && typeof window.CNC_TRACK === 'function') window.CNC_TRACK('lembrete: ' + b.dataset.note);
 });
 document.addEventListener('click', ev => { const a = ev.target.closest('a[data-material]'); if (a && typeof window.CNC_TRACK === 'function') window.CNC_TRACK('material: ' + a.dataset.material); });
+document.addEventListener('click', async ev => { const b = ev.target.closest('[data-wifi]'); if (!b) return; const m = b.closest('.wifi').querySelector('.wmsg');
+  try { await navigator.clipboard.writeText(b.dataset.wifi); m.textContent = 'Senha copiada.'; } catch(e){ m.textContent = 'Não deu para copiar: digite cnc2026@'; }
+  if (typeof window.CNC_TRACK === 'function') window.CNC_TRACK('wifi: copiou a senha'); });
 function pdfOn(){ return typeof PDFS !== 'undefined' && window.PDF_ON === true; }
 function pdfInner(id){
   const e = EV.find(x => x.id === id); const label = e && e.pid ? 'Resumo estendido em PDF' : 'Ementa em PDF';
@@ -1055,6 +1064,13 @@ function renderInicio(){
     ${typeof PWA_INSTALL_HTML === 'function' ? PWA_INSTALL_HTML() : ''}
     <div class="block">
       <h2>Informações gerais</h2>
+      <div class="wifi">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/></svg>
+        <div><div class="wt">Wi-Fi do evento</div>
+        <div class="wl">Rede: <b>CNC2026</b></div>
+        <div class="wl">Senha: <b>cnc2026@</b> <button type="button" class="wcopy" data-wifi="cnc2026@">Copiar senha</button></div>
+        <div class="wmsg" aria-live="polite"></div></div>
+      </div>
       <ul class="info">
         <li><b>27/10 · a partir das 7:30</b><span>Credenciamento.</span></li>
         <li><b>27/10 · a partir das 8:00</b><span>Minicursos.</span></li>
