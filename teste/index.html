@@ -497,7 +497,7 @@ window.NOTES_ON = true; // botão de lembrete nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '27/10 às 09:21';
+const BUILD_STAMP = '27/10 às 09:30';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -524,6 +524,7 @@ const EVENTS = [
 /* ===== 28/10 ===== */
 [28,'10:00','11:00','EXP','', 'A','*Reconstrução de Colisões Veiculares*;;*Fundamentos de Estatística Aplicados na Reconstrução de Acidentes de Trânsito* (2ª edição)','Autores: Wilson Toresan Jr. (responsável pela sessão) e Nortthon Didyk','Livros|Acidente de trânsito',''],
 [28,'15:30','16:30','EXP','', 'A','*Entomologia Forense: quando os insetos são vestígios* (4ª edição);;*Entomologia Forense Médico-Legal: da cronotanatognose à entomogenética*;;*Entomologia Forense no Brasil: insetos peritos*','Vários autores;;Responsável pela sessão: Janyra Oliveira-Costa','Livros|Entomologia forense',''],
+[28,'09:00','18:00','EXP','', 'A','Literatura de cordel: *O Perito Criminal e o Corpo que sabia demais* (Parte I – Augusta e os Legistas)','Autor: José Alysson D. M. Medeiros;;Distribuição gratuita: [[baixe o PDF aqui|https://crdias8.github.io/cnc2026app/materiais/Cordel_O_Perito_Criminal_e_o_Corpo_que_sabia_demais.pdf]] ou pegue seu exemplar no cordel próximo à área de lançamento de livros.','Livros|Literatura de cordel','o'],
 [28,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [28,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
 [28,'10:00','10:55','TEA','GI.P.3','P','Ensino, Pesquisa e Inovação na Polícia Científica do Paraná','Alexandre Lara - PCI/PR','Inovação',''],
@@ -597,6 +598,7 @@ const EVENTS = [
 /* ===== 29/10 ===== */
 [29,'09:00','10:00','EXP','', 'A','*Reprodução Simulada dos Fatos: Fundamentos da Reconstrução Criminal*','Autor: Andrei Röehrs Portinho (responsável pela sessão)','Livros',''],
 [29,'09:00','10:00','EXP','', 'A','*Balística Forense: Aspectos Técnicos e Jurídicos*;;*Armas Taurus*','Autor: Domingos Tocchetto (responsável pela sessão)','Livros|Balística forense',''],
+[29,'09:00','18:00','EXP','', 'A','Literatura de cordel: *O Perito Criminal e o Corpo que sabia demais* (Parte I – Augusta e os Legistas)','Autor: José Alysson D. M. Medeiros;;Distribuição gratuita: [[baixe o PDF aqui|https://crdias8.github.io/cnc2026app/materiais/Cordel_O_Perito_Criminal_e_o_Corpo_que_sabia_demais.pdf]] ou pegue seu exemplar no cordel próximo à área de lançamento de livros.','Livros|Literatura de cordel','o'],
 [29,'15:30','18:00','EXP','', 'A','*Criminalística: procedimentos e metodologias* (6ª edição)','Vários autores;;Responsáveis pela sessão: Gabrielle Virgínia Ferreira Cardoso e Celso Felipe Bandeira de Sá','Livros',''],
 [29,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [29,'09:30','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
@@ -674,6 +676,7 @@ const EVENTS = [
 /* ===== 30/10 ===== */
 [30,'09:00','10:00','EXP','', 'A','*Vestígios*, volumes 1, 2 e 3','Autor: Anderson Fraga Morales (responsável pela sessão)','Livros',''],
 [30,'09:00','10:00','EXP','', 'A','*Criminalística* (9ª edição)','Vários autores;;Responsável pela sessão: Cássio Thyone Almeida de Rosa','Livros',''],
+[30,'09:00','18:00','EXP','', 'A','Literatura de cordel: *O Perito Criminal e o Corpo que sabia demais* (Parte I – Augusta e os Legistas)','Autor: José Alysson D. M. Medeiros;;Distribuição gratuita: [[baixe o PDF aqui|https://crdias8.github.io/cnc2026app/materiais/Cordel_O_Perito_Criminal_e_o_Corpo_que_sabia_demais.pdf]] ou pegue seu exemplar no cordel próximo à área de lançamento de livros.','Livros|Literatura de cordel','o'],
 [30,'15:30','16:30','EXP','', 'A','*Uma Introdução à Criminalística: Guia Prático para Perícia Criminal e Concursos*;;*A Lei Antifacção: Quando a Comunidade é o Corpo de Delito*;;*Impressões Humanas na Cena do Crime: Papiloscopia e outros vestígios corporais de contato*','Autor: Paulo Ricardo Ost Frank (responsável pela sessão)','Livros',''],
 [30,'08:30','10:00','EXP','', 'V','Apresentação de pôsteres com a presença dos autores','Pôsteres expostos das 08:30 às 18:00','Pôsteres',''],
 [30,'09:00','11:55','AUD','', 'I','Reunião CONDPCi','','',''],
@@ -922,6 +925,7 @@ EVENTS.forEach((r, i) => {
   if (!code && ID_KEEP[id]) id = ID_KEEP[id];
   if (code && EVENTS.filter(x => x[4] === code).length > 1) id = `${code}@${d}-${s}`;
   if (!code){ const dup = EVENTS.slice(0, i).filter(x => !x[4] && x[0] === d && x[3] === room && x[1] === s).length; if (dup) id += '-' + (dup + 1); } // sessões simultâneas no mesmo local
+  while (EV.some(x => x.id === id)) id += '+'; // nunca repetir identificador (ex.: alias do ID_KEEP)
   const kws = kw ? kw.split('|') : [];
   const ev = { i, id, d, s, e, sm:mins(s), em:mins(e), room, code, type, title, people: people ? people.split(';;') : [], kws, flags, areas };
   ev.staff = staffFor(d, room, ev.sm, ev.em, type, code);
