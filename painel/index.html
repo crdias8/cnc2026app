@@ -58,6 +58,20 @@ main{padding-block:18px 40px}
 .card h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:18px;margin:0;color:var(--accent)}
 .card .hint{font-size:12.5px;color:var(--muted);margin:2px 0 10px}
 .cardhead{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.slot{border-top:1px solid var(--line);padding:12px 0 6px}
+.slot:first-child{border-top:0;padding-top:2px}
+.slothead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.slothead .hr{font-family:var(--f-display);font-weight:500;font-size:20px;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.slothead .tot{font-size:12.5px;color:var(--muted)}
+.slothead .conc{font-size:11.5px;font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:2px 9px}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:5px 0}
+.srow .nm{font-size:14px;line-height:1.35}
+.srow .nm b{font-weight:600}
+.srow .mt{font-size:12px;color:var(--muted);grid-column:1}
+.srow .ct{grid-row:1/span 2;grid-column:2;align-self:center;font-family:var(--f-display);font-size:20px;font-variant-numeric:tabular-nums}
+.srow .tr{grid-column:1/-1;height:6px;border-radius:3px;background:var(--bar-soft);overflow:hidden}
+.srow .tr i{display:block;height:100%;background:var(--bar);border-radius:3px}
+.slot details summary{cursor:pointer;font-size:13px;color:var(--accent);margin-top:4px}
 .cardhead .seg{margin-left:auto}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
 .seg button{background:none;border:0;padding:6px 12px;font:inherit;font-size:13px;color:var(--muted);cursor:pointer}
@@ -300,6 +314,7 @@ function render(S){
       ${card('Navegador','', rows(br,{col:'Navegador'}))}
       ${card('Por onde chegaram','Sites ou apps de onde veio o clique.', rows(refs,{col:'Origem'}))}
     </div>
+    ${card('Favoritos por dia e horário','Atividades marcadas com a estrela, agrupadas pelo horário em que acontecem, para ver quais disputam o mesmo público. Os horários seguem a programação atual (inclui as mudanças feitas depois da marcação). Só aparecem atividades que já receberam alguma estrela.', '<div id="slots"></div>', '<div class="seg" role="group" aria-label="Dia" id="dayseg"></div>')}
     ${teste.length ? card('Versão de teste','Acessos que ainda chegam pelo endereço de teste.', rows(teste.map(h=>({name:h.path.replace(/^\[teste\] /,''), count:h.count})).sort((a,b)=>b.count-a.count),{max:6,col:'Item'})) : ''}
     <footer>Os números são anônimos: o app não usa cookies nem guarda dados pessoais, e ninguém é identificado. Acessos feitos sem internet e por quem usa bloqueador de anúncios podem não ser contados, então os valores mostram tendências, não uma contagem exata. Fonte: GoatCounter.${S.last_error ? ' Última tentativa de atualização falhou às '+fmtDT(S.last_try)+'; exibindo os dados anteriores.' : ''}</footer>`;
 
@@ -307,8 +322,67 @@ function render(S){
   let mode = 'hora';
   const draw = () => lineChart($('#tl'), series(S.total && S.total.days, mode));
   draw();
-  document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); }));
+  document.querySelectorAll('.seg button[data-m]').forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; document.querySelectorAll('.seg button[data-m]').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); }));
+  initSlots(favList);
   let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { draw(); drawMesh(); }, 150); });
+}
+
+
+/* favoritos agrupados por dia e faixa de horário (programação atual em agenda.json) */
+function initSlots(favList){
+  const box = document.getElementById('slots'), seg = document.getElementById('dayseg'); if (!box) return;
+  if (!AGENDA.length){ box.innerHTML = '<div class="empty">Programação indisponível no momento.</div>'; return; }
+  const mins = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+  const norm = x => (x||'').toLowerCase().replace(/\s+/g,' ').trim();
+  // casa cada favorito com uma atividade da programação
+  const items = new Map();
+  favList.forEach(f => {
+    const m = f.name.match(/^(.*?) – (.*)$/); if (!m) return;
+    const pre = m[1], tt = norm(m[2]).replace(/…$/,''); let a = null;
+    let pm = pre.match(/^Pôster (\d+)$/), dm = pre.match(/^(\d\d)\/10 (\d\d:\d\d)$/);
+    if (pm) a = AGENDA.find(x => x.pid === pm[1]);
+    else if (dm){ const d = +dm[1];
+      a = AGENDA.find(x => !x.code && x.d === d && x.s === dm[2] && norm(x.title).startsWith(tt.slice(0,25))) ||
+          AGENDA.find(x => !x.code && norm(x.title).startsWith(tt.slice(0,25))) ||
+          {d, s: dm[2], e: dm[2], room: '', type: '', title: m[2], code: ''}; }
+    else { const c = AGENDA.filter(x => x.code === pre); a = c.find(x => norm(x.title).startsWith(tt.slice(0,40))) || c[0]; }
+    if (!a) return;
+    const k = a.pid ? 'P'+a.pid : (a.code || '') + '|' + a.d + '|' + a.s + '|' + a.title;
+    const cur = items.get(k) || {a, count: 0}; cur.count += f.count; items.set(k, cur);
+  });
+  const all = [...items.values()];
+  const days = [...new Set(all.map(x => x.a.d))].sort((a,b)=>a-b);
+  if (!days.length){ box.innerHTML = '<div class="empty">Ainda sem dados.</div>'; return; }
+  const hoje = +new Intl.DateTimeFormat('en-GB',{timeZone:'America/Sao_Paulo',day:'2-digit'}).format(new Date());
+  let cur = days.find(d => d >= hoje) ?? days[0];
+  seg.innerHTML = days.map(d => `<button type="button" data-day="${d}" aria-pressed="${d===cur}">${d}/10</button>`).join('');
+  const label = a => (a.pid ? 'Pôster ' + a.pid : (a.code ? a.code : a.type || 'Atividade'));
+  const draw = () => {
+    const list = all.filter(x => x.a.d === cur);
+    // faixas: inícios das atividades de ~1 h da programação do dia (palestras), exceto pôsteres
+    const bounds = [...new Set(AGENDA.filter(x => x.d === cur && !x.pid && !x.open && mins(x.e) - mins(x.s) >= 50 && mins(x.e) - mins(x.s) <= 130).map(x => mins(x.s)))].sort((a,b)=>a-b);
+    const bEnd = b => Math.min(...AGENDA.filter(x => x.d === cur && !x.pid && !x.open && mins(x.s) === b && mins(x.e) - mins(x.s) >= 50 && mins(x.e) - mins(x.s) <= 130).map(x => mins(x.e)));
+    const groups = new Map(), gEnd = {};
+    list.forEach(it => {
+      const st = mins(it.a.s);
+      const b = [...bounds].reverse().find(b => b <= st && st < bEnd(b));
+      const key = it.a.pid ? 'pos' : String(b ?? st);
+      gEnd[key] = b !== undefined && !it.a.pid ? bEnd(b) : Math.max(gEnd[key] || 0, it.a.open ? st : mins(it.a.e));
+      if (!groups.has(key)) groups.set(key, []); groups.get(key).push(it);
+    });
+    const keys = [...groups.keys()].sort((a,b) => (a==='pos'? mins('08:30') : +a) - (b==='pos'? mins('08:30') : +b));
+    const hhmm = m => String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
+    box.innerHTML = keys.map(k => {
+      const g = groups.get(k).sort((a,b)=>b.count-a.count), tot = g.reduce((s,x)=>s+x.count,0), mx = g[0].count;
+      const ini = k === 'pos' ? '08:30' : hhmm(+k), fimM = k === 'pos' ? mins('10:00') : gEnd[k], fim = hhmm(fimM);
+      const title = k === 'pos' ? 'Pôsteres · ' + ini + '–' + fim : (fimM > +k ? ini + '–' + fim : 'a partir das ' + ini);
+      const row = x => `<div class="srow"><span class="nm"><b>${esc(label(x.a))}</b> – ${esc(x.a.title)}</span><span class="mt">${esc(x.a.open ? 'a partir das ' + x.a.s : x.a.s + '–' + x.a.e)}${x.a.room ? ' · ' + esc(x.a.room) : ''}</span><span class="ct">${nf(x.count)}</span><span class="tr"><i style="width:${(x.count/mx*100).toFixed(1)}%"></i></span></div>`;
+      const lim = k === 'pos' ? 8 : 99, head = g.slice(0, lim), rest = g.slice(lim);
+      return `<div class="slot"><div class="slothead"><span class="hr">${title}</span><span class="tot">${nf(tot)} ${tot===1?'estrela':'estrelas'} · ${g.length} ${g.length===1?'atividade':'atividades'}</span>${k !== 'pos' && g.length > 1 ? '<span class="conc">mesmo horário</span>' : ''}</div>${head.map(row).join('')}${rest.length ? `<details><summary>Ver mais ${rest.length} pôsteres</summary>${rest.map(row).join('')}</details>` : ''}</div>`;
+    }).join('');
+  };
+  seg.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { cur = +b.dataset.day; seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); }));
+  draw();
 }
 
 drawMesh();
@@ -324,7 +398,9 @@ const loadTrab = fetch('../trabalhos/INDICE.csv?t=' + Date.now(), {cache:'no-sto
     let tit = r[2]; if (poster && tit === tit.toUpperCase()) tit = tit.charAt(0) + tit.slice(1).toLowerCase();
     TRAB[id] = {rot: poster ? 'Pôster ' + r[1] : r[1], tit: tit.length > 80 ? tit.slice(0, 78) + '…' : tit}; });
 }).catch(() => {});
-Promise.all([fetch('stats.json?t=' + Date.now(), {cache:'no-store'}).then(r => r.json()), loadTrab]).then(([S]) => S).then(render).catch(() => {
+let AGENDA = [];
+const loadAgenda = fetch('agenda.json?t=' + Date.now(), {cache:'no-store'}).then(r => r.json()).then(j => { AGENDA = j.itens || []; }).catch(() => {});
+Promise.all([fetch('stats.json?t=' + Date.now(), {cache:'no-store'}).then(r => r.json()), loadTrab, loadAgenda]).then(([S]) => S).then(render).catch(() => {
   $('#upd').textContent = 'Não foi possível carregar os dados agora.';
   $('#main').innerHTML = '<div class="notice"><h2>Sem dados no momento</h2><p>Tente recarregar a página em alguns instantes.</p></div>';
 });
