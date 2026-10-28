@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 28/10/2026 17:19 | 4646232 | EX.1 (29/10 10:00, Arena Elis Regina): título alterado para "A Utilização de Deposição de Metal a Vácuo (VMD) na revelação de Vestígios Papiloscópicos: Aplicações e Perspectivas na Papiloscopia Forense" (palestrante Michel Luna Machado Freitas - Equipatec). EX.2 (28/10 14:30, Sala Moacyr Scliar): título alterado para "Tablet Multiespectral Forenscope: Aplicações e Potencialidades na Perícia Criminal" e palestrante apenas "Equipatec". A pedido da coordenação (oficial e teste). |
 | 28/10/2026 17:04 | c3893eb | EX.1 (29/10 10:00, Arena Elis Regina): palestrante "Bruno Henrique Ugliara - Equipatec" substituído por "Michel Luna Machado Freitas - Equipatec", a pedido da coordenação (oficial e teste). |
 | 28/10/2026 16:08 | 608603c | Painel, "Favoritos por dia e horário": a etiqueta de cada horário e o resumo do dia passam a separar "lotadas" (vermelho, estrelas ≥ 100% da capacidade) de "perto da lotação" (amarelo, 90% a 99%). A pedido da coordenação (o app não muda). |
 | 28/10/2026 16:02 | 6f76491 | Painel, "Favoritos por dia e horário": cor da barra conforme a ocupação da sala — verde abaixo de 90%, amarela de 90% a 99%, vermelha a partir de 100%; o destaque amarelo do card (≥ 90%) foi mantido. A pedido da coordenação (o app não muda). |
