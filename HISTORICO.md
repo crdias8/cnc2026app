@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 28/10/2026 08:16 | d692395 | EX.4 (28/10 11:00, Arena Elis Regina): instituição da palestrante alterada de "Griaule" para "PCISC" ("Aline Borges Teixeira - PCISC"), a pedido da coordenação (oficial e teste). |
 | 27/10/2026 23:50 | e3413d2 | Aviso agendado para todos os usuários "Festa oficial do CNC 2026" ("ATENÇÃO: Garanta seu ingresso para a festa oficial do CNC 2026! ÚLTIMAS UNIDADES!"), com a arte da festa (materiais/Festa_oficial_CNC2026.jpg) e botão "Garantir meu ingresso" para o mesmo link de ingressos do Evento social; aparece uma vez por aparelho de 28/10 07h30 a 28/10 19h30. Cliques no link são contados no painel. A pedido da coordenação (oficial e teste). |
 | 27/10/2026 14:13 | 8634e6d | CP.R.1 (30/10 13:30, Teatro Lupicínio Rodrigues): debatedor "Daniel Ribeiro Surdi de Avelar - Juiz auxiliar da presidência do CNJ" substituído por "Desembargadora Viviane de Faria Miranda - TJRS", a pedido da coordenação (oficial e teste). |
 | 27/10/2026 12:13 | 0606dfc | Palestrantes incluídos a pedido da coordenação: EX.1 (29/10 10:00, Arena Elis Regina) — "Bruno Henrique Ugliara - Equipatec"; EX.2 (28/10 14:30, Sala Moacyr Scliar) — "Michel Luna Machado Freitas - Equipatec" (antes constava só "Equipatec"). Oficial e teste. |
