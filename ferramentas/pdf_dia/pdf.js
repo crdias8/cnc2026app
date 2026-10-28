@@ -1,0 +1,2 @@
+const {chromium}=require('playwright');(async()=>{const [,,src,out,dia]=process.argv;const b=await chromium.launch();const p=await b.newPage();
+await p.goto('file://'+src);await p.pdf({path:out,format:'A4',printBackground:true,preferCSSPageSize:true,displayHeaderFooter:true,headerTemplate:'<span></span>',footerTemplate:`<div style="font-size:7pt;color:#888;width:100%;text-align:center;font-family:Arial">Programação CNC 2026 · ${dia}/10 · página <span class="pageNumber"></span> de <span class="totalPages"></span></div>`});await b.close();})();
