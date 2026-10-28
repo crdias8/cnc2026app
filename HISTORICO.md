@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 28/10/2026 16:08 | 608603c | Painel, "Favoritos por dia e horário": a etiqueta de cada horário e o resumo do dia passam a separar "lotadas" (vermelho, estrelas ≥ 100% da capacidade) de "perto da lotação" (amarelo, 90% a 99%). A pedido da coordenação (o app não muda). |
 | 28/10/2026 16:02 | 6f76491 | Painel, "Favoritos por dia e horário": cor da barra conforme a ocupação da sala — verde abaixo de 90%, amarela de 90% a 99%, vermelha a partir de 100%; o destaque amarelo do card (≥ 90%) foi mantido. A pedido da coordenação (o app não muda). |
 | 28/10/2026 14:24 | 8cc5184 | Painel, quadro "Favoritos por dia e horário": a barra abaixo de cada atividade passa a ser proporcional à lotação da sala (estrelas ÷ lugares; barra cheia = sala lotada ou acima), em amarelo quando ≥ 90%. Atividades sem lotação cadastrada (pôsteres, saguão) mantêm a comparação com a mais favoritada do horário. A pedido da coordenação (o app não muda). |
 | 28/10/2026 13:48 | 2d51e08 | Apoio de sala de LC.O.2 (29/10 11:00) e LC.O.1 (29/10 11:30), Arena Elis Regina: Monica Midori Marcon Uchida Sguazzardi substituída por Anderson Fraga Morales, a pedido da coordenação (oficial e teste). |
