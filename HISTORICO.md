@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 28/10/2026 11:45 | da6f002 | Painel: lotação das salas atualizada para o alerta de 90% — Arena Elis Regina 77 (antes 90), Auditório Augusto Meyer 42 (120), João Simões Lopes Neto 35 (50), Iberê Camargo 44 (65), Mário Quintana 54 (70), Moacyr Scliar 45 (65), Érico Veríssimo 134 (230), Dyonélio Machado 52 (65), Josué Guimarães 64 (60), Alcides Maya 43 (40); Teatro Lupicínio Rodrigues mantido em 340. A pedido da coordenação (o app não muda). |
 | 28/10/2026 11:06 | 8684f79 | Informações gerais (aba Início): quadro no topo com o texto "Não encontrou o que precisa no app? Consulte o Manual do Congressista." e botão "Baixe aqui o Manual do Congressista" (materiais/Manual_do_Congressista_CNC2026.pdf, 12 páginas, 1,1 MB; versão com imagens reduzidas do arquivo de 35 MB enviado pela coordenação, atualização de 28/10). Downloads contados no painel. A pedido da coordenação (oficial e teste). |
 | 28/10/2026 09:59 | 9ed03a3 | Removidas as referências antigas de sala que ainda apareciam entre parênteses nos cards e no filtro de salas: "Sala A" (João Simões Lopes Neto), "Sala B" (Iberê Camargo), "Sala C" (Mário Quintana) e "Sala H" (Alcides Maya). A pedido da coordenação (oficial e teste). |
 | 28/10/2026 08:16 | d692395 | EX.4 (28/10 11:00, Arena Elis Regina): instituição da palestrante alterada de "Griaule" para "PCISC" ("Aline Borges Teixeira - PCISC"), a pedido da coordenação (oficial e teste). |
