@@ -114,6 +114,7 @@ section.view{padding-top:16px}
 .anais .asize{font-size:13.5px;color:var(--muted);font-weight:600}
 .anais .amini{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
 .anais .amini a{color:var(--accent)}
+.anais.manual{margin:0 0 12px}
 .orgs{display:grid;gap:8px;grid-template-columns:1fr}
 @media (min-width:560px){.orgs{grid-template-columns:1fr 1fr}}
 .org{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:15px}
@@ -531,7 +532,7 @@ window.MAP_ON = true; // aba Mapa e "ver no mapa" nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '28/10 às 09:58';
+const BUILD_STAMP = '28/10 às 11:02';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1191,6 +1192,10 @@ function renderInicio(){
     ${typeof PWA_INSTALL_HTML === 'function' ? PWA_INSTALL_HTML() : ''}
     <div class="block">
       <h2>Informações gerais</h2>
+      <div class="anais manual">
+        <p>Não encontrou o que precisa no app? Consulte o <b>Manual do Congressista</b>.</p>
+        <div class="arow"><a class="abtn" href="/cnc2026app/materiais/Manual_do_Congressista_CNC2026.pdf" target="_blank" rel="noopener" data-material="manual do congressista">Baixe aqui o Manual do Congressista</a><span class="asize">PDF · 1,1 MB</span></div>
+      </div>
       <div class="wifi">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/></svg>
         <div><div class="wt">Wi-Fi do evento</div>
