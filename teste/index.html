@@ -249,6 +249,8 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 .aviso .af button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 22px;font:600 15px/1.2 var(--f-body);cursor:pointer}
 .aviso .ab .mh{font-weight:700;color:var(--accent);margin:0 0 6px}.aviso .ab hr{border:0;border-top:1px solid var(--line);margin:12px 0}
 .aviso .ab .antes{font-size:13.5px;color:var(--muted)}
+.aviso{max-height:calc(100dvh - 32px);overflow:auto}.aviso .ab img{display:block;width:100%;height:auto;border-radius:10px;margin:2px 0 10px}
+.aviso .af a.btn{background:var(--brand);color:#fff;border-radius:999px;padding:10px 22px;font:600 15px/1.2 var(--f-body);text-decoration:none;display:inline-block}
 .aviso .af{gap:10px}.aviso .af button.sec{background:none;color:var(--brand);border:1.5px solid var(--brand)}
 .ev.flash{box-shadow:0 0 0 3px var(--brand);transition:box-shadow .3s}
 .maplink{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -529,7 +531,7 @@ window.MAP_ON = true; // aba Mapa e "ver no mapa" nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '27/10 às 14:13';
+const BUILD_STAMP = '27/10 às 23:49';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1479,7 +1481,11 @@ document.addEventListener('click', ev => {
 const AVISOS = [
   { id: 'guarda-volumes-30', de: '2026-10-29T00:00:00-03:00', ate: '2026-10-30T23:59:59-03:00',
     titulo: 'Guarda-volumes no dia 30/10',
-    html: '<p>No último dia do congresso, <b>sexta-feira, 30/10</b>, na área da <b>secretaria e do credenciamento</b> vai funcionar um <b>guarda-volumes</b>.</p><p>Se precisar fazer o check-out do hotel nesse dia, deixe sua bagagem lá e aproveite a programação até o encerramento!</p>' }
+    html: '<p>No último dia do congresso, <b>sexta-feira, 30/10</b>, na área da <b>secretaria e do credenciamento</b> vai funcionar um <b>guarda-volumes</b>.</p><p>Se precisar fazer o check-out do hotel nesse dia, deixe sua bagagem lá e aproveite a programação até o encerramento!</p>' },
+  { id: 'festa-28', de: '2026-10-28T07:30:00-03:00', ate: '2026-10-28T19:30:00-03:00',
+    titulo: 'Festa oficial do CNC 2026',
+    html: '<p><b>ATENÇÃO:</b> Garanta seu ingresso para a festa oficial do CNC 2026! <b>ÚLTIMAS UNIDADES!</b></p><a href="https://tri.rs/event/baruma-congresso-nacional-de-criminalistica-61b6b0" target="_blank" rel="noopener" data-aviso-link><img src="https://crdias8.github.io/cnc2026app/materiais/Festa_oficial_CNC2026.jpg" alt="Festa oficial do CNC 2026: quarta-feira, 28/10/2026, a partir das 19h30, no Baruma, Canela/RS. Atrações: DJ Foca (anos 70, 80 e 90) e Rui e Mateus." width="1080" height="720"></a>',
+    link: { txt: 'Garantir meu ingresso', url: 'https://tri.rs/event/baruma-congresso-nacional-de-criminalistica-61b6b0' } }
 ];
 /* ---------- avisos de mudança de dia, horário ou sala: só para quem favoritou a atividade antes da mudança ---------- */
 const WD = {27:'terça-feira',28:'quarta-feira',29:'quinta-feira',30:'sexta-feira'};
@@ -1561,11 +1567,13 @@ function mudDemo(){
   const a = force ? AVISOS.find(x => x.id === force) : AVISOS.find(x => !vistos.has(x.id) && agora >= Date.parse(x.de) && agora <= Date.parse(x.ate) && (!x.favs || x.favs.some(id => FAV.has(id))));
   if (!a) return;
   const bg = document.createElement('div'); bg.className = 'aviso-bg';
-  bg.innerHTML = `<div class="aviso" role="dialog" aria-modal="true" aria-labelledby="aviso-t"><div class="ah"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.3" r="1.3" fill="currentColor"/></svg><h3 id="aviso-t">${esc(a.titulo)}</h3></div><div class="ab">${a.html}</div><div class="af"><button type="button" data-aviso-ok>Entendi</button></div></div>`;
+  bg.innerHTML = `<div class="aviso" role="dialog" aria-modal="true" aria-labelledby="aviso-t"><div class="ah"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.3" r="1.3" fill="currentColor"/></svg><h3 id="aviso-t">${esc(a.titulo)}</h3></div><div class="ab">${a.html}</div><div class="af">${a.link ? `<button type="button" class="sec" data-aviso-ok>Fechar</button><a class="btn" href="${a.link.url}" target="_blank" rel="noopener" data-aviso-link>${esc(a.link.txt)}</a>` : '<button type="button" data-aviso-ok>Entendi</button>'}</div></div>`;
   document.body.appendChild(bg);
   if (typeof window.CNC_TRACK === 'function') window.CNC_TRACK('aviso: ' + a.id);
   const close = () => { if (!force){ vistos.add(a.id); store.set('cnc26_avisos', [...vistos]); } bg.remove(); };
-  bg.addEventListener('click', ev => { if (ev.target === bg || ev.target.closest('[data-aviso-ok]')) close(); });
+  bg.addEventListener('click', ev => {
+    if (ev.target.closest('[data-aviso-link]')){ if (typeof window.CNC_TRACK === 'function') window.CNC_TRACK('aviso: ' + a.id + ' (link)'); close(); return; }
+    if (ev.target === bg || ev.target.closest('[data-aviso-ok]')) close(); });
   setTimeout(() => bg.querySelector('[data-aviso-ok]').focus(), 50);
 })();
 </script>
