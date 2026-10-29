@@ -532,7 +532,7 @@ window.MAP_ON = true; // aba Mapa e "ver no mapa" nos cards (em teste)
 </main>
 
 <script>
-const BUILD_STAMP = '29/10 às 13:52';
+const BUILD_STAMP = '29/10 às 14:41';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1488,7 +1488,7 @@ const MINFO = {
  ARE:['terreo','Arena Elis Regina','Na área externa do térreo, a “arena silenciosa” (com fones de ouvido): saia pelo acesso lateral do saguão, ao lado da secretaria, e siga pela rampa de acesso até o piso externo.'],
  EXP:['terreo','Saguão de expositores','No térreo: é o grande salão logo após a entrada principal, com os estandes e os pôsteres.'],
  LIV:['terreo','Autógrafos e lançamentos','No térreo, dentro do saguão de expositores, no lado oposto à entrada principal, perto dos banheiros.'],
- SEC:['terreo','Secretaria e credenciamento','No térreo, no saguão de expositores, à direita de quem entra pela entrada principal. No dia 30/10 funciona ali um guarda-volumes.'],
+ SEC:['terreo','Secretaria e credenciamento','No térreo, no saguão de expositores, à direita de quem entra pela entrada principal. Ali funciona o achados e perdidos e, em 30/10, até as 20h, há um guarda-volumes ao lado.'],
  AUD:['mezanino','Auditório Augusto Meyer','No mezanino: suba a escada do saguão; o auditório fica no primeiro patamar.'],
  JSL:['andar1','Sala João Simões Lopes Neto','No 1º andar, à esquerda do corredor, primeira sala.'],
  IBE:['andar1','Sala Iberê Camargo','No 1º andar, à esquerda do corredor, segunda sala.'],
@@ -1545,9 +1545,18 @@ document.addEventListener('click', ev => {
 /* ---------- avisos agendados: aparecem uma vez por aparelho, dentro do período; fechado, não volta ----------
    campos: id, de/ate (horário de Brasília), titulo, html; opcional: favs = lista de ids (só para quem favoritou algum) */
 const AVISOS = [
-  { id: 'guarda-volumes-30', de: '2026-10-29T00:00:00-03:00', ate: '2026-10-30T23:59:59-03:00',
+  { id: 'guarda-volumes-30', de: '2026-10-29T00:00:00-03:00', ate: '2026-10-30T07:59:59-03:00',
     titulo: 'Guarda-volumes no dia 30/10',
     html: '<p>No último dia do congresso, <b>sexta-feira, 30/10</b>, na área da <b>secretaria e do credenciamento</b> vai funcionar um <b>guarda-volumes</b>.</p><p>Se precisar fazer o check-out do hotel nesse dia, deixe sua bagagem lá e aproveite a programação até o encerramento!</p>' },
+  { id: 'guarda-volumes-30b', de: '2026-10-30T08:00:00-03:00', ate: '2026-10-30T20:00:00-03:00',
+    titulo: 'Guarda-volumes hoje até as 20h',
+    html: '<p>Hoje, <b>sexta-feira, 30/10</b>, está disponível um <b>guarda-volumes</b> até as <b>20h</b>, ao lado do <b>credenciamento</b>.</p>' },
+  { id: 'certificados', de: '2026-10-30T09:00:00-03:00', ate: '2026-11-30T23:59:59-03:00',
+    titulo: 'Certificados',
+    html: '<p>Os <b>certificados de participação</b> e de <b>trabalhos apresentados</b> estarão disponíveis <b>10 dias após o término do evento</b>, na área restrita do site <a href="https://www.congressocriminalistica.com.br/" target="_blank" rel="noopener">www.congressocriminalistica.com.br</a>.</p>' },
+  { id: 'achados-perdidos', de: '2026-10-29T15:55:00-03:00', ate: '2026-10-30T20:00:00-03:00',
+    titulo: 'Achados e perdidos',
+    html: '<p>No <b>credenciamento</b> está funcionando um <b>achados e perdidos</b>: objetos encontrados nas dependências do evento estão à disposição dos congressistas.</p>' },
   { id: 'festa-28', de: '2026-10-28T07:30:00-03:00', ate: '2026-10-28T19:30:00-03:00',
     titulo: 'Festa oficial do CNC 2026',
     html: '<p><b>ATENÇÃO:</b> Garanta seu ingresso para a festa oficial do CNC 2026! <b>ÚLTIMAS UNIDADES!</b></p><a href="https://tri.rs/event/baruma-congresso-nacional-de-criminalistica-61b6b0" target="_blank" rel="noopener" data-aviso-link><img src="https://crdias8.github.io/cnc2026app/materiais/Festa_oficial_CNC2026.jpg" alt="Festa oficial do CNC 2026: quarta-feira, 28/10/2026, a partir das 19h30, no Baruma, Canela/RS. Atrações: DJ Foca (anos 70, 80 e 90) e Rui e Mateus." width="1080" height="720"></a>',
