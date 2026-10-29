@@ -354,7 +354,8 @@ function initSlots(favList){
       a = AGENDA.find(x => !x.code && x.d === d && x.s === dm[2] && norm(x.title).startsWith(tt.slice(0,25))) ||
           AGENDA.find(x => !x.code && norm(x.title).startsWith(tt.slice(0,25))) ||
           {d, s: dm[2], e: dm[2], room: '', type: '', title: m[2], code: ''}; }
-    else { const c = AGENDA.filter(x => x.code === pre); a = c.find(x => norm(x.title).startsWith(tt.slice(0,40))) || c[0]; }
+    else { const cd = pre.match(/^(\S+) \((\d\d)\/10\)$/); // código repetido em mais de um dia: "EX.2 (29/10)"
+      const c = cd ? AGENDA.filter(x => x.code === cd[1] && x.d === +cd[2]) : AGENDA.filter(x => x.code === pre); a = c.find(x => norm(x.title).startsWith(tt.slice(0,40))) || c[0]; }
     if (!a) return;
     const k = a.pid ? 'P'+a.pid : (a.code || '') + '|' + a.d + '|' + a.s + '|' + a.title;
     const cur = items.get(k) || {a, count: 0}; cur.count += f.count; items.set(k, cur);
