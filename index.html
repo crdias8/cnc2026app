@@ -463,7 +463,7 @@ window.goatcounter = { no_onload: true };
 </main>
 
 <script>
-const BUILD_STAMP = '30/10 às 13:03';
+const BUILD_STAMP = '30/10 às 17:54';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -1481,6 +1481,10 @@ document.addEventListener('click', ev => {
 /* ---------- avisos agendados: aparecem uma vez por aparelho, dentro do período; fechado, não volta ----------
    campos: id, de/ate (horário de Brasília), titulo, html; opcional: favs = lista de ids (só para quem favoritou algum) */
 const AVISOS = [
+  { id: 'fotos', de: '2026-10-30T18:00:00-03:00', ate: '2026-11-30T23:59:59-03:00',
+    titulo: 'Fotos do evento',
+    html: '<p>As <b>fotografias do XXVIII Congresso Nacional de Criminalística</b> já estão disponíveis!</p><p>Acesse a pasta com as fotos do evento pelo botão abaixo.</p>',
+    link: { txt: 'Ver as fotos', url: 'https://drive.google.com/drive/folders/1IsULCSyRP7uKnNXIpSn-CodMfWJ4zc4t' } },
   { id: 'cancel-CP.O.7', de: '2026-10-30T11:30:00-03:00', ate: '2026-10-30T23:59:59-03:00', favs: ['CP.O.7'],
     titulo: 'Atividade cancelada',
     html: '<p>A apresentação oral <b>CP.O.7</b> – <b>Violence as a Service (VaaS) e Crime as a Service (CaaS): aspectos essenciais da perícia computacional para atuação de combate no ecossistema cibercriminoso transnacional</b>, prevista para hoje, <b>30/10, às 17:10</b>, na Sala João Simões Lopes Neto, foi <b>cancelada a pedido do autor</b>.</p><p>A ementa continua disponível no card da atividade.</p>' },
