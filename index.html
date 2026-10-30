@@ -239,6 +239,8 @@ footer{margin-top:36px;padding-block:18px;border-top:1px solid var(--line);font-
 .wifi .wl{font-size:16px;line-height:1.6}.wifi b{font-weight:700;letter-spacing:.02em}
 .wcopy{margin-left:8px;background:#fff;color:var(--brand);border:0;border-radius:999px;padding:3px 12px;font:600 13px/1.4 var(--f-body);cursor:pointer;vertical-align:1px}
 .wmsg{font-size:12.5px;opacity:.9;min-height:0}
+.ev.cancel .ev-top,.ev.cancel h3,.ev.cancel .ppl,.ev.cancel .room,.ev.cancel .staff,.ev.cancel .flags,.ev.cancel .kws,.ev.cancel .maplink{opacity:.45}
+.ev .cancelado{display:inline-block;background:#C10000;color:#fff;font-family:var(--f-display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:14px;padding:3px 12px;border-radius:5px;margin:0 0 8px}
 .aviso-bg{position:fixed;inset:0;background:rgba(20,10,10,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
 .aviso{background:var(--surface);color:var(--fg);border-radius:16px;max-width:440px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.35);overflow:hidden}
 .aviso .ah{background:var(--brand);color:#fff;padding:14px 18px;display:flex;gap:10px;align-items:center}
@@ -461,7 +463,7 @@ window.goatcounter = { no_onload: true };
 </main>
 
 <script>
-const BUILD_STAMP = '30/10 às 10:25';
+const BUILD_STAMP = '30/10 às 11:32';
 /* PROGRAMAÇÃO — XXVIII CNC 2026
    Formato: [dia, início, fim, sala, código, tipo, título, pessoas, palavras-chave (|), selos]
    tipos: P palestra · R mesa-redonda · O apresentação oral · M minicurso · C reunião de coordenadores
@@ -703,7 +705,7 @@ const EVENTS = [
 [30,'17:10','17:35','ARE','EF.O.10','O','Revisão de casos de desabamento por ruptura de consolo em concreto pré-moldado: achados periciais, retroanálises e recomendações','Jorge Augusto Wissmann (PCIPR; UNIOESTE) - apresentador, Marcelo Mazzuco (PCIPR), Joel Heron Freitas (PCISC), Guilherme de Lima Dutra (UNIOESTE)','',''],
 [30,'16:10','16:35','JSL','OE.O.2','O','18 mil itens por ano: como a Informática Forense de Santa Catarina enfrentou o passivo','Wilson Leite da Silva Filho (PCISC) - apresentador','',''],
 [30,'16:40','17:05','JSL','CP.O.5','O','Exame forense em câmeras espiãs de baixo custo: da extração de memória flash à vinculação ao suspeito','Mateus Bizzotto Nunes (PCI SC) - apresentador','',''],
-[30,'17:10','17:35','JSL','CP.O.7','O','Violence as a Service (VaaS) e Crime as a Service (CaaS): aspectos essenciais da perícia computacional para atuação de combate no ecossistema cibercriminoso transnacional','João Benedito dos Santos Junior (PUC Minas) - apresentador','',''],
+[30,'17:10','17:35','JSL','CP.O.7','O','Violence as a Service (VaaS) e Crime as a Service (CaaS): aspectos essenciais da perícia computacional para atuação de combate no ecossistema cibercriminoso transnacional','João Benedito dos Santos Junior (PUC Minas) - apresentador','','x'],
 [30,'17:40','18:05','JSL','CP.O.8','O','Análise forense do mecanismo de bloqueio de aplicativos (app lock) em dispositivos Xiaomi: identificação de artefatos e inferência de credenciais','Michael André Hempkemeyer (PCI) - apresentador','',''],
 [30,'16:10','17:05','IBE','PA.P.1','P','Aplicação do POP de maus-tratos em SP','Felipe Martins dos Santos - SPTC/SP','Maus-tratos a animais',''],
 [30,'17:10','18:05','IBE','PA.P.6','P','Do Ruído ao Laudo: a Prática Pericial de Poluição Sonora com Apoio da Inteligência Artificial','Leandro Goulart Dias - SPTC/SP','Poluição sonora|Inteligência artificial',''],
@@ -1140,9 +1142,10 @@ function card(e, opts = {}){
   const sinab = '';
   const kws = e.kws.filter(k => k !== 'Pôsteres').map(k => `<button class="kw${F.kws.has(k)?' on':''}" data-kw="${esc(k)}">${esc(k)}</button>`).join('');
   const minicurso = e.type === 'M' && e.sm === mins('13:00') ? ' · intervalo 15:00–15:15' : '';
-  return `<article class="ev${dim?' dim':''}${isNow?' is-now':''}" data-id="${esc(e.id)}">
+  const canc = e.flags.includes('x');   // atividade cancelada: selo CANCELADO e título riscado
+  return `<article class="ev${dim?' dim':''}${isNow?' is-now':''}${canc?' cancel':''}" data-id="${esc(e.id)}">
     <div class="ev-main">
-      <div class="ev-top">${tagHTML(e)}<span class="type">${e.pid ? 'Pôster' : TYPES[e.type]}</span><span class="time">${opts.showDay?`${e.d}/10 · `:''}${e.flags.includes('o') ? `a partir das ${e.s}` : `${e.s}–${e.e}`}${minicurso}</span>${isNow?'<span class="nowpill">Agora</span>':''}</div>
+      ${canc?'<div class="cancelado" role="status">Cancelado</div>':''}<div class="ev-top">${tagHTML(e)}<span class="type">${e.pid ? 'Pôster' : TYPES[e.type]}</span><span class="time">${opts.showDay?`${e.d}/10 · `:''}${e.flags.includes('o') ? `a partir das ${e.s}` : `${e.s}–${e.e}`}${minicurso}</span>${isNow?'<span class="nowpill">Agora</span>':''}</div>
       <h3${e.type==='A'?' class="books"':e.pid?' class="ptitle"':''}>${e.type==='A' ? e.title.split(';;').map(b => `<span class="book">${esc(b).replace(/\*([^*]+)\*/g,'<em>$1</em>')}</span>`).join('') : e.pid ? esc(e.title).replace(/\*([^*]+)\*/g,'<em>$1</em>') : esc(e.title)}</h3>
       ${people?`<p class="ppl">${people}</p>`:''}
       ${room?(window.MAP_ON === true && MAPROOM(e) ? `<button type="button" class="room maplink" data-map="${MAPROOM(e)}">${ICON_PIN}<span>${esc(room.n)}${room.x?` (${room.x})`:''}</span><span class="vm">ver no mapa</span></button>` : `<div class="room">${ICON_PIN}<span>${esc(room.n)}${room.x?` (${room.x})`:''}</span></div>`):''}
@@ -1478,6 +1481,9 @@ document.addEventListener('click', ev => {
 /* ---------- avisos agendados: aparecem uma vez por aparelho, dentro do período; fechado, não volta ----------
    campos: id, de/ate (horário de Brasília), titulo, html; opcional: favs = lista de ids (só para quem favoritou algum) */
 const AVISOS = [
+  { id: 'cancel-CP.O.7', de: '2026-10-30T11:30:00-03:00', ate: '2026-10-30T23:59:59-03:00', favs: ['CP.O.7'],
+    titulo: 'Atividade cancelada',
+    html: '<p>A apresentação oral <b>CP.O.7</b> – <b>Violence as a Service (VaaS) e Crime as a Service (CaaS): aspectos essenciais da perícia computacional para atuação de combate no ecossistema cibercriminoso transnacional</b>, prevista para hoje, <b>30/10, às 17:10</b>, na Sala João Simões Lopes Neto, foi <b>cancelada a pedido do autor</b>.</p><p>A ementa continua disponível no card da atividade.</p>' },
   { id: 'guarda-volumes-30', de: '2026-10-29T00:00:00-03:00', ate: '2026-10-30T07:59:59-03:00',
     titulo: 'Guarda-volumes no dia 30/10',
     html: '<p>No último dia do congresso, <b>sexta-feira, 30/10</b>, na área da <b>secretaria e do credenciamento</b> vai funcionar um <b>guarda-volumes</b>.</p><p>Se precisar fazer o check-out do hotel nesse dia, deixe sua bagagem lá e aproveite a programação até o encerramento!</p>' },
