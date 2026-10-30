@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 30/10/2026 17:59 | 8066037 | Informações gerais (aba Início): quadro "Fotos do evento", abaixo do quadro dos certificados, com botão "Ver as fotos" para a pasta do Google Drive; cliques contados no painel. A pedido da coordenação (oficial e teste). |
 | 30/10/2026 17:56 | 038b80e | Aviso "Fotos do evento" para todos os usuários (uma vez por aparelho, de 30/10 18h a 30/11), com botão "Ver as fotos" para a pasta do Google Drive com as fotografias do evento; cliques contados no painel. A pedido da coordenação (oficial e teste). |
 | 30/10/2026 13:04 | 9424fa8 | OE.R.1 (30/10 13:30, Sala Moacyr Scliar): apoio de sala Cristiane Marzotto substituída por Michelle Larissa Zini Lise, a pedido da coordenação (oficial e teste). |
 | 30/10/2026 12:12 | 2b0b6fb | 30/10: troca de horários entre ML.P.2 e LC.P.8, cada uma no horário e na sala da outra — ML.P.2 de 16:10–17:05 (Sala Érico Veríssimo) para 13:30–14:25 (Teatro Lupicínio Rodrigues), deixando de concorrer com a ML.R.2; LC.P.8 de 13:30–14:25 (Teatro) para 16:10–17:05 (Érico Veríssimo). Apoios acompanham (Renata na ML.P.2, Barbara na LC.P.8); sem conflitos; aviso de mudança para quem havia favoritado. A pedido da coordenação (oficial e teste). |
