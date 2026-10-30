@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 30/10/2026 11:34 | cd135b8 | CP.O.7 (30/10 17:10, Sala João Simões Lopes Neto) cancelada a pedido do autor: card com selo "CANCELADO" e texto mais claro (ementa em PDF mantida acessível); aviso "Atividade cancelada" (cancelada a pedido do autor) para quem favoritou a atividade, válido em 30/10. A pedido da coordenação (oficial e teste). |
 | 30/10/2026 10:25 | bb71bab | Pôster 407 (30/10, EF): botão do resumo estendido do complemento dos anais (trabalhos/poster_407_complemento.pdf, 8 páginas, numeração provisória a partir de 1), remontado a partir do PDF enviado pela coordenação em 30/10 (9 figuras; afiliações idênticas unificadas; pequenas correções de texto e referências). Registrado no INDICE.csv como complemento (oficial e teste). |
 | 30/10/2026 09:49 | 83c936f | Removidos da programação de 30/10 os dois cards "Palestra a confirmar" (17:40–18:05, Arena Elis Regina; 16:10–17:05, Sala Josué Guimarães), a pedido da coordenação (oficial e teste). |
 | 30/10/2026 09:46 | dc51739 | Pôster 453 (30/10, EF): botão do resumo estendido do complemento dos anais (trabalhos/poster_453_complemento.pdf, 6 páginas, numeração provisória a partir de 1), remontado a partir do PDF enviado pela coordenação em 30/10 (12 figuras; numeração das subseções 3.1–3.4, e-mail, português e referências corrigidos). Registrado no INDICE.csv como complemento (oficial e teste). |
