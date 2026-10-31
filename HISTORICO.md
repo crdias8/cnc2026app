@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 31/10/2026 08:52 | d9b8227 | Painel: a atualização automática passa a tentar o envio até 4 vezes quando ele é recusado (trazendo antes o que chegou ao repositório), evitando falhas isoladas como a de 31/10 às 05:50. O app não muda. |
 | 30/10/2026 17:59 | 8066037 | Informações gerais (aba Início): quadro "Fotos do evento", abaixo do quadro dos certificados, com botão "Ver as fotos" para a pasta do Google Drive; cliques contados no painel. A pedido da coordenação (oficial e teste). |
 | 30/10/2026 17:56 | 038b80e | Aviso "Fotos do evento" para todos os usuários (uma vez por aparelho, de 30/10 18h a 30/11), com botão "Ver as fotos" para a pasta do Google Drive com as fotografias do evento; cliques contados no painel. A pedido da coordenação (oficial e teste). |
 | 30/10/2026 13:04 | 9424fa8 | OE.R.1 (30/10 13:30, Sala Moacyr Scliar): apoio de sala Cristiane Marzotto substituída por Michelle Larissa Zini Lise, a pedido da coordenação (oficial e teste). |
