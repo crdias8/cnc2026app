@@ -30,5 +30,13 @@ jobs:
           git add painel/stats.json
           if git diff --cached --quiet; then echo "sem mudanças"; exit 0; fi
           git commit -m "Painel: estatísticas atualizadas"
-          git pull --rebase -q || true
-          git push
+          cp painel/stats.json "$RUNNER_TEMP/stats.json"
+          # até 4 tentativas: traz o que chegou ao repositório no meio tempo e reenvia
+          # (em conflito, fica o stats.json recém-buscado do GoatCounter; os demais arquivos ficam como estão no repositório)
+          for i in 1 2 3 4; do
+            git fetch -q origin main
+            if ! git rebase -q -X theirs origin/main; then git rebase --abort; git reset -q --hard origin/main; cp "$RUNNER_TEMP/stats.json" painel/stats.json; git add painel/stats.json; git commit -q -m "Painel: estatísticas atualizadas" || true; fi
+            if git push -q origin HEAD:main; then echo "publicado (tentativa $i)"; exit 0; fi
+            echo "envio recusado, tentando de novo"; sleep $((i*10))
+          done
+          echo "não foi possível publicar"; exit 1
