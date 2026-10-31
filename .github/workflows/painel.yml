@@ -35,7 +35,7 @@ jobs:
           # (em conflito, fica o stats.json recém-buscado do GoatCounter; os demais arquivos ficam como estão no repositório)
           for i in 1 2 3 4; do
             git fetch -q origin main
-            if ! git rebase -q -X theirs origin/main; then git rebase --abort; git reset -q --hard origin/main; cp "$RUNNER_TEMP/stats.json" painel/stats.json; git add painel/stats.json; git commit -q -m "Painel: estatísticas atualizadas" || true; fi
+            if ! git rebase -q -X theirs FETCH_HEAD; then git rebase --abort; git reset -q --hard FETCH_HEAD; cp "$RUNNER_TEMP/stats.json" painel/stats.json; git add painel/stats.json; git commit -q -m "Painel: estatísticas atualizadas" || true; fi
             if git push -q origin HEAD:main; then echo "publicado (tentativa $i)"; exit 0; fi
             echo "envio recusado, tentando de novo"; sleep $((i*10))
           done
