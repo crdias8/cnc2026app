@@ -4,6 +4,7 @@ Registro de tudo que foi publicado no link oficial (https://crdias8.github.io/cn
 
 | Data e hora | Versão | Alteração |
 |---|---|---|
+| 03/11/2026 09:45 | 1fd6214 | Pôster 472 (28/10, LC): botão do resumo estendido do complemento dos anais (trabalhos/poster_472_complemento.pdf, 4 páginas, numeração provisória a partir de 1), a partir do arquivo enviado pela coordenação em 03/11 (Tabela 1 remontada do PDF do autor; seções numeradas; listas, hifenizações, crases e referências [4] e [5] em formato ABNT corrigidas). Card mantido sem alteração. Registrado no INDICE.csv como complemento (oficial e teste). |
 | 31/10/2026 15:47 | 74f6ac5 | Cards dos pôsteres corrigidos a pedido da coordenação: 485 — "Marcelo Nunes Slva" → "Marcelo Nunes Silva"; 383 — "Renata de Lamare São PauloSilveira" → "Renata de Lamare São Paulo Silveira". O 660 já constava como Breno Viegas Dantas Martins desde 26/10 (oficial e teste). |
 | 31/10/2026 08:52 | d9b8227 | Painel: a atualização automática passa a tentar o envio até 4 vezes quando ele é recusado (trazendo antes o que chegou ao repositório), evitando falhas isoladas como a de 31/10 às 05:50. O app não muda. |
 | 30/10/2026 17:59 | 8066037 | Informações gerais (aba Início): quadro "Fotos do evento", abaixo do quadro dos certificados, com botão "Ver as fotos" para a pasta do Google Drive; cliques contados no painel. A pedido da coordenação (oficial e teste). |
